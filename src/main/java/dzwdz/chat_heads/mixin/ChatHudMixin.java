@@ -39,11 +39,10 @@ public class ChatHudMixin {
             RenderSystem.color4f(1, 1, 1, (float) (p * e));
             int y = (int) (t + h);
             client.getTextureManager().bindTexture(owner.getSkinTexture());
+            // draw base layer
             DrawableHelper.drawTexture(matrixStack, 0, y, 8, 8, 8.0F, 8, 8, 8, 64, 64);
-            PlayerEntity playerEntity = this.client.world.getPlayerByUuid(owner.getProfile().getId());
-            if (playerEntity != null && playerEntity.isPartVisible(PlayerModelPart.HAT)) {
-                DrawableHelper.drawTexture(matrixStack, 0, y, 8, 8, 40.0F, 8, 8, 8, 64, 64);
-            }
+            // draw hat
+            DrawableHelper.drawTexture(matrixStack, 0, y, 8, 8, 40.0F, 8, 8, 8, 64, 64);
             RenderSystem.color4f(1, 1, 1, 1);
         }
     }
