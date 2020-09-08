@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dzwdz.chat_heads.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "ChatHudMixin",
+    "ChatHudLineMixin",
+    "ChatListenerHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

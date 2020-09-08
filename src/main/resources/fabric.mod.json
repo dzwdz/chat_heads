@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "chat_heads",
+  "version": "${version}",
+  "name": "Chat Heads",
+  "description": "",
+  "authors": [
+    "dzwdz"
+  ],
+  "contact": {},
+  "license": "MPL-2.0",
+  "icon": "assets/chat_heads/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dzwdz.chat_heads.EntryPoint"
+    ]
+  },
+  "mixins": [
+    "chat_heads.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.9.3+build.207",
+    "fabric": "*",
+    "minecraft": "1.16.1"
+  }
+}
