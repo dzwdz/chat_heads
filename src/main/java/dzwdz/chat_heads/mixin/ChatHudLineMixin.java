@@ -1,12 +1,10 @@
 package dzwdz.chat_heads.mixin;
 
-import com.mojang.authlib.GameProfile;
 import dzwdz.chat_heads.EntryPoint;
 import dzwdz.chat_heads.mixinterface.ChatHudLineMixinAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.StringRenderable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -29,9 +27,17 @@ public class ChatHudLineMixin implements ChatHudLineMixinAccessor {
     public void init(CallbackInfo callbackInfo) {
         if (EntryPoint.lastUUID != null) {
             chatheads$owner = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(EntryPoint.lastUUID);
-            System.out.println(chatheads$owner);
         }
-        else System.out.println("no lastUUID");
+        if (chatheads$owner == null) {
+            for (String part : text.getString().split("(§.)|[^\\w]")) {
+                if (part.isEmpty()) continue;
+                PlayerListEntry p = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(part);
+                if (p != null) {
+                    chatheads$owner = p;
+                    return;
+                }
+            }
+        }
     }
 
     @Override
