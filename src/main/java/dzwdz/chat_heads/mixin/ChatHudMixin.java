@@ -1,5 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.EntryPoint;
 import dzwdz.chat_heads.mixinterface.ChatHudLineMixinAccessor;
 import net.minecraft.client.MinecraftClient;
@@ -35,6 +36,7 @@ public class ChatHudMixin {
     public void render(MatrixStack matrixStack, int i, CallbackInfo ci, int j, int k, boolean bl, double d, int l, double e, double f, double g, double h, int m, int n, ChatHudLine chatHudLine, double p, int q, int r, int s, double t) {
         PlayerListEntry owner = ((ChatHudLineMixinAccessor)chatHudLine).chatheads$getOwner();
         if (owner != null) {
+            RenderSystem.color4f(1, 1, 1, (float) (p * e));
             int y = (int) (t + h);
             client.getTextureManager().bindTexture(owner.getSkinTexture());
             DrawableHelper.drawTexture(matrixStack, 0, y, 8, 8, 8.0F, 8, 8, 8, 64, 64);
@@ -42,6 +44,7 @@ public class ChatHudMixin {
             if (playerEntity != null && playerEntity.isPartVisible(PlayerModelPart.HAT)) {
                 DrawableHelper.drawTexture(matrixStack, 0, y, 8, 8, 40.0F, 8, 8, 8, 64, 64);
             }
+            RenderSystem.color4f(1, 1, 1, 1);
         }
     }
 
