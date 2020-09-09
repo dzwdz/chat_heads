@@ -7,11 +7,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class EntryPoint implements ModInitializer {
-    // yes, this is dumb
     @Nullable
     public static UUID lastUUID;
-    @Nullable
-    public static StringRenderable lastText;
+
+    public static final int CHAT_OFFSET = 10;
 
     @Override
     public void onInitialize() {

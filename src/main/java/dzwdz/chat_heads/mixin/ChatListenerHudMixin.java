@@ -19,6 +19,5 @@ public class ChatListenerHudMixin {
     )
     public void onChatMessage(MessageType messageType, Text message, UUID senderUuid, CallbackInfo callbackInfo) {
         EntryPoint.lastUUID = senderUuid;
-        EntryPoint.lastText = message;
     }
 }

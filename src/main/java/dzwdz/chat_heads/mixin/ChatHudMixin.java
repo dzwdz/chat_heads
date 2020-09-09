@@ -57,6 +57,18 @@ public class ChatHudMixin {
             index = 2
     )
     public float moveTheText(float prevX) {
-        return 10;
+        return EntryPoint.CHAT_OFFSET;
+    }
+
+    @ModifyArg(
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/font/TextHandler;trimToWidth(Lnet/minecraft/text/StringRenderable;I)Lnet/minecraft/text/Style;"
+            ),
+            method = "getText(DD)Lnet/minecraft/text/Style;",
+            index = 1
+    )
+    public int correctClickPosition(int x) {
+        return x - EntryPoint.CHAT_OFFSET;
     }
 }
