@@ -8,9 +8,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,7 +25,7 @@ public class ChatHudMixin {
     @Inject(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/StringRenderable;FFI)I",
+                    target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I",
                     ordinal = 0
             ),
             method = "render(Lnet/minecraft/client/util/math/MatrixStack;I)V",
@@ -50,7 +48,7 @@ public class ChatHudMixin {
     @ModifyArg(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/StringRenderable;FFI)I",
+                    target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I",
                     ordinal = 0
             ),
             method = "render(Lnet/minecraft/client/util/math/MatrixStack;I)V",
@@ -63,7 +61,7 @@ public class ChatHudMixin {
     @ModifyArg(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/font/TextHandler;trimToWidth(Lnet/minecraft/text/StringRenderable;I)Lnet/minecraft/text/Style;"
+                    target = "Lnet/minecraft/client/font/TextHandler;getStyleAt(Lnet/minecraft/text/OrderedText;I)Lnet/minecraft/text/Style;"
             ),
             method = "getText(DD)Lnet/minecraft/text/Style;",
             index = 1
