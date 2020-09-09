@@ -3,14 +3,16 @@
   "id": "chat_heads",
   "version": "${version}",
   "name": "Chat Heads",
-  "description": "",
+  "description": "See who are you chatting with!",
   "authors": [
     "dzwdz"
   ],
-  "contact": {},
+  "contact": {
+    "sources": "https://github.com/dzwdz/chat_heads"
+  },
   "license": "MPL-2.0",
   "icon": "assets/chat_heads/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "dzwdz.chat_heads.EntryPoint"
@@ -21,7 +23,12 @@
   ],
   "depends": {
     "fabricloader": ">=0.9.3+build.207",
-    "fabric": "*",
     "minecraft": "1.16.1"
+  },
+  "custom": {
+    "modupdater": {
+      "strategy": "curseforge",
+      "projectID": 407206
+    }
   }
 }
