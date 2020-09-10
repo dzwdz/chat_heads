@@ -22,7 +22,7 @@
     "chat_heads.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.9.3+build.207",
+    "fabricloader": ">=0.9.1+build.205",
     "minecraft": "1.16.2"
   },
   "custom": {
