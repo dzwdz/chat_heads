@@ -15,11 +15,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ChatHud.class)
-public class ChatHudMixin {
+public abstract class ChatHudMixin {
     @Shadow @Final private MinecraftClient client;
 
     @Inject(
@@ -68,5 +69,16 @@ public class ChatHudMixin {
     )
     public int correctClickPosition(int x) {
         return x - EntryPoint.CHAT_OFFSET;
+    }
+
+    @Redirect(
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/ChatHud;getWidth()I"
+            ),
+            method = "addMessage(Lnet/minecraft/text/Text;IIZ)V"
+    )
+    public int fixTextOverflow(ChatHud chatHud) {
+        return ChatHud.getWidth(client.options.chatWidth) - EntryPoint.CHAT_OFFSET;
     }
 }
