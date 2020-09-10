@@ -21,14 +21,22 @@ public class ChatListenerHudMixin {
     )
     public void onChatMessage(MessageType messageType, Text message, UUID senderUuid, CallbackInfo callbackInfo) {
         EntryPoint.lastSender = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(senderUuid);
+        String textString = message.getString();
         if (EntryPoint.lastSender == null) {
-            for (String part : message.getString().split("(§.)|[^\\w]")) {
+            for (String part : textString.split("(§.)|[^\\w]")) {
                 if (part.isEmpty()) continue;
                 PlayerListEntry p = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(part);
                 if (p != null) {
                     EntryPoint.lastSender = p;
                     return;
                 }
+            }
+        }
+        for (PlayerListEntry p : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+            Text displayName = p.getDisplayName();
+            if (displayName != null && textString.contains(displayName.getString())) {
+                EntryPoint.lastSender = p;
+                return;
             }
         }
     }
