@@ -1,7 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.EntryPoint;
-import java.util.UUID;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatListenerHud;
 import net.minecraft.client.network.PlayerListEntry;
@@ -11,6 +10,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.UUID;
 
 @Mixin(ChatListenerHud.class)
 public class ChatListenerHudMixin {
@@ -32,7 +33,8 @@ public class ChatListenerHudMixin {
             }
         }
         for (PlayerListEntry p: MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
-            if (textString.contains(p.getDisplayName().getString())) {
+            Text displayName = p.getDisplayName();
+            if (displayName != null && textString.contains(displayName.getString())) {
                 EntryPoint.lastSender = p;
                 return;
             }
