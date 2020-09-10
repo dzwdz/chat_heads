@@ -31,9 +31,7 @@ public class ChatListenerHudMixin {
                 }
             }
         }
-        System.out.println("not found, now looking for "+textString);
         for (PlayerListEntry p: MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
-            System.out.println("\tcheck against "+p.getDisplayName().getString());
             if (textString.contains(p.getDisplayName().getString())) {
                 EntryPoint.lastSender = p;
                 return;
