@@ -2,7 +2,6 @@ package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.EntryPoint;
 import dzwdz.chat_heads.mixinterface.ChatHudLineMixinAccessor;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.text.StringRenderable;
@@ -25,19 +24,7 @@ public class ChatHudLineMixin implements ChatHudLineMixinAccessor {
             method = "<init>(ILnet/minecraft/text/StringRenderable;I)V"
     )
     public void init(CallbackInfo callbackInfo) {
-        if (EntryPoint.lastUUID != null) {
-            chatheads$owner = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(EntryPoint.lastUUID);
-        }
-        if (chatheads$owner == null) {
-            for (String part : text.getString().split("(§.)|[^\\w]")) {
-                if (part.isEmpty()) continue;
-                PlayerListEntry p = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(part);
-                if (p != null) {
-                    chatheads$owner = p;
-                    return;
-                }
-            }
-        }
+        chatheads$owner = EntryPoint.lastSender;
     }
 
     @Override
