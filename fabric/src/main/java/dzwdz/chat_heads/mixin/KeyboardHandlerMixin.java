@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyboardHandlerMixin {
     @Inject(
             at = @At("HEAD"),
-            method = "debugFeedbackTranslated(Ljava/lang/String;[Ljava/lang/Object;)V"
+            method = "Lnet/minecraft/client/KeyboardHandler;debugFeedbackTranslated(Ljava/lang/String;[Ljava/lang/Object;)V"
     )
     public void debugWarnReset(CallbackInfo callbackInfo) {
         ChatHeads.lastSender = null;
@@ -19,7 +19,7 @@ public class KeyboardHandlerMixin {
 
     @Inject(
             at = @At("HEAD"),
-            method = "debugWarningTranslated(Ljava/lang/String;[Ljava/lang/Object;)V"
+            method = "Lnet/minecraft/client/KeyboardHandler;debugWarningTranslated(Ljava/lang/String;[Ljava/lang/Object;)V"
     )
     public void debugErrorReset(CallbackInfo callbackInfo) {
         ChatHeads.lastSender = null;
