@@ -1,6 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
-import dzwdz.chat_heads.EntryPoint;
+import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +14,7 @@ public class KeyboardMixin {
             method = "debugWarn(Ljava/lang/String;[Ljava/lang/Object;)V"
     )
     public void debugWarnReset(CallbackInfo callbackInfo) {
-        EntryPoint.lastSender = null;
+        ChatHeads.lastSender = null;
     }
 
     @Inject(
@@ -22,6 +22,6 @@ public class KeyboardMixin {
             method = "debugError(Ljava/lang/String;[Ljava/lang/Object;)V"
     )
     public void debugErrorReset(CallbackInfo callbackInfo) {
-        EntryPoint.lastSender = null;
+        ChatHeads.lastSender = null;
     }
 }

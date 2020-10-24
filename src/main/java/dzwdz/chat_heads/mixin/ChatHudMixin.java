@@ -1,7 +1,7 @@
 package dzwdz.chat_heads.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import dzwdz.chat_heads.EntryPoint;
+import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.ChatHudLineMixinAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -56,7 +56,7 @@ public abstract class ChatHudMixin {
             index = 2
     )
     public float moveTheText(float prevX) {
-        return EntryPoint.CHAT_OFFSET;
+        return ChatHeads.CHAT_OFFSET;
     }
 
     @ModifyArg(
@@ -68,7 +68,7 @@ public abstract class ChatHudMixin {
             index = 1
     )
     public int correctClickPosition(int x) {
-        return x - EntryPoint.CHAT_OFFSET;
+        return x - ChatHeads.CHAT_OFFSET;
     }
 
     @Redirect(
@@ -79,6 +79,6 @@ public abstract class ChatHudMixin {
             method = "addMessage(Lnet/minecraft/text/Text;IIZ)V"
     )
     public int fixTextOverflow(ChatHud chatHud) {
-        return ChatHud.getWidth(client.options.chatWidth) - EntryPoint.CHAT_OFFSET;
+        return ChatHud.getWidth(client.options.chatWidth) - ChatHeads.CHAT_OFFSET;
     }
 }

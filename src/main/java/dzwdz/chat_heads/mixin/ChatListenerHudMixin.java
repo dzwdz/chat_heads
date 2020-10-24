@@ -1,6 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
-import dzwdz.chat_heads.EntryPoint;
+import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatListenerHud;
 import net.minecraft.client.network.PlayerListEntry;
@@ -20,14 +20,14 @@ public class ChatListenerHudMixin {
             method = "onChatMessage(Lnet/minecraft/network/MessageType;Lnet/minecraft/text/Text;Ljava/util/UUID;)V"
     )
     public void onChatMessage(MessageType messageType, Text message, UUID senderUuid, CallbackInfo callbackInfo) {
-        EntryPoint.lastSender = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(senderUuid);
+        ChatHeads.lastSender = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(senderUuid);
         String textString = message.getString();
-        if (EntryPoint.lastSender == null) {
+        if (ChatHeads.lastSender == null) {
             for (String part : textString.split("(§.)|[^\\w]")) {
                 if (part.isEmpty()) continue;
                 PlayerListEntry p = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(part);
                 if (p != null) {
-                    EntryPoint.lastSender = p;
+                    ChatHeads.lastSender = p;
                     return;
                 }
             }
@@ -35,7 +35,7 @@ public class ChatListenerHudMixin {
         for (PlayerListEntry p: MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
             Text displayName = p.getDisplayName();
             if (displayName != null && textString.contains(displayName.getString())) {
-                EntryPoint.lastSender = p;
+                ChatHeads.lastSender = p;
                 return;
             }
         }

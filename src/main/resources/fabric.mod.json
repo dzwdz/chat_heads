@@ -14,9 +14,6 @@
   "icon": "assets/chat_heads/icon.png",
   "environment": "client",
   "entrypoints": {
-    "main": [
-      "dzwdz.chat_heads.EntryPoint"
-    ]
   },
   "mixins": [
     "chat_heads.mixins.json"

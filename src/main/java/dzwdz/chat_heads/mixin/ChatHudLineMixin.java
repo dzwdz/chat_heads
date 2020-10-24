@@ -1,6 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
-import dzwdz.chat_heads.EntryPoint;
+import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.ChatHudLineMixinAccessor;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.network.PlayerListEntry;
@@ -20,7 +20,7 @@ public class ChatHudLineMixin implements ChatHudLineMixinAccessor {
             method = "<init>(ILjava/lang/Object;I)V"
     )
     public void init(CallbackInfo callbackInfo) {
-        chatheads$owner = EntryPoint.lastSender;
+        chatheads$owner = ChatHeads.lastSender;
     }
 
     @Override
