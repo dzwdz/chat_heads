@@ -1,19 +1,19 @@
 package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.mixinterface.ChatHudLineMixinAccessor;
-import net.minecraft.client.gui.hud.ChatHudLine;
-import net.minecraft.client.network.PlayerListEntry;
+import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
+import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ChatHudLine.class)
-public class ChatHudLineMixin implements ChatHudLineMixinAccessor {
+@Mixin(GuiMessage.class)
+public class GuiMessageMixin implements GuiMessageOwnerAccessor {
     @Nullable
-    public PlayerListEntry chatheads$owner;
+    public PlayerInfo chatheads$owner;
 
     @Inject(
             at = @At("TAIL"),
@@ -24,7 +24,7 @@ public class ChatHudLineMixin implements ChatHudLineMixinAccessor {
     }
 
     @Override
-    public PlayerListEntry chatheads$getOwner() {
+    public PlayerInfo chatheads$getOwner() {
         return chatheads$owner;
     }
 }

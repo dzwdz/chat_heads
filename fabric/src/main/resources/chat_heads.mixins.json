@@ -4,10 +4,10 @@
   "package": "dzwdz.chat_heads.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "ChatHudMixin",
-    "ChatHudLineMixin",
-    "ChatListenerHudMixin",
-    "KeyboardMixin"
+    "ChatComponentMixin",
+    "GuiMessageMixin",
+    "StandardChatListenerMixin",
+    "KeyboardHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
