@@ -40,8 +40,7 @@ public abstract class ChatComponentMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/ChatLine;getAddedTime()I"
             ),
-            method = "render(Lcom/mojang/blaze3d/matrix/MatrixStack;I)V",
-            print = true
+            method = "render(Lcom/mojang/blaze3d/matrix/MatrixStack;I)V"
     )
     public ChatLine<?> captureGuiMessage(ChatLine<?> guiMessage) {
         ChatHeads.lastGuiMessage = guiMessage;

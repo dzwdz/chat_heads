@@ -104,7 +104,7 @@ mixin {
 jar {
     manifest {
         attributes([
-                // Existing properties here
+                "Implementation-Version": "${version}",
                 "MixinConfigs": "chat_heads.mixins.json"
         ])
     }
