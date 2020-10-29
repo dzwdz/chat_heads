@@ -10,6 +10,3 @@ pluginManagement {
 }
 
 rootProject.name = 'chat_heads'
-
-include 'fabric'
-include 'forge'
