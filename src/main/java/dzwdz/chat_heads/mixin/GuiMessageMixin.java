@@ -20,7 +20,10 @@ public class GuiMessageMixin implements GuiMessageOwnerAccessor {
             method = "<init>(ILjava/lang/Object;I)V"
     )
     public void init(CallbackInfo callbackInfo) {
-        chatheads$owner = ChatHeads.lastSender;
+        if (ChatHeads.firstLine) {
+            chatheads$owner = ChatHeads.lastSender;
+            ChatHeads.firstLine = false;
+        }
     }
 
     @Override

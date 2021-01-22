@@ -12,6 +12,7 @@ public class ChatHeads {
 
     public static int lastY = 0;
     public static float lastOpacity = 0;
+    public static boolean firstLine = false;
 
     public static final int CHAT_OFFSET = 10;
 }

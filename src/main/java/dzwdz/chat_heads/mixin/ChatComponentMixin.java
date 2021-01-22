@@ -90,4 +90,12 @@ public abstract class ChatComponentMixin {
     public int fixTextOverflow(ChatComponent chatHud) {
         return ChatComponent.getWidth(minecraft.options.chatWidth) - ChatHeads.CHAT_OFFSET;
     }
+
+    @Inject(
+            at = @At("HEAD"),
+            method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"
+    )
+    private void detectNewMessage(CallbackInfo ci) {
+        ChatHeads.firstLine = true;
+    }
 }
