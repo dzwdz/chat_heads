@@ -19,8 +19,8 @@
     "chat_heads.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.9.1+build.205",
-    "minecraft": ">=1.16.2"
+    "fabricloader": ">=0.11.0",
+    "minecraft": "1.17"
   },
   "custom": {
     "modupdater": {
