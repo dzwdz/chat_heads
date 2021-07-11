@@ -58,13 +58,13 @@ public abstract class ChatComponentMixin {
     public void render(PoseStack matrixStack, int i, CallbackInfo ci) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor)ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
-            RenderSystem.color4f(1, 1, 1, ChatHeads.lastOpacity);
-            minecraft.getTextureManager().bind(owner.getSkinLocation());
+            RenderSystem.setShaderColor(1, 1, 1, ChatHeads.lastOpacity);
+            RenderSystem.setShaderTexture(0, owner.getSkinLocation());
             // draw base layer
             GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 8.0F, 8, 8, 8, 64, 64);
             // draw hat
             GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 40.0F, 8, 8, 8, 64, 64);
-            RenderSystem.color4f(1, 1, 1, 1);
+            RenderSystem.setShaderColor(1, 1, 1, 1);
         }
     }
 
