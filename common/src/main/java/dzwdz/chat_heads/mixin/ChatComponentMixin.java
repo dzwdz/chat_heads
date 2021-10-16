@@ -30,16 +30,9 @@ public abstract class ChatComponentMixin {
             index = 2
     )
     public float moveTheText(PoseStack poseStack, FormattedCharSequence formattedCharSequence, float x, float y, int color) {
-        PlayerInfo owner = ((GuiMessageOwnerAccessor) ChatHeads.lastGuiMessage).chatheads$getOwner();
-
         ChatHeads.lastY = (int) y;
         ChatHeads.lastOpacity = (((color >> 24) + 256) % 256) / 255f; // haha yes
-
-        if (owner != null || ChatHeads.CONFIG.offsetNonPlayerText) {
-            return ChatHeads.CHAT_OFFSET;
-        } else {
-            return x;
-        }
+        return ChatHeads.lastChatOffset;
     }
 
     @ModifyVariable(
@@ -51,6 +44,7 @@ public abstract class ChatComponentMixin {
     )
     public GuiMessage<?> captureGuiMessage(GuiMessage<?> guiMessage) {
         ChatHeads.lastGuiMessage = guiMessage;
+        ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
         return guiMessage;
     }
 
@@ -75,6 +69,15 @@ public abstract class ChatComponentMixin {
         }
     }
 
+    @ModifyVariable(
+            at = @At("STORE"),
+            method = "getClickedComponentStyleAt(DD)Lnet/minecraft/network/chat/Style;"
+    )
+    public GuiMessage<?> updateChatOffset(GuiMessage<?> guiMessage) {
+        ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
+        return guiMessage;
+    }
+
     @ModifyArg(
             at = @At(
                     value = "INVOKE",
@@ -84,7 +87,7 @@ public abstract class ChatComponentMixin {
             index = 1
     )
     public int correctClickPosition(int x) {
-        return x - ChatHeads.CHAT_OFFSET;
+        return x - ChatHeads.lastChatOffset;
     }
 
     @Redirect(
@@ -95,6 +98,7 @@ public abstract class ChatComponentMixin {
             method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"
     )
     public int fixTextOverflow(ChatComponent chatHud) {
-        return ChatComponent.getWidth(minecraft.options.chatWidth) - ChatHeads.CHAT_OFFSET;
+        // at this point, lastSender is well-defined but neither lastGuiMessage nor lastChatOffset
+        return ChatComponent.getWidth(minecraft.options.chatWidth) - ChatHeads.getChatOffset(ChatHeads.lastSender);
     }
 }
