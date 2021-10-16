@@ -56,15 +56,15 @@ public abstract class ChatComponentMixin {
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
     )
     public void render(PoseStack matrixStack, int i, CallbackInfo ci) {
-        PlayerInfo owner = ((GuiMessageOwnerAccessor)ChatHeads.lastGuiMessage).chatheads$getOwner();
+        PlayerInfo owner = ((GuiMessageOwnerAccessor) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
-            RenderSystem.setShaderColor(1, 1, 1, ChatHeads.lastOpacity);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);
             RenderSystem.setShaderTexture(0, owner.getSkinLocation());
             // draw base layer
-            GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 8.0F, 8, 8, 8, 64, 64);
+            GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 8.0f, 8, 8, 8, 64, 64);
             // draw hat
-            GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 40.0F, 8, 8, 8, 64, 64);
-            RenderSystem.setShaderColor(1, 1, 1, 1);
+            GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 40.0f, 8, 8, 8, 64, 64);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
 
@@ -89,13 +89,5 @@ public abstract class ChatComponentMixin {
     )
     public int fixTextOverflow(ChatComponent chatHud) {
         return ChatComponent.getWidth(minecraft.options.chatWidth) - ChatHeads.CHAT_OFFSET;
-    }
-
-    @Inject(
-            at = @At("HEAD"),
-            method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"
-    )
-    private void detectNewMessage(CallbackInfo ci) {
-        ChatHeads.firstLine = true;
     }
 }

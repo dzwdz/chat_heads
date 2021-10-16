@@ -11,8 +11,7 @@ public class ChatHeads {
     public static GuiMessage<?> lastGuiMessage;
 
     public static int lastY = 0;
-    public static float lastOpacity = 0;
-    public static boolean firstLine = false;
+    public static float lastOpacity = 0.0f;
 
     public static final int CHAT_OFFSET = 10;
 }

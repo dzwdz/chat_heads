@@ -20,10 +20,9 @@ public class GuiMessageMixin implements GuiMessageOwnerAccessor {
             method = "<init>(ILjava/lang/Object;I)V"
     )
     public void init(CallbackInfo callbackInfo) {
-        if (ChatHeads.firstLine) {
-            chatheads$owner = ChatHeads.lastSender;
-            ChatHeads.firstLine = false;
-        }
+        chatheads$owner = ChatHeads.lastSender;
+        // reset sender early so that multi-line chats and non-player messages don't receive a chat head
+        ChatHeads.lastSender = null;
     }
 
     @Override
