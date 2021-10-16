@@ -22,19 +22,26 @@ public class StandardChatListenerMixin {
             method = "handle(Lnet/minecraft/network/chat/ChatType;Lnet/minecraft/network/chat/Component;Ljava/util/UUID;)V"
     )
     public void onChatMessage(ChatType messageType, Component message, UUID senderUuid, CallbackInfo callbackInfo) {
-        ChatHeads.lastSender = Minecraft.getInstance().getConnection().getPlayerInfo(senderUuid);
+        ClientPacketListener connection = Minecraft.getInstance().getConnection();
+
+        ChatHeads.lastSender = connection.getPlayerInfo(senderUuid);
+        if (ChatHeads.lastSender != null)
+            return;
+
         String textString = message.getString();
-        if (ChatHeads.lastSender == null) {
-            for (String part : textString.split("(§.)|[^\\w]")) {
-                if (part.isEmpty()) continue;
-                PlayerInfo p = Minecraft.getInstance().getConnection().getPlayerInfo(part);
-                if (p != null) {
-                    ChatHeads.lastSender = p;
-                    return;
-                }
+
+        for (String part : textString.split("(§.)|[^\\w]")) {
+            if (part.isEmpty()) continue;
+            PlayerInfo p = connection.getPlayerInfo(part);
+            if (p != null) {
+                ChatHeads.lastSender = p;
+                return;
             }
         }
-        for (PlayerInfo p: Minecraft.getInstance().getConnection().getOnlinePlayers()) {
+
+        for (PlayerInfo p : connection.getOnlinePlayers()) {
+            // on vanilla servers this seems to always be null, apparently it can only be set via modifying
+            // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
             Component displayName = p.getTabListDisplayName();
             if (displayName != null && textString.contains(displayName.getString())) {
                 ChatHeads.lastSender = p;
