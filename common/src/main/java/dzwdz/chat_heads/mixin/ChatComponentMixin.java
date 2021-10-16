@@ -20,6 +20,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ChatComponentMixin {
     @Shadow @Final private Minecraft minecraft;
 
+    @ModifyVariable(
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/GuiMessage;getAddedTime()I"
+            ),
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
+    )
+    public GuiMessage<?> captureGuiMessage(GuiMessage<?> guiMessage) {
+        ChatHeads.lastGuiMessage = guiMessage;
+        ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
+        return guiMessage;
+    }
+
     @ModifyArg(
             at = @At(
                     value = "INVOKE",
@@ -33,19 +46,6 @@ public abstract class ChatComponentMixin {
         ChatHeads.lastY = (int) y;
         ChatHeads.lastOpacity = (((color >> 24) + 256) % 256) / 255f; // haha yes
         return ChatHeads.lastChatOffset;
-    }
-
-    @ModifyVariable(
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/GuiMessage;getAddedTime()I"
-            ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
-    )
-    public GuiMessage<?> captureGuiMessage(GuiMessage<?> guiMessage) {
-        ChatHeads.lastGuiMessage = guiMessage;
-        ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
-        return guiMessage;
     }
 
     @Inject(
