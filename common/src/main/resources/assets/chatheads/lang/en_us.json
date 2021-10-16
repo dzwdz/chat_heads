@@ -1,0 +1,5 @@
+{
+  "text.autoconfig.chat_heads.title": "Chat Heads",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Offset non-player chat text",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "All text will be aligned if true"
+}

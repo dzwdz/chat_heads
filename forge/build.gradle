@@ -24,6 +24,8 @@ dependencies {
     // Remove the next line if you don't want to depend on the API
 //    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
 
+    modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
+
     implementation(project(path: ":common", configuration: "dev")) {
         transitive = false
     }

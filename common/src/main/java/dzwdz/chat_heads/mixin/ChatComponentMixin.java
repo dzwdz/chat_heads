@@ -29,10 +29,17 @@ public abstract class ChatComponentMixin {
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V",
             index = 2
     )
-    public float moveTheText(PoseStack poseStack, FormattedCharSequence formattedCharSequence, float f, float y, int color) {
-        ChatHeads.lastY = (int)y;
+    public float moveTheText(PoseStack poseStack, FormattedCharSequence formattedCharSequence, float x, float y, int color) {
+        PlayerInfo owner = ((GuiMessageOwnerAccessor) ChatHeads.lastGuiMessage).chatheads$getOwner();
+
+        ChatHeads.lastY = (int) y;
         ChatHeads.lastOpacity = (((color >> 24) + 256) % 256) / 255f; // haha yes
-        return ChatHeads.CHAT_OFFSET;
+
+        if (owner != null || ChatHeads.CONFIG.offsetNonPlayerText) {
+            return ChatHeads.CHAT_OFFSET;
+        } else {
+            return x;
+        }
     }
 
     @ModifyVariable(

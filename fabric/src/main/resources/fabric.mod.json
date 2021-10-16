@@ -14,6 +14,12 @@
   "icon": "assets/chat_heads/icon.png",
   "environment": "client",
   "entrypoints": {
+    "main": [
+      "dzwdz.chat_heads.fabric.ChatHeads"
+    ],
+    "modmenu": [
+      "dzwdz.chat_heads.fabric.config.ModMenuImpl"
+    ]
   },
   "mixins": [
     "chat_heads.mixins.json"
