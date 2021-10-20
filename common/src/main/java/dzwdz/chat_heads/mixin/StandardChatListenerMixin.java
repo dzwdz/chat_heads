@@ -27,24 +27,27 @@ public class StandardChatListenerMixin {
         if (ChatHeads.lastSender != null)
             return;
 
-        String textString = message.getString();
+        // check each word consisting only out of allowed player name characters
+        for (String word : message.getString().split("(§.)|[^\\w]")) {
+            if (word.isEmpty()) continue;
 
-        for (String part : textString.split("(§.)|[^\\w]")) {
-            if (part.isEmpty()) continue;
-            PlayerInfo p = connection.getPlayerInfo(part);
-            if (p != null) {
-                ChatHeads.lastSender = p;
+            // check if player name
+            PlayerInfo player = connection.getPlayerInfo(word);
+            if (player != null) {
+                ChatHeads.lastSender = player;
                 return;
             }
-        }
 
-        for (PlayerInfo p : connection.getOnlinePlayers()) {
-            // on vanilla servers this seems to always be null, apparently it can only be set via modifying
-            // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
-            Component displayName = p.getTabListDisplayName();
-            if (displayName != null && textString.contains(displayName.getString())) {
-                ChatHeads.lastSender = p;
-                return;
+            // check if nickname
+            for (PlayerInfo p : connection.getOnlinePlayers()) {
+                // on vanilla servers this seems to always be null, apparently it can only be set via modifying
+                // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
+                // in other words, this is only for modded servers
+                Component displayName = p.getTabListDisplayName();
+                if (displayName != null && word.equals(displayName.getString())) {
+                    ChatHeads.lastSender = p;
+                    return;
+                }
             }
         }
     }
