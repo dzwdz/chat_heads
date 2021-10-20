@@ -29,6 +29,13 @@ versionRange = "[1.17.1,)"
 ordering = "NONE"
 side = "CLIENT"
 
+[[dependencies.chat_heads]]
+modId = "cloth_config"
+mandatory = true
+versionRange = "[5.0.0,)"
+ordering = "NONE"
+side = "CLIENT"
+
 #[[dependencies.chat_heads]]
 #modId = "architectury"
 #mandatory = true
