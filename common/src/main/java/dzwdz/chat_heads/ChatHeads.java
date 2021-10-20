@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
-    public static ChatHeadsConfig CONFIG;
+    public static ChatHeadsConfig CONFIG = new ChatHeadsConfig();
 
     @Nullable
     public static PlayerInfo lastSender;
@@ -26,7 +26,7 @@ public class ChatHeads {
     }
 
     public static int getChatOffset(@Nullable PlayerInfo owner) {
-        if (owner != null || ChatHeads.CONFIG.offsetNonPlayerText) {
+        if (owner != null || ChatHeads.CONFIG.offsetNonPlayerText()) {
             return 10;
         } else {
             return 0;

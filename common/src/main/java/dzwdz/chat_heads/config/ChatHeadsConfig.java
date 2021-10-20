@@ -1,13 +1,18 @@
 package dzwdz.chat_heads.config;
 
-import dzwdz.chat_heads.ChatHeads;
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
+@SuppressWarnings("SimplifiableConditionalExpression")
+public class ChatHeadsConfig {
+	private final ChatHeadsConfigData configData;
 
-@SuppressWarnings("CanBeFinal")
-@Config(name = ChatHeads.MOD_ID)
-public class ChatHeadsConfig implements ConfigData {
-	@ConfigEntry.Gui.Tooltip()
-	public boolean offsetNonPlayerText = true;
+	public ChatHeadsConfig() {
+		this.configData = null;
+	}
+
+	public ChatHeadsConfig(ChatHeadsConfigData configData) {
+		this.configData = configData;
+	}
+
+	public boolean offsetNonPlayerText() {
+		return configData == null ? true : configData.offsetNonPlayerText;
+	}
 }
