@@ -4,7 +4,6 @@ import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.chat.StandardChatListener;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,8 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Mixin(StandardChatListener.class)

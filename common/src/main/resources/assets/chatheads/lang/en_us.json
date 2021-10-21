@@ -1,5 +1,8 @@
 {
   "text.autoconfig.chat_heads.title": "Chat Heads",
   "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Offset non-player chat text",
-  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "All text will be aligned if true"
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "All text will be aligned if true",
+  "text.chat_heads.config.error.title": "Couldn't open config menu",
+  "text.chat_heads.config.error.no_cloth_config": "Cloth Config is not installed!",
+  "text.chat_heads.config.error.cloth_config_link": "Open Cloth Config page on CurseForge"
 }
