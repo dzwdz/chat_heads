@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiMessage.class)
-public class GuiMessageMixin implements GuiMessageOwnerAccessor {
+public abstract class GuiMessageMixin implements GuiMessageOwnerAccessor {
     @Nullable
     public PlayerInfo chatheads$owner;
 

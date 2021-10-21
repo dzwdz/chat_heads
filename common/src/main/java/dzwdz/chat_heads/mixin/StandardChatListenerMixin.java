@@ -12,10 +12,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Mixin(StandardChatListener.class)
-public class StandardChatListenerMixin {
+public abstract class StandardChatListenerMixin {
     @Inject(
             at = @At("HEAD"),
             method = "handle(Lnet/minecraft/network/chat/ChatType;Lnet/minecraft/network/chat/Component;Ljava/util/UUID;)V"
@@ -27,28 +29,6 @@ public class StandardChatListenerMixin {
         if (ChatHeads.lastSender != null)
             return;
 
-        // check each word consisting only out of allowed player name characters
-        for (String word : message.getString().split("(§.)|[^\\w]")) {
-            if (word.isEmpty()) continue;
-
-            // check if player name
-            PlayerInfo player = connection.getPlayerInfo(word);
-            if (player != null) {
-                ChatHeads.lastSender = player;
-                return;
-            }
-
-            // check if nickname
-            for (PlayerInfo p : connection.getOnlinePlayers()) {
-                // on vanilla servers this seems to always be null, apparently it can only be set via modifying
-                // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
-                // in other words, this is only for modded servers
-                Component displayName = p.getTabListDisplayName();
-                if (displayName != null && word.equals(displayName.getString())) {
-                    ChatHeads.lastSender = p;
-                    return;
-                }
-            }
-        }
+        ChatHeads.lastSender = ChatHeads.detectPlayer(connection, message);
     }
 }
