@@ -15,4 +15,8 @@ public class ChatHeadsConfig {
 	public boolean offsetNonPlayerText() {
 		return configData == null ? true : configData.offsetNonPlayerText;
 	}
+
+	public boolean smartHeuristics() {
+		return configData == null ? true : configData.smartHeuristics;
+	}
 }

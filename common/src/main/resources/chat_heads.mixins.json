@@ -6,6 +6,7 @@
   "client": [
     "ChatComponentMixin",
     "GuiMessageMixin",
+    "MinecraftMixin",
     "StandardChatListenerMixin"
   ],
   "injectors": {

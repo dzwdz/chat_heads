@@ -1,7 +1,13 @@
 {
   "text.autoconfig.chat_heads.title": "Chat Heads",
   "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Offset non-player chat text",
-  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "All text will be aligned if true",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "All text will be aligned if enabled",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "Smart heuristics",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip[0]": "Some servers don't tell (the UUID of) who sent a message,",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip[1]": "so we make a guess based on the content. This can lead to",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip[2]": "non-player messages getting a chat head.",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip[3]": "This option disables this guessing if the server sent",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip[4]": "at least one UUID.",
   "text.chat_heads.config.error.title": "Couldn't open config menu",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config is not installed!",
   "text.chat_heads.config.error.cloth_config_link": "Open Cloth Config page on CurseForge"

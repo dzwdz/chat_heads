@@ -12,8 +12,6 @@ authors = "dzwdz"
 description = '''
 See who are you chatting with!
 This mod adds player heads next to their chat messages.
-
-Has 1 whole config option if Cloth Config API is installed!
 '''
 logoFile = "icon.png"
 

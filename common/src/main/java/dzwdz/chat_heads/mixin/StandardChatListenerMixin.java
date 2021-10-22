@@ -22,10 +22,16 @@ public abstract class StandardChatListenerMixin {
     public void onChatMessage(ChatType messageType, Component message, UUID senderUuid, CallbackInfo callbackInfo) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
 
+        // find sender via UUID
         ChatHeads.lastSender = connection.getPlayerInfo(senderUuid);
-        if (ChatHeads.lastSender != null)
+        if (ChatHeads.lastSender != null) {
+            ChatHeads.serverSentUuid = true;
             return;
+        }
 
-        ChatHeads.lastSender = ChatHeads.detectPlayer(connection, message);
+        // no UUID, message is either not from a player or the server didn't wanna tell, use a heuristic to find out
+        if (!(ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics())) {
+            ChatHeads.lastSender = ChatHeads.detectPlayer(connection, message);
+        }
     }
 }

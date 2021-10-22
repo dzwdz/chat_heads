@@ -56,7 +56,7 @@ public abstract class ChatComponentMixin {
             ),
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
     )
-    public void render(PoseStack matrixStack, int i, CallbackInfo ci) {
+    public void renderChatHead(PoseStack matrixStack, int i, CallbackInfo ci) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);

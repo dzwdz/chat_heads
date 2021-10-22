@@ -3,7 +3,7 @@
   "id": "chat_heads",
   "version": "${version}",
   "name": "Chat Heads",
-  "description": "See who are you chatting with!\nThis mod adds player heads next to their chat messages.\n\nHas 1 whole config option if Cloth Config API is installed!",
+  "description": "See who are you chatting with!\nThis mod adds player heads next to their chat messages.",
   "authors": [
     "dzwdz"
   ],

@@ -24,6 +24,7 @@ public class ChatHeads {
     public static int lastY = 0;
     public static float lastOpacity = 0.0f;
     public static int lastChatOffset;
+    public static boolean serverSentUuid = false;
 
     public static int getChatOffset(@NotNull GuiMessage<?> guiMessage) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) guiMessage).chatheads$getOwner();
@@ -39,6 +40,7 @@ public class ChatHeads {
     }
 
     /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
+    @Nullable
     public static PlayerInfo detectPlayer(ClientPacketListener connection, Component message) {
         Map<String, PlayerInfo> nicknameCache = new HashMap<>();
 

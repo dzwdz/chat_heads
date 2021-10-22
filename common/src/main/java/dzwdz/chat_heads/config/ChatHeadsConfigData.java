@@ -11,4 +11,6 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class ChatHeadsConfigData implements ConfigData {
 	@ConfigEntry.Gui.Tooltip()
 	public boolean offsetNonPlayerText = true;
+	@ConfigEntry.Gui.Tooltip(count = 5)
+	public boolean smartHeuristics = true;
 }
