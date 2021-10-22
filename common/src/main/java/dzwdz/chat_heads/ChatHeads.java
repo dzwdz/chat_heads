@@ -60,26 +60,32 @@ public class ChatHeads {
         return null;
     }
 
+    // helper method for detectPlayer using an (initially empty) cache to speed up subsequent calls
+    // this cache will either be full or empty after this method returns
     @Nullable
     private static PlayerInfo getPlayerFromNickname(String word, ClientPacketListener connection, Map<String, PlayerInfo> nicknameCache) {
-        if (!nicknameCache.isEmpty()) {
-            return nicknameCache.get(word);
-        }
+        if (nicknameCache.isEmpty()) {
+            for (PlayerInfo p : connection.getOnlinePlayers()) {
+                // on vanilla servers this seems to always be null, apparently it can only be set via modifying
+                // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
+                Component displayName = p.getTabListDisplayName();
 
-        for (PlayerInfo p : connection.getOnlinePlayers()) {
-            // on vanilla servers this seems to always be null, apparently it can only be set via modifying
-            // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
-            Component displayName = p.getTabListDisplayName();
+                if (displayName != null) {
+                    String nickname = displayName.getString();
 
-            if (displayName != null) {
-                String nickname = displayName.getString();
+                    // found match, we are done
+                    if (word.equals(nickname)) {
+                        nicknameCache.clear(); // make sure to not leave the cache in an incomplete state
+                        return p;
+                    }
 
-                // found match, we are done
-                if (word.equals(nickname)) return p;
-
-                // cache values for next run
-                nicknameCache.put(nickname, p);
+                    // fill cache for subsequent calls
+                    nicknameCache.put(nickname, p);
+                }
             }
+        } else {
+            // use prepared cache
+            return nicknameCache.get(word);
         }
 
         return null;
