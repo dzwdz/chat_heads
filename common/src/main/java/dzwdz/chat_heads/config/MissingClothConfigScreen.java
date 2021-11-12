@@ -36,7 +36,7 @@ public class MissingClothConfigScreen extends Screen {
 		int x = width / 2 - w / 2; // centered
 		int y = 120;
 
-		addRenderableWidget(new Button(x, y, w, h, clothConfigLink, (button) -> {
+		addButton(new Button(x, y, w, h, clothConfigLink, (button) -> {
 			Util.getPlatform().openUri(forgeLink
 					? "https://www.curseforge.com/minecraft/mc-mods/cloth-config-forge"
 					: "https://www.curseforge.com/minecraft/mc-mods/cloth-config");
@@ -44,7 +44,7 @@ public class MissingClothConfigScreen extends Screen {
 
 		y += h + 10;
 
-		addRenderableWidget(new Button(x, y, w, h, CommonComponents.GUI_BACK, (button) -> {
+		addButton(new Button(x, y, w, h, CommonComponents.GUI_BACK, (button) -> {
 			minecraft.setScreen(parent);
 		}));
 	}

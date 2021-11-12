@@ -48,7 +48,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-//    classifier "fabric" // adds suffix
+    classifier null
 }
 
 jar {
