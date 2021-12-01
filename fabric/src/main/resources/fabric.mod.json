@@ -25,11 +25,11 @@
     "chat_heads.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.0",
-    "minecraft": "1.17.x"
+    "fabricloader": ">=0.12.8",
+    "minecraft": "1.18.x"
   },
   "suggests": {
-    "cloth-config2": ">=5.0.0"
+    "cloth-config2": ">=6.0.0"
   },
   "custom": {
     "modupdater": {
