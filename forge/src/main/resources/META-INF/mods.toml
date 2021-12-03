@@ -18,7 +18,7 @@ logoFile = "icon.png"
 [[dependencies.chat_heads]]
 modId = "forge"
 mandatory = true
-versionRange = "[38,)"
+versionRange = "[38.0.6,)"
 ordering = "NONE"
 side = "CLIENT"
 

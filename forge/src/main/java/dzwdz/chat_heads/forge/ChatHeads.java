@@ -5,14 +5,14 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmllegacy.network.FMLNetworkConstants;
+import net.minecraftforge.network.NetworkConstants;
 
 @Mod("chat_heads")
 public class ChatHeads {
 	public ChatHeads() {
 		// Make sure the mod being absent on the other network side does not cause the client to display the server as incompatible
 		ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class,
-				() -> new IExtensionPoint.DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+				() -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
 		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ChatHeadsClient::init);
 	}
