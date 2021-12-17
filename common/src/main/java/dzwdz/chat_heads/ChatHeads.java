@@ -1,6 +1,7 @@
 package dzwdz.chat_heads;
 
 import dzwdz.chat_heads.config.ChatHeadsConfig;
+import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
-    public static ChatHeadsConfig CONFIG = new ChatHeadsConfig();
+    public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
     @Nullable
     public static PlayerInfo lastSender;
