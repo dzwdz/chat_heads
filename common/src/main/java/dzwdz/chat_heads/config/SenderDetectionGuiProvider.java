@@ -31,7 +31,7 @@ public class SenderDetectionGuiProvider implements GuiProvider {
 						.build(),
 				ConfigEntryBuilder.create()
 						.startEnumSelector(new TranslatableComponent(SENDER_DETECTION), SenderDetection.class, config.senderDetection)
-						.setDefaultValue(Defaults.SENDER_DETECTION)
+						.setDefaultValue(ChatHeadsConfigDefaults.SENDER_DETECTION)
 						.setSaveConsumer(senderDetection -> config.senderDetection = senderDetection)
 						.setEnumNameProvider(anEnum -> new TranslatableComponent(SENDER_DETECTION + "." + anEnum.name()))
 						.build());
