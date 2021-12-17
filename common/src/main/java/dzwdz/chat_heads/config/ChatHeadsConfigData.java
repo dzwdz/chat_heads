@@ -10,7 +10,9 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 @Config(name = ChatHeads.MOD_ID)
 public class ChatHeadsConfigData implements ConfigData {
 	@ConfigEntry.Gui.Tooltip()
-	public boolean offsetNonPlayerText = true;
-	@ConfigEntry.Gui.Tooltip(count = 5)
-	public boolean smartHeuristics = true;
+	public boolean offsetNonPlayerText = Defaults.OFFSET_NON_PLAYER_TEXT;
+	@ConfigEntry.Gui.Tooltip(count = 3)
+	public SenderDetection senderDetection = Defaults.SENDER_DETECTION;
+	@ConfigEntry.Gui.Tooltip
+	public boolean smartHeuristics = Defaults.SMART_HEURISTICS;
 }
