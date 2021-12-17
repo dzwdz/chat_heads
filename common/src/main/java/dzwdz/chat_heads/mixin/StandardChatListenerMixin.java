@@ -1,6 +1,7 @@
 package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.ChatHeads;
+import dzwdz.chat_heads.config.SenderDetection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.chat.StandardChatListener;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -22,16 +23,23 @@ public abstract class StandardChatListenerMixin {
     public void onChatMessage(ChatType messageType, Component message, UUID senderUuid, CallbackInfo callbackInfo) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
 
-        // find sender via UUID
-        ChatHeads.lastSender = connection.getPlayerInfo(senderUuid);
-        if (ChatHeads.lastSender != null) {
-            ChatHeads.serverSentUuid = true;
-            return;
+        if (ChatHeads.CONFIG.senderDetection() != SenderDetection.HEURISTIC_ONLY) {
+            // find sender via UUID
+            ChatHeads.lastSender = connection.getPlayerInfo(senderUuid);
+
+            if (ChatHeads.lastSender != null) {
+                ChatHeads.serverSentUuid = true;
+                return;
+            }
+
+            // no UUID, message is either not from a player or the server didn't wanna tell
+
+            if (ChatHeads.CONFIG.senderDetection() == SenderDetection.UUID_ONLY || ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics()) {
+                return;
+            }
         }
 
-        // no UUID, message is either not from a player or the server didn't wanna tell, use a heuristic to find out
-        if (!(ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics())) {
-            ChatHeads.lastSender = ChatHeads.detectPlayer(connection, message);
-        }
+        // use heuristic to find sender
+        ChatHeads.lastSender = ChatHeads.detectPlayer(connection, message);
     }
 }
