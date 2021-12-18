@@ -5,7 +5,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod("chat_heads")
 public class ChatHeadsClient {
 	public static void init() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ChatHeadsClient::commonSetup);
