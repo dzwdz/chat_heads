@@ -8,7 +8,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 @Environment(EnvType.CLIENT)
 public class MissingClothConfigScreen extends Screen {
@@ -20,9 +19,9 @@ public class MissingClothConfigScreen extends Screen {
 	private final boolean forgeLink;
 
 	public MissingClothConfigScreen(Screen parent, boolean forgeLink) {
-		super(new TranslatableComponent("text.chat_heads.config.error.title"));
-		this.message = new TranslatableComponent("text.chat_heads.config.error.no_cloth_config");
-		this.clothConfigLink = new TranslatableComponent("text.chat_heads.config.error.cloth_config_link");
+		super(Component.translatable("text.chat_heads.config.error.title"));
+		this.message = Component.translatable("text.chat_heads.config.error.no_cloth_config");
+		this.clothConfigLink = Component.translatable("text.chat_heads.config.error.cloth_config_link");
 		this.parent = parent;
 		this.forgeLink = forgeLink;
 	}

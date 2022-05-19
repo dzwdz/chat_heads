@@ -99,6 +99,6 @@ public abstract class ChatComponentMixin {
     )
     public int fixTextOverflow(ChatComponent chatHud) {
         // at this point, lastSender is well-defined but neither lastGuiMessage nor lastChatOffset
-        return ChatComponent.getWidth(minecraft.options.chatWidth) - ChatHeads.getChatOffset(ChatHeads.lastSender);
+        return ChatComponent.getWidth(minecraft.options.chatWidth().get()) - ChatHeads.getChatOffset(ChatHeads.lastSender);
     }
 }

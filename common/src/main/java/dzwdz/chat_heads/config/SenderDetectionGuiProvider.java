@@ -4,7 +4,7 @@ import me.shedaniel.autoconfig.gui.registry.api.GuiProvider;
 import me.shedaniel.autoconfig.gui.registry.api.GuiRegistryAccess;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -20,20 +20,20 @@ public class SenderDetectionGuiProvider implements GuiProvider {
 
 		return List.of(
 				ConfigEntryBuilder.create()
-						.startTextDescription(new TranslatableComponent(EXPLANATION))
+						.startTextDescription(Component.translatable(EXPLANATION))
 						.setTooltip(
-								new TranslatableComponent(EXPLANATION + ".@Tooltip[0]"),
-								new TranslatableComponent(EXPLANATION + ".@Tooltip[1]"),
-								new TranslatableComponent(EXPLANATION + ".@Tooltip[2]"),
-								new TranslatableComponent(EXPLANATION + ".@Tooltip[3]"),
-								new TranslatableComponent(EXPLANATION + ".@Tooltip[4]")
+								Component.translatable(EXPLANATION + ".@Tooltip[0]"),
+								Component.translatable(EXPLANATION + ".@Tooltip[1]"),
+								Component.translatable(EXPLANATION + ".@Tooltip[2]"),
+								Component.translatable(EXPLANATION + ".@Tooltip[3]"),
+								Component.translatable(EXPLANATION + ".@Tooltip[4]")
 						)
 						.build(),
 				ConfigEntryBuilder.create()
-						.startEnumSelector(new TranslatableComponent(SENDER_DETECTION), SenderDetection.class, config.senderDetection)
+						.startEnumSelector(Component.translatable(SENDER_DETECTION), SenderDetection.class, config.senderDetection)
 						.setDefaultValue(ChatHeadsConfigDefaults.SENDER_DETECTION)
 						.setSaveConsumer(senderDetection -> config.senderDetection = senderDetection)
-						.setEnumNameProvider(anEnum -> new TranslatableComponent(SENDER_DETECTION + "." + anEnum.name()))
+						.setEnumNameProvider(anEnum -> Component.translatable(SENDER_DETECTION + "." + anEnum.name()))
 						.build());
 	}
 }
