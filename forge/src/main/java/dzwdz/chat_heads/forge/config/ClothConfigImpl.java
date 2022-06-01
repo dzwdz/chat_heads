@@ -19,7 +19,7 @@ public class ClothConfigImpl {
 					if (isInstalled()) {
 						return AutoConfig.getConfigScreen(ChatHeadsConfigData.class, parent).get();
 					} else {
-						return new MissingClothConfigScreen(parent, true);
+						return new MissingClothConfigScreen(parent);
 					}
 				}));
 	}

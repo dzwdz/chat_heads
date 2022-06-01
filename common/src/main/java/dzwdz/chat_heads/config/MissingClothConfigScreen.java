@@ -16,14 +16,12 @@ public class MissingClothConfigScreen extends Screen {
 	private final Screen parent;
 	private final Component message;
 	private final Component clothConfigLink;
-	private final boolean forgeLink;
 
-	public MissingClothConfigScreen(Screen parent, boolean forgeLink) {
+	public MissingClothConfigScreen(Screen parent) {
 		super(Component.translatable("text.chat_heads.config.error.title"));
 		this.message = Component.translatable("text.chat_heads.config.error.no_cloth_config");
 		this.clothConfigLink = Component.translatable("text.chat_heads.config.error.cloth_config_link");
 		this.parent = parent;
-		this.forgeLink = forgeLink;
 	}
 
 	@Override
@@ -36,9 +34,7 @@ public class MissingClothConfigScreen extends Screen {
 		int y = 120;
 
 		addRenderableWidget(new Button(x, y, w, h, clothConfigLink, (button) -> {
-			Util.getPlatform().openUri(forgeLink
-					? "https://www.curseforge.com/minecraft/mc-mods/cloth-config-forge"
-					: "https://www.curseforge.com/minecraft/mc-mods/cloth-config");
+			Util.getPlatform().openUri("https://www.curseforge.com/minecraft/mc-mods/cloth-config");
 		}));
 
 		y += h + 10;

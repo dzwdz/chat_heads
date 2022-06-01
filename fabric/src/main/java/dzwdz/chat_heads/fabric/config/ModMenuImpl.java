@@ -18,7 +18,7 @@ public class ModMenuImpl implements ModMenuApi {
             if (ClothConfigImpl.isInstalled()) {
                 return AutoConfig.getConfigScreen(ChatHeadsConfigData.class, parent).get();
             } else {
-                return new MissingClothConfigScreen(parent, false);
+                return new MissingClothConfigScreen(parent);
             }
         };
     }
