@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ChatComponent.class)
+@Mixin(value = ChatComponent.class, priority = 990) // apply before Quark's ChatComponentMixin
 public abstract class ChatComponentMixin {
     @Shadow @Final private Minecraft minecraft;
 
