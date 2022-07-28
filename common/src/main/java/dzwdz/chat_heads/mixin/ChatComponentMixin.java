@@ -5,10 +5,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
+import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,11 +26,11 @@ public abstract class ChatComponentMixin {
     @ModifyVariable(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/GuiMessage;getAddedTime()I"
+                    target = "Lnet/minecraft/client/GuiMessage$Line;addedTime()I"
             ),
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
     )
-    public GuiMessage<?> captureGuiMessage(GuiMessage<?> guiMessage) {
+    public GuiMessage.Line captureGuiMessage(GuiMessage.Line guiMessage) {
         ChatHeads.lastGuiMessage = guiMessage;
         ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
         return guiMessage;
@@ -57,7 +60,7 @@ public abstract class ChatComponentMixin {
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
     )
     public void renderChatHead(PoseStack matrixStack, int i, CallbackInfo ci) {
-        PlayerInfo owner = ((GuiMessageOwnerAccessor) ChatHeads.lastGuiMessage).chatheads$getOwner();
+        PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);
             RenderSystem.setShaderTexture(0, owner.getSkinLocation());
@@ -73,7 +76,7 @@ public abstract class ChatComponentMixin {
             at = @At("STORE"),
             method = "getClickedComponentStyleAt(DD)Lnet/minecraft/network/chat/Style;"
     )
-    public GuiMessage<?> updateChatOffset(GuiMessage<?> guiMessage) {
+    public GuiMessage.Line updateChatOffset(GuiMessage.Line guiMessage) {
         ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
         return guiMessage;
     }
@@ -95,7 +98,7 @@ public abstract class ChatComponentMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/components/ChatComponent;getWidth()I"
             ),
-            method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"
+            method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"
     )
     public int fixTextOverflow(ChatComponent chatHud) {
         // at this point, lastSender is well-defined but neither lastGuiMessage nor lastChatOffset

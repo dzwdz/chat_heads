@@ -10,18 +10,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GuiMessage.class)
-public abstract class GuiMessageMixin implements GuiMessageOwnerAccessor {
+@Mixin(GuiMessage.Line.class)
+public abstract class GuiMessageLineMixin implements GuiMessageOwnerAccessor {
     @Nullable
     public PlayerInfo chatheads$owner;
 
-    @Inject(
-            at = @At("TAIL"),
-            method = "<init>(ILjava/lang/Object;I)V"
-    )
+    @Inject(method = "<init>",  at = @At("TAIL"))
     public void init(CallbackInfo callbackInfo) {
         chatheads$owner = ChatHeads.lastSender;
-        // reset sender early so that multi-line chats and non-player messages don't receive a chat head
+        // reset sender early so multi-line chats don't receive a chat head
         ChatHeads.lastSender = null;
     }
 

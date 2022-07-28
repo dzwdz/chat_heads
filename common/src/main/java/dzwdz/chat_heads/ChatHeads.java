@@ -4,6 +4,7 @@ import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,31 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
+import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
+
+/*
+ * For 1.19.1 it goes
+ *
+ * ChatListener.handleChatMessage()
+ *  -> ChatListener.processPlayerChatMessage()
+ *  -> ChatListener.showMessageToPlayer()
+ *  -> ChatComponent.addMessage()
+ *  -> new GuiMessage.Line()
+ *
+ * For system messages (messages without UUID)
+ *
+ * ChatListener.handleChatMessage()
+ *   -> ChatListener.processNonPlayerChatMessage()
+ *   -> ChatComponent.addMessage()
+ *   -> new GuiMessage.Line()
+ *
+ * handleChatMessage() resolves the PlayerInfo from the MessageSigner's profile UUID.
+ * This replaces the previous need for the ChatSender in StandardChatListener.
+ * (StandardChatListener doesn't exist anymore and ChatSender seems to now only be used locally for verification.)
+ * Previously, GuiMessage was used for the full and split lines, now the latter uses GuiMessage.Line.
+ */
+
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
@@ -20,15 +46,35 @@ public class ChatHeads {
     @Nullable
     public static PlayerInfo lastSender;
     @Nullable
-    public static GuiMessage<?> lastGuiMessage;
+    public static GuiMessage.Line lastGuiMessage;
 
     public static int lastY = 0;
     public static float lastOpacity = 0.0f;
     public static int lastChatOffset;
     public static boolean serverSentUuid = false;
 
-    public static int getChatOffset(@NotNull GuiMessage<?> guiMessage) {
-        PlayerInfo owner = ((GuiMessageOwnerAccessor) guiMessage).chatheads$getOwner();
+    public static void handleAddedMessage(Component message, @Nullable PlayerInfo playerInfo) {
+        if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
+            ChatHeads.lastSender = playerInfo;
+
+            if (playerInfo != null) {
+                ChatHeads.serverSentUuid = true;
+                return;
+            }
+
+            // no PlayerInfo/UUID, message is either not from a player or the server didn't wanna tell
+
+            if (ChatHeads.CONFIG.senderDetection() == UUID_ONLY || ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics()) {
+                return;
+            }
+        }
+
+        // use heuristic to find sender
+        ChatHeads.lastSender = ChatHeads.detectPlayer(message);
+    }
+
+    public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
+        PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
         return getChatOffset(owner);
     }
 
@@ -42,7 +88,8 @@ public class ChatHeads {
 
     /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
     @Nullable
-    public static PlayerInfo detectPlayer(ClientPacketListener connection, Component message) {
+    public static PlayerInfo detectPlayer(Component message) {
+        ClientPacketListener connection = Minecraft.getInstance().getConnection();
         Map<String, PlayerInfo> nicknameCache = new HashMap<>();
 
         // check each word consisting only out of allowed player name characters
