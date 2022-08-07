@@ -9,6 +9,7 @@ import net.minecraft.network.chat.PlayerChatMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.time.Instant;
@@ -27,12 +28,24 @@ public abstract class ChatListenerMixin {
         ChatHeads.handleAddedMessage(component, playerInfo);
     }
 
-    // called for system messages aka messages without UUID
+    // called for player messages without UUID
     @Inject(
         method = "processNonPlayerChatMessage",
         at = @At("HEAD")
     )
-    public void chatheads$handleAddedSystemMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, CallbackInfoReturnable<Boolean> cir) {
+    public void chatheads$handleAddedSystemSignedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, CallbackInfoReturnable<Boolean> cir) {
         ChatHeads.handleAddedMessage(component, null);
+    }
+
+    // called for system messages
+    @Inject(
+            method = "handleSystemMessage",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;)V"
+            )
+    )
+    public void chatheads$handleAddedPlayerMessage(Component message, boolean bl, CallbackInfo ci) {
+        ChatHeads.handleAddedMessage(message, null);
     }
 }

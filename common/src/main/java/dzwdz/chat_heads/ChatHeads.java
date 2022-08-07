@@ -26,7 +26,7 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
  *  -> ChatComponent.addMessage()
  *  -> new GuiMessage.Line()
  *
- * For system messages (messages without UUID)
+ * For system signed player messages (messages without UUID)
  *
  * ChatListener.handleChatMessage()
  *   -> ChatListener.processNonPlayerChatMessage()
@@ -37,6 +37,9 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
  * This replaces the previous need for the ChatSender in StandardChatListener.
  * (StandardChatListener doesn't exist anymore and ChatSender seems to now only be used locally for verification.)
  * Previously, GuiMessage was used for the full and split lines, now the latter uses GuiMessage.Line.
+ *
+ * For "proper" system messages, ChatListener.handleSystemMessage() is called.
+ * https://github.com/Oharass/FreedomChat/releases converts chat messages to system messages, so we handle those as well.
  */
 
 public class ChatHeads {
