@@ -1,7 +1,7 @@
 package dzwdz.chat_heads.mixin;
 
+import com.mojang.authlib.GameProfile;
 import dzwdz.chat_heads.ChatHeads;
-import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.multiplayer.chat.ChatListener;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -16,25 +16,26 @@ import java.time.Instant;
 
 @Mixin(ChatListener.class)
 public abstract class ChatListenerMixin {
-    // called from processPlayerChatMessage(), after filtering
+    // called after message filtering
     @Inject(
-        method = "showMessageToPlayer",
+        method = "showMessageToPlayer", // called from handlePlayerChatMessage
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V"
         )
     )
-    public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, PlayerInfo playerInfo, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
-        ChatHeads.handleAddedMessage(component, playerInfo);
+    public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, GameProfile gameProfile, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
+        // looks like gameProfile.getId() *could* be different from the sender UUID, so we set ChatHeads.lastSender in ClientPacketListenerMixin instead
+        ChatHeads.handleAddedMessage(component);
     }
 
-    // called for player messages without UUID
     @Inject(
-        method = "processNonPlayerChatMessage",
+        method = "handleDisguisedChatMessage",
         at = @At("HEAD")
     )
-    public void chatheads$handleAddedSystemSignedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, CallbackInfoReturnable<Boolean> cir) {
-        ChatHeads.handleAddedMessage(component, null);
+    public void chatheads$handleAddedDisguisedMessage(Component component, ChatType.Bound bound, CallbackInfo ci) {
+        ChatHeads.lastSender = null;
+        ChatHeads.handleAddedMessage(component);
     }
 
     // called for system messages
@@ -45,7 +46,8 @@ public abstract class ChatListenerMixin {
                     target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;)V"
             )
     )
-    public void chatheads$handleAddedPlayerMessage(Component message, boolean bl, CallbackInfo ci) {
-        ChatHeads.handleAddedMessage(message, null);
+    public void chatheads$handleAddedSystemMessage(Component message, boolean bl, CallbackInfo ci) {
+        ChatHeads.lastSender = null;
+        ChatHeads.handleAddedMessage(message);
     }
 }

@@ -5,13 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
-import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +25,7 @@ public abstract class ChatComponentMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/GuiMessage$Line;addedTime()I"
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V"
     )
     public GuiMessage.Line captureGuiMessage(GuiMessage.Line guiMessage) {
         ChatHeads.lastGuiMessage = guiMessage;
@@ -42,7 +39,7 @@ public abstract class ChatComponentMixin {
                     target = "Lnet/minecraft/client/gui/Font;drawShadow(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/util/FormattedCharSequence;FFI)I",
                     ordinal = 0
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V",
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V",
             index = 2
     )
     public float moveTheText(PoseStack poseStack, FormattedCharSequence formattedCharSequence, float x, float y, int color) {
@@ -57,9 +54,9 @@ public abstract class ChatComponentMixin {
                     target = "Lnet/minecraft/client/gui/Font;drawShadow(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/util/FormattedCharSequence;FFI)I",
                     ordinal = 0
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V"
     )
-    public void renderChatHead(PoseStack matrixStack, int i, CallbackInfo ci) {
+    public void renderChatHead(PoseStack matrixStack, int i, int j, int k, CallbackInfo ci) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);

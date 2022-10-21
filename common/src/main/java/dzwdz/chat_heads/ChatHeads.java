@@ -18,28 +18,32 @@ import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
 /*
- * For 1.19.1 it goes
+ * 22w42a changed chat a bit, here's the overview:
  *
- * ChatListener.handleChatMessage()
- *  -> ChatListener.processPlayerChatMessage()
+ * previous ClientboundPlayerChatPacket was split into ClientboundPlayerChatPacket and ClientboundDisguisedChatPacket
+ * (ChatListener.handleChatMessage() -> ClientPacketListener.handlePlayerChat() and ClientPacketListener.handleDisguisedChat())
+ * "disguised player messages" are the equivalent of the previous "system signed player messages" which were player messages with UUID 0
+ *
+ * Call stack looks roughly like this:
+ *
+ * ClientPacketListener.handlePlayerChat()
+ *  -> ChatListener.handlePlayerChatMessage(), note: doesn't take PlayerInfo but GameProfile instead
  *  -> ChatListener.showMessageToPlayer()
  *  -> ChatComponent.addMessage()
  *  -> new GuiMessage.Line()
  *
- * For system signed player messages (messages without UUID)
+ * ClientPacketListener.handleDisguisedChat()
+ *  -> ChatListener.handleDisguisedChatMessage()
+ *  -> ChatComponent.addMessage()
+ *  -> new GuiMessage.Line()
  *
- * ChatListener.handleChatMessage()
- *   -> ChatListener.processNonPlayerChatMessage()
- *   -> ChatComponent.addMessage()
- *   -> new GuiMessage.Line()
+ * ClientPacketListener.handleSystemChat()
+ *  -> ChatListener.handleSystemMessage()
+ *  -> ChatComponent.addMessage()
+ *  -> new GuiMessage.Line()
  *
- * handleChatMessage() resolves the PlayerInfo from the MessageSigner's profile UUID.
- * This replaces the previous need for the ChatSender in StandardChatListener.
- * (StandardChatListener doesn't exist anymore and ChatSender seems to now only be used locally for verification.)
- * Previously, GuiMessage was used for the full and split lines, now the latter uses GuiMessage.Line.
- *
- * For "proper" system messages, ChatListener.handleSystemMessage() is called.
- * https://github.com/Oharass/FreedomChat/releases converts chat messages to system messages, so we handle those as well.
+ * FreedomChat (https://github.com/Oharass/FreedomChat) will likely work the same as before, converting chat messages
+ * to system messages, so we still handle those.
  */
 
 public class ChatHeads {
@@ -56,11 +60,10 @@ public class ChatHeads {
     public static int lastChatOffset;
     public static boolean serverSentUuid = false;
 
-    public static void handleAddedMessage(Component message, @Nullable PlayerInfo playerInfo) {
+    // requires ChatHeads.lastSender to be set beforehand because of good programming
+    public static void handleAddedMessage(Component message) {
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
-            ChatHeads.lastSender = playerInfo;
-
-            if (playerInfo != null) {
+            if (ChatHeads.lastSender != null) {
                 ChatHeads.serverSentUuid = true;
                 return;
             }
