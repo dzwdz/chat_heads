@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[38,)"
+loaderVersion = "[44,)"
 issueTrackerURL = "https://github.com/dzwdz/chat_heads/issues"
 license = "MPL-2.0"
 
@@ -18,21 +18,21 @@ logoFile = "icon.png"
 [[dependencies.chat_heads]]
 modId = "forge"
 mandatory = true
-versionRange = "[38.0.6,)"
+versionRange = "[44.0.1,)"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.chat_heads]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18,)"
+versionRange = "[1.19.3,)"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.chat_heads]]
 modId = "cloth_config"
 mandatory = false
-versionRange = "[6.0.0,)"
+versionRange = "[9.0.0,)"
 ordering = "NONE"
 side = "CLIENT"
 
