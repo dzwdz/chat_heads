@@ -8,9 +8,15 @@ public class ClothConfigCommonImpl {
 	public static void loadConfig() {
 		ChatHeads.CONFIG = AutoConfig.register(ChatHeadsConfigData.class, JanksonConfigSerializer::new).getConfig();
 
-		AutoConfig.getGuiRegistry(ChatHeadsConfigData.class).registerPredicateProvider(
+		var guiRegistry = AutoConfig.getGuiRegistry(ChatHeadsConfigData.class);
+		guiRegistry.registerPredicateProvider(
 				new SenderDetectionGuiProvider(),
 				field -> field.getName().equals("senderDetection")
+		);
+
+		guiRegistry.registerPredicateProvider(
+				new AliasesGuiProvider(),
+				field -> field.getName().equals("nameAliases")
 		);
 	}
 }

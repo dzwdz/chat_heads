@@ -1,7 +1,6 @@
 package dzwdz.chat_heads.forge;
 
 import dzwdz.chat_heads.forge.config.ClothConfigImpl;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
