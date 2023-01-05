@@ -99,6 +99,9 @@ public class ChatHeads {
         for (String word : message.getString().split("(§.)|[^\\w]")) {
             if (word.isEmpty()) continue;
 
+            // manually translate nickname to profile name (needed for non-displayname nicknames)
+            word = CONFIG.getProfileName(word);
+
             // check if player name
             PlayerInfo player = connection.getPlayerInfo(word);
             if (player != null) return player;

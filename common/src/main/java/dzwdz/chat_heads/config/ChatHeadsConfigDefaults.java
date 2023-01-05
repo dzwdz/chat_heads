@@ -19,4 +19,9 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	public boolean smartHeuristics() {
 		return SMART_HEURISTICS;
 	}
+
+	@Override
+	public String getProfileName(String nickname) {
+		return nickname;
+	}
 }
