@@ -1,0 +1,27 @@
+package dzwdz.chat_heads.mixin;
+
+import dzwdz.chat_heads.mixinterface.HttpTextureAccessor;
+import net.minecraft.client.renderer.texture.HttpTexture;
+import net.minecraft.client.resources.SkinManager;
+import net.minecraft.resources.ResourceLocation;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+
+@Mixin(SkinManager.class)
+public abstract class SkinManagerMixin {
+    @ModifyArgs(
+            method = "registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinTextureCallback;)Lnet/minecraft/resources/ResourceLocation;",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/texture/TextureManager;register(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V"
+            )
+    )
+    public void chatheads$rememberTextureLocation(Args args) {
+        ResourceLocation id = args.get(0);
+        HttpTexture texture = args.get(1);
+        ((HttpTextureAccessor) texture).chatheads$setTextureLocation(id);
+    }
+}

@@ -1,5 +1,6 @@
 package dzwdz.chat_heads;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
@@ -8,11 +9,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
@@ -55,6 +59,8 @@ public class ChatHeads {
     public static float lastOpacity = 0.0f;
     public static int lastChatOffset;
     public static boolean serverSentUuid = false;
+
+    public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
     public static void handleAddedMessage(Component message, @Nullable PlayerInfo playerInfo) {
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
@@ -143,5 +149,26 @@ public class ChatHeads {
         }
 
         return null;
+    }
+
+    public static NativeImage extractBlendedHead(NativeImage skin) {
+        NativeImage head = new NativeImage(8, 8, false);
+
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                int headColor = skin.getPixelRGBA(8 + x, 8 + y);
+                int hatColor = skin.getPixelRGBA(40 + x, 8 + y);
+
+                // blend layers together
+                head.setPixelRGBA(x, y, headColor);
+                head.blendPixel(x, y, hatColor);
+            }
+        }
+
+        return head;
+    }
+
+    public static ResourceLocation getBlendedHeadLocation(ResourceLocation skinLocation) {
+        return new ResourceLocation(ChatHeads.MOD_ID, skinLocation.getPath());
     }
 }

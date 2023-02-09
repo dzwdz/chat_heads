@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class AliasesGuiProvider implements GuiProvider {
     /** Match "(nickname1 nickname2 ...) -> (profilename)" */
-    public static Pattern PATTERN = Pattern.compile("\\s*(.+)\\s+->\\s+(\\S+)\\s*");
+    public static final Pattern PATTERN = Pattern.compile("\\s*(.+)\\s+->\\s+(\\S+)\\s*");
 
     /** Convert a list of "nick1 nick2 -> profilename" strings to a map from nicks to profile names */
     public static Map<String, String> toAliases(List<String> aliasStrings) {

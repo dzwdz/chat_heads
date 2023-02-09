@@ -7,7 +7,9 @@
     "ChatComponentMixin",
     "ChatListenerMixin",
     "GuiMessageLineMixin",
-    "MinecraftMixin"
+    "HttpTextureMixin",
+    "MinecraftMixin",
+    "SkinManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
