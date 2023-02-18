@@ -6,6 +6,8 @@
   "client": [
     "ChatComponentMixin",
     "ChatListenerMixin",
+    "ClientPacketListenerMixin",
+    "CommandSuggestionSuggestionsListMixin",
     "GuiMessageLineMixin",
     "HttpTextureMixin",
     "MinecraftMixin",
