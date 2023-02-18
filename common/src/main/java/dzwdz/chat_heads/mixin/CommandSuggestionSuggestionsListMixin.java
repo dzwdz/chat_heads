@@ -1,11 +1,9 @@
 package dzwdz.chat_heads.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.suggestion.Suggestion;
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.Rect2i;
