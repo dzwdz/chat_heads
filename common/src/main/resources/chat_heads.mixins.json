@@ -9,7 +9,9 @@
     "ClientPacketListenerMixin",
     "CommandSuggestionSuggestionsListMixin",
     "GuiMessageLineMixin",
-    "MinecraftMixin"
+    "HttpTextureMixin",
+    "MinecraftMixin",
+    "SkinManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

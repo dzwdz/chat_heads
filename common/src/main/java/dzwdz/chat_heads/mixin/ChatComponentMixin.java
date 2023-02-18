@@ -60,11 +60,21 @@ public abstract class ChatComponentMixin {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);
-            RenderSystem.setShaderTexture(0, owner.getSkinLocation());
-            // draw base layer
-            GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 8.0f, 8, 8, 8, 64, 64);
-            // draw hat
-            GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 40.0f, 8, 8, 8, 64, 64);
+
+            if (ChatHeads.blendedHeadTextures.contains(owner.getSkinLocation())) {
+                RenderSystem.setShaderTexture(0, ChatHeads.getBlendedHeadLocation(owner.getSkinLocation()));
+
+                // draw head in one draw call, fixing transparency issues of the "vanilla" path below
+                GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 0, 0, 8, 8, 8, 8);
+            } else {
+                RenderSystem.setShaderTexture(0, owner.getSkinLocation());
+
+                // draw base layer
+                GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 8.0f, 8, 8, 8, 64, 64);
+                // draw hat
+                GuiComponent.blit(matrixStack, 0, ChatHeads.lastY, 8, 8, 40.0f, 8, 8, 8, 64, 64);
+            }
+
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
