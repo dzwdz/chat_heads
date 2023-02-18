@@ -3,6 +3,7 @@ package dzwdz.chat_heads.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.suggestion.Suggestion;
+import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.CommandSuggestions;
@@ -66,12 +67,7 @@ public abstract class CommandSuggestionSuggestionsListMixin {
         int x = rect.getX() - (8 + 2);
 
         if (chatHeads$player != null) {
-            RenderSystem.setShaderTexture(0, chatHeads$player.getSkinLocation());
-            // draw base layer
-            GuiComponent.blit(poseStack, x, y, 8, 8, 8.0f, 8, 8, 8, 64, 64);
-            // draw hat
-            GuiComponent.blit(poseStack, x, y, 8, 8, 40.0f, 8, 8, 8, 64, 64);
-
+            ChatHeads.renderChatHead(poseStack, x, y, chatHeads$player);
             chatHeads$player = null;
         }
     }
