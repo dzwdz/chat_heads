@@ -13,9 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(CommandSuggestions.SuggestionsList.class)
 public abstract class CommandSuggestionSuggestionsListMixin {
@@ -23,7 +21,20 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     private Rect2i rect;
 
     @Unique
+    PoseStack chatHeads$poseStack;
+
+    @Unique
     PlayerInfo chatHeads$player;
+
+    @ModifyVariable(
+            at = @At("HEAD"),
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V",
+            argsOnly = true
+    )
+    public PoseStack chatheads$capturePoseStack(PoseStack poseStack) {
+        chatHeads$poseStack = poseStack;
+        return poseStack;
+    }
 
     @ModifyVariable(
             at = @At("STORE"),
@@ -51,23 +62,26 @@ public abstract class CommandSuggestionSuggestionsListMixin {
         return x;
     }
 
-    @ModifyArgs(
+    @ModifyArg(
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/Font;drawShadow(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I",
                     ordinal = 0
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V",
+            index = 3
     )
-    public void renderChatHead(Args args) {
-        PoseStack poseStack = args.get(0);
-        int y = (int) (float) args.get(3);
+    public float renderChatHead(float y) {
         int x = rect.getX() - (8 + 2);
 
         if (chatHeads$player != null) {
-            ChatHeads.renderChatHead(poseStack, x, y, chatHeads$player);
+            ChatHeads.renderChatHead(chatHeads$poseStack, x, (int) y, chatHeads$player);
             chatHeads$player = null;
         }
+
+        chatHeads$poseStack = null;
+
+        return y;
     }
 
 }
