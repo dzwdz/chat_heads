@@ -26,7 +26,7 @@ public abstract class ChatComponentMixin {
             ),
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V"
     )
-    public GuiMessage.Line captureGuiMessage(GuiMessage.Line guiMessage) {
+    public GuiMessage.Line chatheads$captureGuiMessage(GuiMessage.Line guiMessage) {
         ChatHeads.lastGuiMessage = guiMessage;
         ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
         return guiMessage;
@@ -41,7 +41,7 @@ public abstract class ChatComponentMixin {
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V",
             index = 2
     )
-    public float moveTheText(PoseStack poseStack, FormattedCharSequence formattedCharSequence, float x, float y, int color) {
+    public float chatheads$moveText(PoseStack poseStack, FormattedCharSequence formattedCharSequence, float x, float y, int color) {
         ChatHeads.lastY = (int) y;
         ChatHeads.lastOpacity = (((color >> 24) + 256) % 256) / 255f; // haha yes
         return ChatHeads.lastChatOffset;
@@ -55,7 +55,7 @@ public abstract class ChatComponentMixin {
             ),
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V"
     )
-    public void renderChatHead(PoseStack matrixStack, int i, int j, int k, CallbackInfo ci) {
+    public void chatheads$renderChatHead(PoseStack matrixStack, int i, int j, int k, CallbackInfo ci) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);
@@ -68,7 +68,7 @@ public abstract class ChatComponentMixin {
             at = @At("STORE"),
             method = "getClickedComponentStyleAt(DD)Lnet/minecraft/network/chat/Style;"
     )
-    public GuiMessage.Line updateChatOffset(GuiMessage.Line guiMessage) {
+    public GuiMessage.Line chatheads$updateChatOffset(GuiMessage.Line guiMessage) {
         ChatHeads.lastChatOffset = ChatHeads.getChatOffset(guiMessage);
         return guiMessage;
     }
@@ -81,7 +81,7 @@ public abstract class ChatComponentMixin {
             method = "getClickedComponentStyleAt(DD)Lnet/minecraft/network/chat/Style;",
             index = 1
     )
-    public int correctClickPosition(int x) {
+    public int chatheads$correctClickPosition(int x) {
         return x - ChatHeads.lastChatOffset;
     }
 
@@ -92,7 +92,7 @@ public abstract class ChatComponentMixin {
             ),
             method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"
     )
-    public int fixTextOverflow(ChatComponent chatHud) {
+    public int chatheads$fixTextOverflow(ChatComponent chatHud) {
         // at this point, lastSender is well-defined but neither lastGuiMessage nor lastChatOffset
         return ChatComponent.getWidth(minecraft.options.chatWidth().get()) - ChatHeads.getChatOffset(ChatHeads.lastSender);
     }

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
 	@Inject(method = "setLevel(Lnet/minecraft/client/multiplayer/ClientLevel;)V", at = @At("HEAD"))
-	public void setLevel(ClientLevel clientLevel, CallbackInfo ci) {
+	public void chatheads$resetServerKnowledge(ClientLevel clientLevel, CallbackInfo ci) {
 		// reset every time we enter a world, be it singleplayer or multiplayer
 		ChatHeads.serverSentUuid = false;
 	}
