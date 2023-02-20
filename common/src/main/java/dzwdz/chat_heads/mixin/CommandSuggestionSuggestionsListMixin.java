@@ -12,8 +12,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CommandSuggestions.SuggestionsList.class)
 public abstract class CommandSuggestionSuggestionsListMixin {
@@ -79,9 +81,14 @@ public abstract class CommandSuggestionSuggestionsListMixin {
             chatHeads$player = null;
         }
 
-        chatHeads$poseStack = null;
-
         return y;
     }
 
+    @Inject(
+            at = @At("RETURN"),
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"
+    )
+    public void chatheads$forgetPoseStack(PoseStack poseStack, int i, int j, CallbackInfo ci) {
+        chatHeads$poseStack = null;
+    }
 }
