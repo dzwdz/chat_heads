@@ -29,6 +29,10 @@ public abstract class HttpTextureMixin implements HttpTextureAccessor {
 
     @Inject(method = "loadCallback", at = @At("HEAD"))
     public void chatheads$registerBlendedHeadTexture(NativeImage image, CallbackInfo ci) {
+        if (chatheads$textureLocation == null) {
+            return;
+        }
+
         Minecraft.getInstance().getTextureManager()
                 .register(getBlendedHeadLocation(chatheads$textureLocation), new DynamicTexture(extractBlendedHead(image)));
 
