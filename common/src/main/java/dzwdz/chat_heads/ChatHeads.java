@@ -104,6 +104,11 @@ public class ChatHeads {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
         Map<String, PlayerInfo> nicknameCache = new HashMap<>();
 
+        // When Polymer's early play networking API is used, messages can be received pre-login, in which case we disable chat heads
+        if (connection == null) {
+            return null;
+        }
+
         // check each word consisting only out of allowed player name characters
         for (String word : message.getString().split("(§.)|[^\\w]")) {
             if (word.isEmpty()) continue;
