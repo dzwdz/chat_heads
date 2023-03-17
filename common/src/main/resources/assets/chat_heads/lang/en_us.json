@@ -1,4 +1,5 @@
 {
+  "modmenu.descriptionTranslation.chat_heads": "See who are you chatting with!\nThis mod adds player heads next to their chat messages.",
   "text.autoconfig.chat_heads.title": "Chat Heads",
   "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Offset non-player chat text",
   "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "All text will be aligned if enabled",

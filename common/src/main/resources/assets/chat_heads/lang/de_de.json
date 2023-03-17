@@ -1,0 +1,20 @@
+{
+  "modmenu.descriptionTranslation.chat_heads": "Sieh mit wem du chattest!\nDiese Mod fügt Spielerköpfe zum Chat hinzu.",
+  "text.autoconfig.chat_heads.title": "Chat Heads",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Nicht-Spieler-Nachrichten verschieben",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "Richtet allen Text in eine Reihe aus",
+  "text.autoconfig.chat_heads.option.explanation": "\"UUID\"? \"Heuristik\"?",
+  "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Normalerweise sagen Server wer eine Nachricht sendet, d.h. die Sender-UUID.\nViele Server tun dies jedoch nicht, sie können sogar falsche UUIDs senden.\nIn diesem Fall nutzen wir eine Heuristik, d.h. wir raten den Sender durch\nden Nachrichteninhalt. Diese Heuristik ist nicht perfekt und kann Köpfe\nfalsch zuordnen.",
+  "text.autoconfig.chat_heads.option.senderDetection": "Sender-Erkennung",
+  "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "Für die meisten Server funktioniert \"UUID und Heuristik\".\nWenn der Server falsche UUIDs sendet muss \"Nur Heuristik\"\nbenutzt werden.",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "Nur UUID",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_AND_HEURISTIC": "UUID und Heuristik",
+  "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "Nur Heuristik",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "Schlaue Heuristik",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Schaltet die Heuristik aus wenn der Server UUIDs sendet.\n(Trifft auf die \"UUID und Heuristik\" Sender-Erkennung zu)",
+  "text.autoconfig.chat_heads.option.nameAliases": "Pseudonyme",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Manche Server erlauben Spitznamen welche nicht automatisch zugeordnet\nwerden können. Hier können die Spitznamen wie folgt manuell zugeordnet werden:\nSpitzname -> Profilname\nName1 Name2 Name3 -> Profilname",
+  "text.chat_heads.config.error.title": "Konnte Konfigurationsmenü nicht öffnen",
+  "text.chat_heads.config.error.no_cloth_config": "Cloth Config ist nicht installiert!",
+  "text.chat_heads.config.error.cloth_config_link": "Cloth Config Seite auf CurseForge öffnen"
+}
