@@ -5,7 +5,8 @@
   "name": "Chat Heads",
   "description": "See who are you chatting with!\nThis mod adds player heads next to their chat messages.",
   "authors": [
-    "dzwdz"
+    "dzwdz",
+    "Fourmisain"
   ],
   "contact": {
     "sources": "https://github.com/dzwdz/chat_heads"

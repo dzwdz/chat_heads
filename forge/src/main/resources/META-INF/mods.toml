@@ -7,7 +7,7 @@ license = "MPL-2.0"
 modId = "chat_heads"
 version = "${version}"
 displayName = "Chat Heads"
-authors = "dzwdz"
+authors = "dzwdz, Fourmisain"
 
 description = '''
 See who are you chatting with!
