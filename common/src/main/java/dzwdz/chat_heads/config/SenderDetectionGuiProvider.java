@@ -21,13 +21,7 @@ public class SenderDetectionGuiProvider implements GuiProvider {
 		return List.of(
 				ConfigEntryBuilder.create()
 						.startTextDescription(Component.translatable(EXPLANATION))
-						.setTooltip(
-								Component.translatable(EXPLANATION + ".@Tooltip[0]"),
-								Component.translatable(EXPLANATION + ".@Tooltip[1]"),
-								Component.translatable(EXPLANATION + ".@Tooltip[2]"),
-								Component.translatable(EXPLANATION + ".@Tooltip[3]"),
-								Component.translatable(EXPLANATION + ".@Tooltip[4]")
-						)
+						.setTooltip(Component.translatable(EXPLANATION + ".@Tooltip"))
 						.build(),
 				ConfigEntryBuilder.create()
 						.startEnumSelector(Component.translatable(SENDER_DETECTION), SenderDetection.class, config.senderDetection)
