@@ -1,0 +1,19 @@
+{
+  "text.autoconfig.chat_heads.title": "Chat Heads",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Відступ тексту від негравців",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "Якщо увімкнено, весь текст буде вирівняно",
+  "text.autoconfig.chat_heads.option.explanation": "\"UUID\"? \"Припущення\"?",
+  "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Зазвичай, сервери дають моду знати, хто відправив\nповідомлення, тобто UUID відправника. Але, багато серверів\nтакого не роблять. Вони навіть можуть відправляти\nнесправжні UUID. У цьому випадку нам доводиться припускати,\nхто є цей гравець за змістом повідомлення. Це припущення\nне є ідеальним, тож позначення голов гравців може\nбути неправильним.",
+  "text.autoconfig.chat_heads.option.senderDetection": "Визначення відправника",
+  "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "Для більшості серверів параметр \"UUID та припущення\"\nпрацює як слід. Якщо сервер відправляє несправжні UUID,\nпотрібно використовувати параметр \"Тільки припущення\".",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "Тільки UUID",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_AND_HEURISTIC": "UUID та припущення",
+  "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "Тільки припущення",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "Розумне припущення",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Не припускати особу відправника, якщо відомо, що сервер\nвідправляє справжні UUID.\n(Застосовується при встановленні значення \"UUID та припущення\"\nпараметру \"Визначення відправника\")",
+  "text.autoconfig.chat_heads.option.nameAliases": "Псевдоніми",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Деякі сервери дозволяють встановлювати псевдоніми, які автоматично\nне визначаються. Тут ви можете самостійно співставити псевдоніми\nта їх профільні імена за наступним зразком:\nпсевдонім -> ім'яПрофілю\nпсевдо1 псевдо2 псевдо3 -> ім'яПрофілю",
+  "text.chat_heads.config.error.title": "Неможливо відкрити меню параметрів",
+  "text.chat_heads.config.error.no_cloth_config": "Не встановлено мод Cloth Config!",
+  "text.chat_heads.config.error.cloth_config_link": "Відкрити сторінку мода Cloth Config на CurseForge"
+}

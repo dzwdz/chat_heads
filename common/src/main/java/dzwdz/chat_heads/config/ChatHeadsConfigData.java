@@ -14,12 +14,12 @@ import java.util.Map;
 public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	@ConfigEntry.Gui.Tooltip()
 	public boolean offsetNonPlayerText = ChatHeadsConfigDefaults.OFFSET_NON_PLAYER_TEXT;
-	@ConfigEntry.Gui.Tooltip(count = 3)
+	@ConfigEntry.Gui.Tooltip()
 	public SenderDetection senderDetection = ChatHeadsConfigDefaults.SENDER_DETECTION;
-	@ConfigEntry.Gui.Tooltip(count = 2)
+	@ConfigEntry.Gui.Tooltip()
 	public boolean smartHeuristics = ChatHeadsConfigDefaults.SMART_HEURISTICS;
 
-	@ConfigEntry.Gui.Tooltip(count = 4)
+	@ConfigEntry.Gui.Tooltip()
 	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
 
 	@Override
