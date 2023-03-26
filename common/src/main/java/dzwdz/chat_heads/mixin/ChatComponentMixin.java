@@ -47,6 +47,11 @@ public abstract class ChatComponentMixin {
         return ChatHeads.lastChatOffset;
     }
 
+    @ModifyConstant(method = "getTagIconLeft(Lnet/minecraft/client/GuiMessage$Line;)I", constant = @Constant(intValue = 4))
+    private int chatheads$moveTagIcon(int four) {
+        return four + ChatHeads.lastChatOffset;
+    }
+
     @Inject(
             at = @At(
                     value = "INVOKE",
