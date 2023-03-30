@@ -5,10 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ChatComponentMixin",
+    "ChatComponentMixin2",
     "ChatListenerMixin",
     "ClientPacketListenerMixin",
     "CommandSuggestionSuggestionsListMixin",
     "GuiMessageLineMixin",
+    "GuiMessageMixin",
     "HttpTextureMixin",
     "MinecraftMixin",
     "SkinManagerMixin"

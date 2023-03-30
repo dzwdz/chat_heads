@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = ChatComponent.class, priority = 990) // apply before Quark's ChatComponentMixin
 public abstract class ChatComponentMixin {
@@ -98,7 +99,18 @@ public abstract class ChatComponentMixin {
             method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"
     )
     public int chatheads$fixTextOverflow(ChatComponent chatHud) {
-        // at this point, lastSender is well-defined but neither lastGuiMessage nor lastChatOffset
-        return ChatComponent.getWidth(minecraft.options.chatWidth().get()) - ChatHeads.getChatOffset(ChatHeads.lastSender);
+        // at this point, neither lastGuiMessage nor lastChatOffset are well-defined
+        return ChatComponent.getWidth(minecraft.options.chatWidth().get()) - ChatHeads.getChatOffset(ChatHeads.getLineOwner());
+    }
+
+    // Compact Chat calls this at the beginning of addMessage (to get rid of old duplicate messages)
+    @Inject(
+            method = "refreshTrimmedMessage",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    private void chatheads$transferMessageOwner(CallbackInfo ci, int i, GuiMessage guiMessage) {
+        // transfer owner from GuiMessage to new GuiMessage.Line
+        ChatHeads.refreshingLineOwner = ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
     }
 }

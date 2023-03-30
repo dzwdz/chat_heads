@@ -59,6 +59,13 @@ public class ChatHeads {
 
     @Nullable
     public static PlayerInfo lastSender;
+
+    // with Compact Chat, addMessage() can call refreshTrimmedMessage() and thus addMessage() with another owner inside itself,
+    // we hence need two separate owner variables, distinguished by 'refreshing'
+    public static boolean refreshing;
+    @Nullable public static PlayerInfo lineOwner;
+    @Nullable public static PlayerInfo refreshingLineOwner;
+
     @Nullable
     public static GuiMessage.Line lastGuiMessage;
 
@@ -68,6 +75,18 @@ public class ChatHeads {
     public static boolean serverSentUuid = false;
 
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
+
+    public static PlayerInfo getLineOwner() {
+        return refreshing ? refreshingLineOwner : lineOwner;
+    }
+
+    public static void resetLineOwner() {
+        if (refreshing) {
+            refreshingLineOwner = null;
+        } else {
+            lineOwner = null;
+        }
+    }
 
     // requires ChatHeads.lastSender to be set beforehand because of good programming
     public static void handleAddedMessage(Component message) {
