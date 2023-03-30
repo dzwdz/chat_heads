@@ -11,15 +11,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GuiMessage.Line.class)
-public abstract class GuiMessageLineMixin implements GuiMessageOwnerAccessor {
+@Mixin(GuiMessage.class)
+public abstract class GuiMessageMixin implements GuiMessageOwnerAccessor {
     @Unique @Nullable
     public PlayerInfo chatheads$owner;
 
-    @Inject(method = "<init>",  at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At("TAIL"))
     public void chatheads$setOwner(CallbackInfo callbackInfo) {
-        chatheads$owner = ChatHeads.getLineOwner();
-        ChatHeads.resetLineOwner(); // reset early so multi-line chats don't each receive a chat head
+        chatheads$owner = ChatHeads.lastSender;
+        ChatHeads.lastSender = null; // we're effectively at the end of a (non-refreshing) addMessage() call, good time as ever
     }
 
     @Override
