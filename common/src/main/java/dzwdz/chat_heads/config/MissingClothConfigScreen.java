@@ -46,7 +46,7 @@ public class MissingClothConfigScreen extends Screen {
 
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
-		renderDirtBackground(0);
+		renderDirtBackground(poseStack);
 		drawCenteredString(poseStack, font, title, width / 2, 80, WHITE);
 		drawCenteredString(poseStack, font, message, width / 2, 100, WHITE);
 		super.render(poseStack, mouseX, mouseY, delta);
