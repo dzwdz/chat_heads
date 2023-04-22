@@ -17,10 +17,17 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
+
 @Mixin(CommandSuggestions.SuggestionsList.class)
 public abstract class CommandSuggestionSuggestionsListMixin {
     @Shadow @Final
     private Rect2i rect;
+    @Shadow @Final
+    private List<Suggestion> suggestionList;
+
+    @Unique
+    boolean chatheads$hasChatHead;
 
     @Unique
     PoseStack chatheads$poseStack;
@@ -36,6 +43,22 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     public PoseStack chatheads$capturePoseStack(PoseStack poseStack) {
         chatheads$poseStack = poseStack;
         return poseStack;
+    }
+
+    @Inject(at = @At("RETURN"), method = "<init>")
+    public void chatheads$fixOutOfBoundChatHeads(CommandSuggestions commandSuggestions, int x, int y, int width, List<Suggestion> suggestions, boolean bl, CallbackInfo ci) {
+        // when chat head would render out of bounds
+        if (rect.getX() - (2 + 8 + 2) < 3) {
+            // and when a chat head could render at all
+            for (int i = 0; i < suggestionList.size(); i++) {
+                PlayerInfo playerInfo = Minecraft.getInstance().getConnection().getPlayerInfo(suggestionList.get(i).getText());
+                if (playerInfo != null) {
+                    // move suggestions to accommodate for chat heads
+                    rect.setPosition(3 + (2 + 8 + 2), rect.getY());
+                    break;
+                }
+            }
+        }
     }
 
     @ModifyVariable(
