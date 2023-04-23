@@ -64,9 +64,11 @@ public abstract class ChatComponentMixin {
     public void chatheads$renderChatHead(PoseStack matrixStack, int i, int j, int k, CallbackInfo ci) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
+            RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);
             ChatHeads.renderChatHead(matrixStack, 0, ChatHeads.lastY, owner);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderSystem.disableBlend();
         }
     }
 
