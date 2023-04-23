@@ -88,10 +88,10 @@ public class ChatHeads {
         }
     }
 
-    // requires ChatHeads.lastSender to be set beforehand because of good programming
-    public static void handleAddedMessage(Component message) {
+    public static void handleAddedMessage(Component message, PlayerInfo playerInfo) {
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
-            if (ChatHeads.lastSender != null) {
+            if (playerInfo != null) {
+                ChatHeads.lastSender = playerInfo;
                 ChatHeads.serverSentUuid = true;
                 return;
             }
@@ -99,6 +99,7 @@ public class ChatHeads {
             // no PlayerInfo/UUID, message is either not from a player or the server didn't wanna tell
 
             if (ChatHeads.CONFIG.senderDetection() == UUID_ONLY || ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics()) {
+                ChatHeads.lastSender = null;
                 return;
             }
         }

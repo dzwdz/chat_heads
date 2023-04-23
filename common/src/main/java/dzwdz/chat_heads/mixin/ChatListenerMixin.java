@@ -2,6 +2,7 @@ package dzwdz.chat_heads.mixin;
 
 import com.mojang.authlib.GameProfile;
 import dzwdz.chat_heads.ChatHeads;
+import dzwdz.chat_heads.mixinterface.PlayerChatMessageAccessor;
 import net.minecraft.client.multiplayer.chat.ChatListener;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -25,8 +26,8 @@ public abstract class ChatListenerMixin {
         )
     )
     public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, GameProfile gameProfile, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
-        // looks like gameProfile.getId() *could* be different from the sender UUID, so we set ChatHeads.lastSender in ClientPacketListenerMixin instead
-        ChatHeads.handleAddedMessage(component);
+        // it looks like gameProfile.getId() *could* be different from the sender UUID (or null), so we use the latter instead
+        ChatHeads.handleAddedMessage(component, ((PlayerChatMessageAccessor) (Object) playerChatMessage).getPlayerInfo());
     }
 
     @Inject(
@@ -34,8 +35,7 @@ public abstract class ChatListenerMixin {
         at = @At("HEAD")
     )
     public void chatheads$handleAddedDisguisedMessage(Component component, ChatType.Bound bound, CallbackInfo ci) {
-        ChatHeads.lastSender = null;
-        ChatHeads.handleAddedMessage(component);
+        ChatHeads.handleAddedMessage(component, null);
     }
 
     // called for system messages
@@ -47,7 +47,6 @@ public abstract class ChatListenerMixin {
             )
     )
     public void chatheads$handleAddedSystemMessage(Component message, boolean bl, CallbackInfo ci) {
-        ChatHeads.lastSender = null;
-        ChatHeads.handleAddedMessage(message);
+        ChatHeads.handleAddedMessage(message, null);
     }
 }

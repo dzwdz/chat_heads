@@ -13,6 +13,7 @@
     "GuiMessageMixin",
     "HttpTextureMixin",
     "MinecraftMixin",
+    "PlayerChatMessageMixin",
     "SkinManagerMixin"
   ],
   "injectors": {
