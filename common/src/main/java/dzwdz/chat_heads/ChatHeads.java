@@ -123,6 +123,7 @@ public class ChatHeads {
     @Nullable
     public static PlayerInfo detectPlayer(Component message) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
+        Map<String, PlayerInfo> profileNameCache = new HashMap<>();
         Map<String, PlayerInfo> nicknameCache = new HashMap<>();
 
         // When Polymer's early play networking API is used, messages can be received pre-login, in which case we disable chat heads
@@ -138,7 +139,7 @@ public class ChatHeads {
             word = CONFIG.getProfileName(word);
 
             // check if player name
-            PlayerInfo player = connection.getPlayerInfo(word);
+            PlayerInfo player = getPlayerFromProfileName(word, connection, profileNameCache);
             if (player != null) return player;
 
             // check if nickname
@@ -149,13 +150,36 @@ public class ChatHeads {
         return null;
     }
 
+    // plugins like HaoNick can change the profile names to contain illegal characters like formatting codes, so we can't simply use connection.getPlayerInfo()
+    public static PlayerInfo getPlayerFromProfileName(String word, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache) {
+        if (profileNameCache.isEmpty()) {
+            for (PlayerInfo playerInfo : connection.getOnlinePlayers()) {
+                String profileName = playerInfo.getProfile().getName().replaceAll(NON_NAME_REGEX, "");
+
+                // found match, we are done
+                if (profileName.equals(word)) {
+                    profileNameCache.clear(); // make sure to not leave the cache in an incomplete state
+                    return playerInfo;
+                }
+
+                // fill cache for subsequent calls
+                profileNameCache.put(profileName, playerInfo);
+            }
+
+            return null;
+        } else {
+            // use prepared cache
+            return profileNameCache.get(word);
+        }
+    }
+
     // helper method for detectPlayer using an (initially empty) cache to speed up subsequent calls
     // this cache will either be full or empty after this method returns
     @Nullable
     private static PlayerInfo getPlayerFromNickname(String word, ClientPacketListener connection, Map<String, PlayerInfo> nicknameCache) {
         if (nicknameCache.isEmpty()) {
             for (PlayerInfo p : connection.getOnlinePlayers()) {
-                // on vanilla servers this seems to always be null, apparently it can only be set via modifying
+                // on vanilla servers this is always null, apparently it can only be set by modifying
                 // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
                 Component displayName = p.getTabListDisplayName();
 
