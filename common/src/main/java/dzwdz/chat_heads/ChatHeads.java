@@ -55,6 +55,8 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
+    public static final String NON_NAME_REGEX = "(§.)|[^\\w]";
+
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
     @Nullable
@@ -133,7 +135,7 @@ public class ChatHeads {
         }
 
         // check each word consisting only out of allowed player name characters
-        for (String word : message.getString().split("(§.)|[^\\w]")) {
+        for (String word : message.getString().split(NON_NAME_REGEX)) {
             if (word.isEmpty()) continue;
 
             // manually translate nickname to profile name (needed for non-displayname nicknames)
@@ -162,7 +164,7 @@ public class ChatHeads {
                 Component displayName = p.getTabListDisplayName();
 
                 if (displayName != null) {
-                    String nickname = displayName.getString();
+                    String nickname = displayName.getString().replaceAll(NON_NAME_REGEX, "");
 
                     // found match, we are done
                     if (word.equals(nickname)) {
