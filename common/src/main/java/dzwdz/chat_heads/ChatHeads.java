@@ -141,7 +141,7 @@ public class ChatHeads {
             if (word.isEmpty()) continue;
 
             // manually translate nickname to profile name (needed for non-displayname nicknames)
-            word = CONFIG.getProfileName(word);
+            word = CONFIG.getProfileName(word).replaceAll(NON_NAME_REGEX, "");
 
             // check if player name
             PlayerInfo player = getPlayerFromProfileName(word, connection, profileNameCache);
