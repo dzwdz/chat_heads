@@ -6,6 +6,8 @@ import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.FormattedCharSequence;
@@ -25,7 +27,7 @@ public abstract class ChatComponentMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/GuiMessage$Line;addedTime()I"
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V"
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;III)V"
     )
     public GuiMessage.Line chatheads$captureGuiMessage(GuiMessage.Line guiMessage) {
         ChatHeads.lastGuiMessage = guiMessage;
@@ -36,14 +38,14 @@ public abstract class ChatComponentMixin {
     @ModifyArg(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/Font;drawShadow(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/util/FormattedCharSequence;FFI)I",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)I",
                     ordinal = 0
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V",
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;III)V",
             index = 2
     )
-    public float chatheads$moveText(PoseStack poseStack, FormattedCharSequence formattedCharSequence, float x, float y, int color) {
-        ChatHeads.lastY = (int) y;
+    public int chatheads$moveText(Font font, FormattedCharSequence formattedCharSequence, int x, int y, int color) {
+        ChatHeads.lastY = y;
         ChatHeads.lastOpacity = (((color >> 24) + 256) % 256) / 255f; // haha yes
         return ChatHeads.lastChatOffset;
     }
@@ -56,17 +58,17 @@ public abstract class ChatComponentMixin {
     @Inject(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/Font;drawShadow(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/util/FormattedCharSequence;FFI)I",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)I",
                     ordinal = 0
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V"
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;III)V"
     )
-    public void chatheads$renderChatHead(PoseStack matrixStack, int i, int j, int k, CallbackInfo ci) {
+    public void chatheads$renderChatHead(GuiGraphics guiGraphics, int i, int j, int k, CallbackInfo ci) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) ChatHeads.lastGuiMessage).chatheads$getOwner();
         if (owner != null) {
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);
-            ChatHeads.renderChatHead(matrixStack, 0, ChatHeads.lastY, owner);
+            ChatHeads.renderChatHead(guiGraphics, 0, ChatHeads.lastY, owner);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             RenderSystem.disableBlend();
         }

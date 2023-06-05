@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.suggestion.Suggestion;
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.Rect2i;
@@ -27,22 +28,19 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     private List<Suggestion> suggestionList;
 
     @Unique
-    boolean chatheads$hasChatHead;
-
-    @Unique
-    PoseStack chatheads$poseStack;
+    GuiGraphics chatheads$guiGraphics;
 
     @Unique
     PlayerInfo chatheads$player;
 
     @ModifyVariable(
             at = @At("HEAD"),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V",
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;II)V",
             argsOnly = true
     )
-    public PoseStack chatheads$capturePoseStack(PoseStack poseStack) {
-        chatheads$poseStack = poseStack;
-        return poseStack;
+    public GuiGraphics chatheads$capturePoseStack(GuiGraphics guiGraphics) {
+        chatheads$guiGraphics = guiGraphics;
+        return guiGraphics;
     }
 
     @Inject(at = @At("RETURN"), method = "<init>")
@@ -63,7 +61,7 @@ public abstract class CommandSuggestionSuggestionsListMixin {
 
     @ModifyVariable(
             at = @At("STORE"),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V",
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;II)V",
             ordinal = 0
     )
     public Suggestion chatheads$captureSuggestion(Suggestion suggestion) {
@@ -76,11 +74,11 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     @ModifyArg(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiComponent;fill(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
                     ordinal = 4
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V",
-            index = 1
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;II)V",
+            index = 0
     )
     public int chatheads$enlargeBackground(int x) {
         if (chatheads$player != null) return x - (2 + 8 + 2);
@@ -90,17 +88,17 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     @ModifyArg(
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/Font;drawShadow(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)I",
                     ordinal = 0
             ),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V",
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;II)V",
             index = 3
     )
-    public float chatheads$renderChatHead(float y) {
+    public int chatheads$renderChatHead(int y) {
         int x = rect.getX() - (8 + 2);
 
         if (chatheads$player != null) {
-            ChatHeads.renderChatHead(chatheads$poseStack, x, (int) y, chatheads$player);
+            ChatHeads.renderChatHead(chatheads$guiGraphics, x, y, chatheads$player);
             chatheads$player = null;
         }
 
@@ -109,9 +107,9 @@ public abstract class CommandSuggestionSuggestionsListMixin {
 
     @Inject(
             at = @At("RETURN"),
-            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;II)V"
     )
-    public void chatheads$forgetPoseStack(PoseStack poseStack, int i, int j, CallbackInfo ci) {
-        chatheads$poseStack = null;
+    public void chatheads$forgetPoseStack(GuiGraphics guiGraphics, int i, int j, CallbackInfo ci) {
+        chatheads$guiGraphics = null;
     }
 }

@@ -8,7 +8,7 @@ import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
@@ -222,21 +222,17 @@ public class ChatHeads {
         return new ResourceLocation(ChatHeads.MOD_ID, skinLocation.getPath());
     }
 
-    public static void renderChatHead(PoseStack matrixStack, int x, int y, PlayerInfo owner) {
+    public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner) {
         ResourceLocation skinLocation = owner.getSkinLocation();
 
         if (blendedHeadTextures.contains(skinLocation)) {
-            RenderSystem.setShaderTexture(0, getBlendedHeadLocation(skinLocation));
-
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
-            GuiComponent.blit(matrixStack, x, y, 8, 8, 0, 0, 8, 8, 8, 8);
+            guiGraphics.blit(getBlendedHeadLocation(skinLocation), x, y, 8, 8, 0, 0, 8, 8, 8, 8);
         } else {
-            RenderSystem.setShaderTexture(0, skinLocation);
-
             // draw base layer
-            GuiComponent.blit(matrixStack, x, y, 8, 8, 8.0f, 8, 8, 8, 64, 64);
+            guiGraphics.blit(skinLocation, x, y, 8, 8, 8.0f, 8, 8, 8, 64, 64);
             // draw hat
-            GuiComponent.blit(matrixStack, x, y, 8, 8, 40.0f, 8, 8, 8, 64, 64);
+            guiGraphics.blit(skinLocation, x, y, 8, 8, 40.0f, 8, 8, 8, 64, 64);
         }
     }
 }

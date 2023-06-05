@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.Util;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -45,10 +46,10 @@ public class MissingClothConfigScreen extends Screen {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
-		renderDirtBackground(poseStack);
-		drawCenteredString(poseStack, font, title, width / 2, 80, WHITE);
-		drawCenteredString(poseStack, font, message, width / 2, 100, WHITE);
-		super.render(poseStack, mouseX, mouseY, delta);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+		renderDirtBackground(guiGraphics);
+		guiGraphics.drawCenteredString(font, title, width / 2, 80, WHITE);
+		guiGraphics.drawCenteredString(font, message, width / 2, 100, WHITE);
+		super.render(guiGraphics, mouseX, mouseY, delta);
 	}
 }
