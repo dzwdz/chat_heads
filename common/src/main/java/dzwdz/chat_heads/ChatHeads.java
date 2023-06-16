@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
@@ -136,7 +137,7 @@ public class ChatHeads {
             if (word.isEmpty()) continue;
 
             // manually translate nickname to profile name (needed for non-displayname nicknames)
-            word = CONFIG.getProfileName(word);
+            word = CONFIG.getProfileName(word).replaceAll(NON_NAME_REGEX, "");
 
             // check if player name
             PlayerInfo player = getPlayerFromProfileName(word, connection, profileNameCache);
@@ -150,58 +151,50 @@ public class ChatHeads {
         return null;
     }
 
-    // plugins like HaoNick can change the profile names to contain illegal characters like formatting codes, so we can't simply use connection.getPlayerInfo()
-    public static PlayerInfo getPlayerFromProfileName(String word, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache) {
-        if (profileNameCache.isEmpty()) {
-            for (PlayerInfo playerInfo : connection.getOnlinePlayers()) {
-                String profileName = playerInfo.getProfile().getName().replaceAll(NON_NAME_REGEX, "");
-
-                // found match, we are done
-                if (profileName.equals(word)) {
-                    profileNameCache.clear(); // make sure to not leave the cache in an incomplete state
-                    return playerInfo;
-                }
-
-                // fill cache for subsequent calls
-                profileNameCache.put(profileName, playerInfo);
-            }
-
-            return null;
+    /**
+     * Finds a value v in `collection` such that `keyFunction(v)` equals `key`.
+     * Uses an (initially empty) cache to speed up subsequent calls.
+     * This cache will either be full or empty after this method returns.
+     */
+    public static <V, K> V findByKey(Iterable<V> collection, Function<V, K> keyFunction, K key, Map<K, V> cache) {
+        if (!cache.isEmpty()) {
+            return cache.get(key);
         } else {
-            // use prepared cache
-            return profileNameCache.get(word);
-        }
-    }
+            for (V v : collection) {
+                K k = keyFunction.apply(v);
 
-    // helper method for detectPlayer using an (initially empty) cache to speed up subsequent calls
-    // this cache will either be full or empty after this method returns
-    @Nullable
-    private static PlayerInfo getPlayerFromNickname(String word, ClientPacketListener connection, Map<String, PlayerInfo> nicknameCache) {
-        if (nicknameCache.isEmpty()) {
-            for (PlayerInfo p : connection.getOnlinePlayers()) {
-                // on vanilla servers this is always null, apparently it can only be set by modifying
-                // ServerPlayer.getTabListDisplayName() or sending an UPDATE_DISPLAY_NAME packet to the client
-                Component displayName = p.getTabListDisplayName();
-
-                if (displayName != null) {
-                    String nickname = displayName.getString().replaceAll(NON_NAME_REGEX, "");
-
-                    // found match, we are done
-                    if (word.equals(nickname)) {
-                        nicknameCache.clear(); // make sure to not leave the cache in an incomplete state
-                        return p;
+                if (k != null) {
+                    if (key.equals(k)) {
+                        cache.clear(); // make sure to not leave the cache in an incomplete state
+                        return v;
                     }
 
                     // fill cache for subsequent calls
-                    nicknameCache.put(nickname, p);
+                    cache.put(k, v);
                 }
             }
-        } else {
-            // use prepared cache
-            return nicknameCache.get(word);
-        }
 
-        return null;
+            return null;
+        }
+    }
+
+    // plugins like HaoNick can change the profile names to contain illegal characters like formatting codes, so we can't simply use connection.getPlayerInfo()
+    public static PlayerInfo getPlayerFromProfileName(String word, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache) {
+        return findByKey(connection.getOnlinePlayers(),
+                playerInfo -> playerInfo.getProfile().getName().replaceAll(NON_NAME_REGEX, ""),
+                word,
+                profileNameCache);
+    }
+
+    @Nullable
+    private static PlayerInfo getPlayerFromNickname(String word, ClientPacketListener connection, Map<String, PlayerInfo> nicknameCache) {
+        return findByKey(connection.getOnlinePlayers(),
+                playerInfo -> {
+                    Component displayName = playerInfo.getTabListDisplayName();
+                    return displayName != null ? displayName.getString().replaceAll(NON_NAME_REGEX, "") :  null;
+                },
+                word,
+                nicknameCache);
     }
 
     public static NativeImage extractBlendedHead(NativeImage skin) {
