@@ -30,7 +30,7 @@ public abstract class HttpTextureMixin implements HttpTextureAccessor {
     @Inject(method = "loadCallback", at = @At("HEAD"))
     public void chatheads$registerBlendedHeadTexture(NativeImage image, CallbackInfo ci) {
         // mods like Essential don't use SkinManager and textureLocation is thus never set, we hence simply disable texture blending
-        if (chatheads$textureLocation == null) {
+        if (chatheads$textureLocation == null || !chatheads$textureLocation.getPath().startsWith("skins/")) {
             return;
         }
 
