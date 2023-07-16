@@ -27,9 +27,6 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     private List<Suggestion> suggestionList;
 
     @Unique
-    boolean chatheads$hasChatHead;
-
-    @Unique
     PoseStack chatheads$poseStack;
 
     @Unique
