@@ -198,12 +198,16 @@ public class ChatHeads {
     }
 
     public static NativeImage extractBlendedHead(NativeImage skin) {
-        NativeImage head = new NativeImage(8, 8, false);
+        // vanilla skins are 64x64 pixels, HD skins (e.g. with CustomSkinLoader) 128x128
+        int xScale = skin.getWidth() / 64;
+        int yScale = skin.getHeight() / 64;
 
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                int headColor = skin.getPixelRGBA(8 + x, 8 + y);
-                int hatColor = skin.getPixelRGBA(40 + x, 8 + y);
+        NativeImage head = new NativeImage(8 * xScale, 8 * yScale, false);
+
+        for (int y = 0; y < head.getHeight(); y++) {
+            for (int x = 0; x < head.getWidth(); x++) {
+                int headColor = skin.getPixelRGBA(8 * xScale + x, 8 * yScale + y);
+                int hatColor = skin.getPixelRGBA(40 * xScale + x, 8 * yScale + y);
 
                 // blend layers together
                 head.setPixelRGBA(x, y, headColor);
