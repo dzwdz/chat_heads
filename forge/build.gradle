@@ -7,8 +7,6 @@ architectury {
     forge()
 }
 
-version = rootProject.mod_version + "-forge-" + rootProject.minecraft_version
-
 loom {
     forge {
         mixinConfig "chat_heads.mixins.json"
