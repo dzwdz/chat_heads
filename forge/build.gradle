@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
 architectury {
@@ -9,7 +9,7 @@ architectury {
 
 loom {
     forge {
-        mixinConfig "chat_heads.mixins.json"
+        mixinConfig "${project.mod_id}.mixins.json"
     }
 }
 
@@ -22,20 +22,12 @@ configurations {
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+    forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 
     modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
-}
-
-processResources {
-    inputs.property "version", project.mod_version
-
-    filesMatching("META-INF/mods.toml") {
-        expand "version": project.mod_version
-    }
 }
 
 shadowJar {

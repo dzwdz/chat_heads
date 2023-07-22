@@ -1,11 +1,11 @@
 package dzwdz.chat_heads.fabric;
 
 import dzwdz.chat_heads.fabric.config.ClothConfigImpl;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class ChatHeads implements ModInitializer {
+public class ChatHeads implements ClientModInitializer {
 	@Override
-	public void onInitialize() {
+	public void onInitializeClient() {
 		ClothConfigImpl.loadConfig();
 	}
 }
