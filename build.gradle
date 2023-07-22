@@ -6,7 +6,7 @@ plugins {
 }
 
 architectury {
-    minecraft = rootProject.minecraft_version
+    minecraft = project.minecraft_version
 }
 
 subprojects {
@@ -17,39 +17,47 @@ subprojects {
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        // The following line declares the mojmap mappings, you may use other mappings as well
+        minecraft "com.mojang:minecraft:${project.minecraft_version}"
         mappings loom.officialMojangMappings()
-        // The following line declares the yarn mappings you may select this one as well.
-        // mappings "net.fabricmc:yarn:1.17.1+build.63:v2"
     }
 }
 
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
 
-    archivesBaseName = rootProject.archives_base_name
-    // version = rootProject.mod_version
-    group = rootProject.maven_group
+    // version = project.mod_version
+    group = project.maven_group
+
+    base {
+        archivesName = project.archives_base_name
+    }
 
     repositories {
-        // Add repositories to retrieve artifacts from in here.
-        // You should only use this when depending on other mods because
-        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-        // for more information about repositories.
         maven { url = "https://maven.shedaniel.me/" }
         maven { url = "https://maven.terraformersmc.com/" }
     }
 
     tasks.withType(JavaCompile).configureEach {
-        it.options.release = 17
+        it.options.release = project.java_version as Integer
     }
 }
 
 subprojects {
+    processResources {
+        // expand every property from gradle.properties
+        def stringProperties = providers.gradlePropertiesPrefixedBy('').get()
+        stringProperties.each { inputs.property(it.key, it.value) }
+
+        ["${project.mod_id}.mixins.json", "fabric.mod.json", "META-INF/mods.toml"].each {
+            filesMatching(it) {
+                expand(stringProperties) {
+                    escapeBackslash = true
+                }
+            }
+        }
+    }
+
     def loader = project.name
     if (!enabled_platforms.split(',').contains(loader))
         return
