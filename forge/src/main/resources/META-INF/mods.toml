@@ -5,7 +5,7 @@ license = "MPL-2.0"
 
 [[mods]]
 modId = "chat_heads"
-version = "${version}"
+version = "${mod_version}"
 displayName = "Chat Heads"
 authors = "dzwdz, Fourmisain"
 
@@ -25,7 +25,7 @@ side = "CLIENT"
 [[dependencies.chat_heads]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18,)"
+versionRange = "${forge_game_version_range}"
 ordering = "NONE"
 side = "CLIENT"
 
@@ -35,10 +35,3 @@ mandatory = false
 versionRange = "[6.0.0,)"
 ordering = "NONE"
 side = "CLIENT"
-
-#[[dependencies.chat_heads]]
-#modId = "architectury"
-#mandatory = true
-#versionRange = "[2.3.23,)"
-#ordering = "AFTER"
-#side = "BOTH"

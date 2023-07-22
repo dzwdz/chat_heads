@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "chat_heads",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "Chat Heads",
   "description": "See who are you chatting with!\nThis mod adds player heads next to their chat messages.",
   "authors": [
@@ -15,7 +15,7 @@
   "icon": "assets/chat_heads/icon.png",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "dzwdz.chat_heads.fabric.ChatHeads"
     ],
     "modmenu": [
@@ -27,7 +27,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.14.5",
-    "minecraft": "1.19.x"
+    "minecraft": "${fabric_game_version_range}"
   },
   "suggests": {
     "cloth-config2": ">=6.0.0"
