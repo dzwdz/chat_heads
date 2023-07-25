@@ -10,4 +10,4 @@ pluginManagement {
 include("common")
 include(enabled_platforms.split(','))
 
-rootProject.name = "chat_heads"
+rootProject.name = archives_base_name

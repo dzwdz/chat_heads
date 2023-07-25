@@ -25,6 +25,7 @@ subprojects {
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
 
     // version = project.mod_version
     group = project.maven_group
@@ -40,6 +41,10 @@ allprojects {
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = project.java_version as Integer
+    }
+
+    java {
+        withSourcesJar()
     }
 }
 
