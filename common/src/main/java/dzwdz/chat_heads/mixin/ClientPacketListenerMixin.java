@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.UUID;
 
 /** Pass the sender's PlayerInfo through the PlayerChatMessage */
-@Mixin(ClientPacketListener.class)
+@Mixin(value = ClientPacketListener.class, priority = 990) // apply before EssentialClient (else the callbacks will land inside the @WrapConditional introduced ifs)
 public abstract class ClientPacketListenerMixin {
 	@Shadow
 	@Nullable
