@@ -1,2 +1,1 @@
-- add `ja_jp` Japanese translation, thanks to co-91!
-- fix potential issue with EssentialClient
+add `be_by` Belarusian translation, thanks to Gazmanovich!
