@@ -1,0 +1,20 @@
+{
+  "modmenu.descriptionTranslation.chat_heads": "Бачце таго з кім вы размаўляеце!\nГэты мод дадае голавы гульцоў побач з іх паведамленнямі.",
+  "text.autoconfig.chat_heads.title": "Chat Heads",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Зрушэнне тэксту чата без гульца",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "Увесь тэкст будзе выраўнаваны, калі ўключана",
+  "text.autoconfig.chat_heads.option.explanation": "\"UUIDs\"? \"Эўрыстыка\"?",
+  "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Звычайна, сервер кажа, хто дасылае паведамленне,\nто бок UUID карыстальніка. Але ж, некаторыя серверы не.\nЯны могуць дасылаць нават несапраўдны UUIDs. У гэтых выпадках выкарыстоўваецца\nэўрыстыка, то бок мы гадаем па кантэксту паведамлення.\nГэты метад не ідэальны, таму ён можа памыляцца.",
+  "text.autoconfig.chat_heads.option.senderDetection": "Выяўленне дасылальніка",
+  "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "Для большасці сервераў \"UUID і эўрыстыка\" працуе добра.\nКалі сервер дасылае несапраўдныя UUIDs, \"толькі эўрыстыка\"\nбудзе выкарыстоўвацца.",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "Толькі UUID",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_AND_HEURISTIC": "UUID і эўрыстыка",
+  "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "Толькі эўрыстыка",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "Смарт эўрыстыка",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Адключыць эўрыстыку, калі сервер дасылае UUIDs.\n(Дазваляльна для \"UUID и эўрыстыка\" выяўлення дасылальніка)",
+  "text.autoconfig.chat_heads.option.nameAliases": "Псеўданімы імёнаў",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Некаторыя сервера дазваляюць ставіць нікнеймы, якія не супадаюць.\nТут вы можаце звязаць нікнейм з именем, напрыклад:\nnickname -> profilename\nnick1 nick2 nick3 -> profilename",
+  "text.chat_heads.config.error.title": "Немагчыма адкрыць меню налад",
+  "text.chat_heads.config.error.no_cloth_config": "Cloth Config адсутнічае!",
+  "text.chat_heads.config.error.cloth_config_link": "Адкрыць старонку Cloth Config на CurseForge"
+}
