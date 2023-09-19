@@ -12,6 +12,8 @@
   "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "Nur Heuristik",
   "text.autoconfig.chat_heads.option.smartHeuristics": "Schlaue Heuristik",
   "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Schaltet die Heuristik aus wenn der Server UUIDs sendet.\n(Trifft auf die \"UUID und Heuristik\" Sender-Erkennung zu)",
+  "text.autoconfig.chat_heads.option.handleSystemMessages": "Behandle System-Nachrichten",
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Ob Köpfe zu \"reinen\" Server-Nachrichten hinzugefügt werden können.\nBedenke dass viele Server (z.B. mit dem FreedomChat-Plugin)\nSpieler-Nachrichten in Server-Nachrichten umwandeln!\nDeaktiviere diese Option nur wenn du verstehst was du tust!",
   "text.autoconfig.chat_heads.option.nameAliases": "Pseudonyme",
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Manche Server erlauben Spitznamen welche nicht automatisch zugeordnet\nwerden können. Hier können die Spitznamen wie folgt manuell zugeordnet werden:\nSpitzname -> Profilname\nName1 Name2 Name3 -> Profilname",
   "text.chat_heads.config.error.title": "Konnte Konfigurationsmenü nicht öffnen",
