@@ -1,6 +1,5 @@
 package dzwdz.chat_heads.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.suggestion.Suggestion;
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.Minecraft;

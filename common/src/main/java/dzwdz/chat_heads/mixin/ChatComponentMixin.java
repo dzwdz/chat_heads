@@ -1,7 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
