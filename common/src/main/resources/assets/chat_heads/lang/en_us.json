@@ -12,6 +12,8 @@
   "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "Heuristic only",
   "text.autoconfig.chat_heads.option.smartHeuristics": "Smart heuristics",
   "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Turn off heuristics if the server is known to send UUIDs.\n(Applies to the \"UUID and heuristic\" sender detection)",
+  "text.autoconfig.chat_heads.option.handleSystemMessages": "Handle system messages",
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Determines whether to add heads to messages sent by the server itself.",
   "text.autoconfig.chat_heads.option.nameAliases": "Name aliases",
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Some servers allow setting nicknames which can't automatically be matched.\nHere you can manually match those nicknames to their profile name, like:\nnickname -> profilename\nnick1 nick2 nick3 -> profilename",
   "text.chat_heads.config.error.title": "Couldn't open config menu",

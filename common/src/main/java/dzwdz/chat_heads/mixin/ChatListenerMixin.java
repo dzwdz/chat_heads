@@ -48,6 +48,7 @@ public abstract class ChatListenerMixin {
             )
     )
     public void chatheads$handleAddedSystemMessage(Component message, boolean bl, CallbackInfo ci) {
-        ChatHeads.handleAddedMessage(message, null, null);
+        if (ChatHeads.CONFIG.handleSystemMessages())
+            ChatHeads.handleAddedMessage(message, null, null);
     }
 }
