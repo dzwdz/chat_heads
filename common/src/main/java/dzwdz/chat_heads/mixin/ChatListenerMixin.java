@@ -24,8 +24,8 @@ public abstract class ChatListenerMixin {
             target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V"
         )
     )
-    public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, PlayerInfo playerInfo, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
-        ChatHeads.handleAddedMessage(component, playerInfo);
+    public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component message, PlayerInfo playerInfo, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
+        ChatHeads.handleAddedMessage(message, bound, playerInfo);
     }
 
     // called for player messages without UUID
@@ -33,8 +33,8 @@ public abstract class ChatListenerMixin {
         method = "processNonPlayerChatMessage",
         at = @At("HEAD")
     )
-    public void chatheads$handleAddedSystemSignedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, CallbackInfoReturnable<Boolean> cir) {
-        ChatHeads.handleAddedMessage(component, null);
+    public void chatheads$handleAddedSystemSignedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component message, CallbackInfoReturnable<Boolean> cir) {
+        ChatHeads.handleAddedMessage(message, bound, null);
     }
 
     // called for system messages
@@ -46,6 +46,7 @@ public abstract class ChatListenerMixin {
             )
     )
     public void chatheads$handleAddedPlayerMessage(Component message, boolean bl, CallbackInfo ci) {
-        ChatHeads.handleAddedMessage(message, null);
+        if (ChatHeads.CONFIG.handleSystemMessages())
+            ChatHeads.handleAddedMessage(message, null, null);
     }
 }
