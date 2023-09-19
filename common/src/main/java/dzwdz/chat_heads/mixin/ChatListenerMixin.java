@@ -27,7 +27,7 @@ public abstract class ChatListenerMixin {
     )
     public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, GameProfile gameProfile, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
         // it looks like gameProfile.getId() *could* be different from the sender UUID (or null), so we use the latter instead
-        ChatHeads.handleAddedMessage(component, ((PlayerChatMessageAccessor) (Object) playerChatMessage).getPlayerInfo());
+        ChatHeads.handleAddedMessage(bound.decorate(component), ((PlayerChatMessageAccessor) (Object) playerChatMessage).getPlayerInfo());
     }
 
     @Inject(
@@ -35,7 +35,7 @@ public abstract class ChatListenerMixin {
         at = @At("HEAD")
     )
     public void chatheads$handleAddedDisguisedMessage(Component component, ChatType.Bound bound, CallbackInfo ci) {
-        ChatHeads.handleAddedMessage(component, null);
+        ChatHeads.handleAddedMessage(bound.decorate(component), null);
     }
 
     // called for system messages
