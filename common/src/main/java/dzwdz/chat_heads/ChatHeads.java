@@ -1,8 +1,6 @@
 package dzwdz.chat_heads;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
@@ -11,6 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.ChatTypeDecoration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -91,7 +91,7 @@ public class ChatHeads {
         }
     }
 
-    public static void handleAddedMessage(Component message, PlayerInfo playerInfo) {
+    public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
             if (playerInfo != null) {
                 ChatHeads.lastSender = playerInfo;
@@ -108,7 +108,7 @@ public class ChatHeads {
         }
 
         // use heuristic to find sender
-        ChatHeads.lastSender = ChatHeads.detectPlayer(message);
+        ChatHeads.lastSender = ChatHeads.detectPlayer(message, bound);
     }
 
     public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
@@ -126,33 +126,60 @@ public class ChatHeads {
 
     /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
     @Nullable
-    public static PlayerInfo detectPlayer(Component message) {
+    public static PlayerInfo detectPlayer(Component message, @Nullable ChatType.Bound bound) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
-        Map<String, PlayerInfo> profileNameCache = new HashMap<>();
-        Map<String, PlayerInfo> nicknameCache = new HashMap<>();
 
         // When Polymer's early play networking API is used, messages can be received pre-login, in which case we disable chat heads
         if (connection == null) {
             return null;
         }
 
-        // check each word consisting only out of allowed player name characters
-        for (String word : message.getString().split(NON_NAME_REGEX)) {
-            if (word.isEmpty()) continue;
+        Component sender = getSenderDecoration(bound);
+        if (sender != null) {
+            // try to get player info only from the sender decoration
+            String cleanSender = sender.getString().replaceAll(NON_NAME_REGEX, "");
 
-            // manually translate nickname to profile name (needed for non-displayname nicknames)
-            word = CONFIG.getProfileName(word).replaceAll(NON_NAME_REGEX, "");
+            return getPlayerInfo(cleanSender, connection, null, null);
+        } else {
+            Map<String, PlayerInfo> profileNameCache = new HashMap<>();
+            Map<String, PlayerInfo> nicknameCache = new HashMap<>();
 
-            // check if player name
-            PlayerInfo player = getPlayerFromProfileName(word, connection, profileNameCache);
-            if (player != null) return player;
+            // check each word of the message consisting only out of allowed player name characters
+            for (String word : message.getString().split(NON_NAME_REGEX)) {
+                if (word.isEmpty()) continue;
 
-            // check if nickname
-            player = getPlayerFromNickname(word, connection, nicknameCache);
-            if (player != null) return player;
+                PlayerInfo player = getPlayerInfo(word, connection, profileNameCache, nicknameCache);
+                if (player != null) return player;
+            }
         }
 
         return null;
+    }
+
+    @Nullable
+    private static Component getSenderDecoration(@Nullable ChatType.Bound bound) {
+        if (bound == null) return null;
+
+        for (var param : bound.chatType().chat().parameters()) {
+            if (param == ChatTypeDecoration.Parameter.SENDER) {
+                return bound.name();
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private static PlayerInfo getPlayerInfo(String name, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache, Map<String, PlayerInfo> nicknameCache) {
+        // manually translate nickname to profile name (needed for non-displayname nicknames)
+        name = CONFIG.getProfileName(name).replaceAll(NON_NAME_REGEX, "");
+
+        // check if player name
+        PlayerInfo player = getPlayerFromProfileName(name, connection, profileNameCache);
+        if (player != null) return player;
+
+        // check if nickname
+        return getPlayerFromNickname(name, connection, nicknameCache);
     }
 
     /**
@@ -160,8 +187,8 @@ public class ChatHeads {
      * Uses an (initially empty) cache to speed up subsequent calls.
      * This cache will either be full or empty after this method returns.
      */
-    public static <V, K> V findByKey(Iterable<V> collection, Function<V, K> keyFunction, K key, Map<K, V> cache) {
-        if (!cache.isEmpty()) {
+    public static <V, K> V findByKey(Iterable<V> collection, Function<V, K> keyFunction, K key, @Nullable Map<K, V> cache) {
+        if (cache != null && !cache.isEmpty()) {
             return cache.get(key);
         } else {
             for (V v : collection) {
@@ -169,12 +196,12 @@ public class ChatHeads {
 
                 if (k != null) {
                     if (key.equals(k)) {
-                        cache.clear(); // make sure to not leave the cache in an incomplete state
+                        if (cache != null) cache.clear(); // make sure to not leave the cache in an incomplete state
                         return v;
                     }
 
                     // fill cache for subsequent calls
-                    cache.put(k, v);
+                    if (cache != null) cache.put(k, v);
                 }
             }
 

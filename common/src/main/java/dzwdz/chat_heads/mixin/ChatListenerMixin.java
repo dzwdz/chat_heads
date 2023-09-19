@@ -17,25 +17,26 @@ import java.time.Instant;
 
 @Mixin(ChatListener.class)
 public abstract class ChatListenerMixin {
-    // called after message filtering
+    // called after message filtering, either from handlePlayerChatMessage directly, or after some potential chat delay
     @Inject(
-        method = "showMessageToPlayer", // called from handlePlayerChatMessage
+        method = "showMessageToPlayer",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V"
         )
     )
-    public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, GameProfile gameProfile, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
+    public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component message, GameProfile gameProfile, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
         // it looks like gameProfile.getId() *could* be different from the sender UUID (or null), so we use the latter instead
-        ChatHeads.handleAddedMessage(component, ((PlayerChatMessageAccessor) (Object) playerChatMessage).getPlayerInfo());
+        ChatHeads.handleAddedMessage(message, bound, ((PlayerChatMessageAccessor) (Object) playerChatMessage).getPlayerInfo());
     }
 
+    // either called from handleDisguisedChatMessage directly, or after some potential chat delay
     @Inject(
-        method = "handleDisguisedChatMessage",
+        method = "method_45745", // lambda inside handleDisguisedChatMessage
         at = @At("HEAD")
     )
-    public void chatheads$handleAddedDisguisedMessage(Component component, ChatType.Bound bound, CallbackInfo ci) {
-        ChatHeads.handleAddedMessage(component, null);
+    public void chatheads$handleAddedDisguisedMessage(ChatType.Bound bound, Component undecoratedMessage, Instant instant, CallbackInfoReturnable<Boolean> cir) {
+        ChatHeads.handleAddedMessage(undecoratedMessage, bound, null);
     }
 
     // called for system messages
@@ -48,6 +49,6 @@ public abstract class ChatListenerMixin {
     )
     public void chatheads$handleAddedSystemMessage(Component message, boolean bl, CallbackInfo ci) {
         if (ChatHeads.CONFIG.handleSystemMessages())
-            ChatHeads.handleAddedMessage(message, null);
+            ChatHeads.handleAddedMessage(message, null, null);
     }
 }
