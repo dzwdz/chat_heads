@@ -254,7 +254,7 @@ public class ChatHeads {
     }
 
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner) {
-        ResourceLocation skinLocation = owner.getSkinLocation();
+        ResourceLocation skinLocation = owner.getSkin().texture();
 
         if (blendedHeadTextures.contains(skinLocation)) {
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
