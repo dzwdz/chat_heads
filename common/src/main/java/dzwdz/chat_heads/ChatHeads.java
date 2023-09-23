@@ -13,7 +13,6 @@ import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.ChatTypeDecoration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -80,6 +79,10 @@ public class ChatHeads {
 
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
+    public static boolean isDisabled() {
+        return serverSentCustomCharacter; // TODO check assets
+    }
+
     public static PlayerInfo getLineOwner() {
         return refreshing ? refreshingLineOwner : lineOwner;
     }
@@ -93,15 +96,9 @@ public class ChatHeads {
     }
 
     public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
-        if (!ChatHeads.serverSentCustomCharacter) {
-            Component sender = getSenderDecoration(bound);
-            if (sender != null && containsCustomCharacters(sender) || containsCustomCharacters(message)) {
-                ChatHeads.serverSentCustomCharacter = true;
-            }
-        }
+        checkForCustomCharacters(message, bound);
 
-        // TODO check assets
-        if (ChatHeads.serverSentCustomCharacter) {
+        if (ChatHeads.isDisabled()) {
             ChatHeads.lastSender = null;
             return;
         }
@@ -125,13 +122,22 @@ public class ChatHeads {
         ChatHeads.lastSender = ChatHeads.detectPlayer(message, bound);
     }
 
-    public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
+    private static void checkForCustomCharacters(Component message, ChatType.@Nullable Bound bound) {
+        if (ChatHeads.serverSentCustomCharacter) return;
+
+        Component sender = getSenderDecoration(bound);
+        if (sender != null && containsCustomCharacters(sender) || containsCustomCharacters(message)) {
+            ChatHeads.serverSentCustomCharacter = true;
+        }
+    }
+
+    public static int getChatOffset(GuiMessage.Line guiMessage) {
         PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
         return getChatOffset(owner);
     }
 
     public static int getChatOffset(@Nullable PlayerInfo owner) {
-        if (owner != null || ChatHeads.CONFIG.offsetNonPlayerText()) {
+        if (owner != null || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.isDisabled())) {
             return 10;
         } else {
             return 0;
