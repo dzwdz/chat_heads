@@ -76,6 +76,7 @@ public class ChatHeads {
     public static float lastOpacity = 0.0f;
     public static int lastChatOffset;
     public static boolean serverSentUuid = false;
+    public static boolean serverSentCustomCharacter = false;
 
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
@@ -92,6 +93,19 @@ public class ChatHeads {
     }
 
     public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
+        if (!ChatHeads.serverSentCustomCharacter) {
+            Component sender = getSenderDecoration(bound);
+            if (sender != null && containsCustomCharacters(sender) || containsCustomCharacters(message)) {
+                ChatHeads.serverSentCustomCharacter = true;
+            }
+        }
+
+        // TODO check assets
+        if (ChatHeads.serverSentCustomCharacter) {
+            ChatHeads.lastSender = null;
+            return;
+        }
+
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
             if (playerInfo != null) {
                 ChatHeads.lastSender = playerInfo;
@@ -180,6 +194,11 @@ public class ChatHeads {
 
         // check if nickname
         return getPlayerFromNickname(name, connection, nicknameCache);
+    }
+
+    public static boolean containsCustomCharacters(Component component) {
+        // characters \uE000-\uE007 are used for drawing heads in vanilla clients via a custom font
+        return component.getString().codePoints().filter(c -> '\uE000' <= c && c <= '\uE007').findAny().isPresent();
     }
 
     /**

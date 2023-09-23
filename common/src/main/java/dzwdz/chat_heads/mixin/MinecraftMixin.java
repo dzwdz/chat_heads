@@ -14,5 +14,6 @@ public abstract class MinecraftMixin {
 	public void chatheads$resetServerKnowledge(ClientLevel clientLevel, CallbackInfo ci) {
 		// reset every time we enter a world, be it singleplayer or multiplayer
 		ChatHeads.serverSentUuid = false;
+		ChatHeads.serverSentCustomCharacter = false;
 	}
 }
