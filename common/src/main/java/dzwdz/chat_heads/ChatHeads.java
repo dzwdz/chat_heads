@@ -59,6 +59,7 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
     public static final String NON_NAME_REGEX = "(§.)|[^\\w]";
+    public static final ResourceLocation DISABLE_RESOURCE = new ResourceLocation(MOD_ID, "disable");
 
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
@@ -77,7 +78,8 @@ public class ChatHeads {
     public static int lastY = 0;
     public static float lastOpacity = 0.0f;
     public static int lastChatOffset;
-    public static boolean serverSentUuid = false;
+    public static volatile boolean serverSentUuid = false;
+    public static volatile boolean serverDisabledChatHeads = false;
 
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
@@ -94,6 +96,11 @@ public class ChatHeads {
     }
 
     public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
+        if (ChatHeads.serverDisabledChatHeads) {
+            ChatHeads.lastSender = null;
+            return;
+        }
+
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
             if (playerInfo != null) {
                 ChatHeads.lastSender = playerInfo;
@@ -119,7 +126,7 @@ public class ChatHeads {
     }
 
     public static int getChatOffset(@Nullable PlayerInfo owner) {
-        if (owner != null || ChatHeads.CONFIG.offsetNonPlayerText()) {
+        if (owner != null || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
             return 10;
         } else {
             return 0;
