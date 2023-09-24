@@ -8,10 +8,11 @@
     "ChatComponentMixin2",
     "ChatListenerMixin",
     "CommandSuggestionSuggestionsListMixin",
+    "ConnectionMixin",
+    "ClientPackSourceMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
     "HttpTextureMixin",
-    "MinecraftMixin",
     "SkinManagerMixin"
   ],
   "injectors": {
