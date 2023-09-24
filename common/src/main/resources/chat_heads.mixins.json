@@ -9,10 +9,11 @@
     "ChatListenerMixin",
     "ClientPacketListenerMixin",
     "CommandSuggestionSuggestionsListMixin",
+    "ConnectionMixin",
+    "DownloadedPackSourceMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
     "HttpTextureMixin",
-    "MinecraftMixin",
     "PlayerChatMessageMixin",
     "SkinManagerMixin"
   ],
