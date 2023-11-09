@@ -11,17 +11,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.ChatTypeDecoration;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
@@ -139,22 +134,40 @@ public class ChatHeads {
             return null;
         }
 
+        Map<String, PlayerInfo> profileNameCache = new HashMap<>();
+        Map<String, PlayerInfo> nicknameCache = new HashMap<>();
+
+        // try to get player info only from the sender decoration
         Component sender = getSenderDecoration(bound);
         if (sender != null) {
-            // try to get player info only from the sender decoration
+            // StyledNicknames compatibility: try to get player info from /tell click event
+            PlayerInfo player = getPlayerInfo(getTellReceiver(sender), connection, profileNameCache, nicknameCache);
+            if (player != null) return player;
+
             String cleanSender = sender.getString().replaceAll(NON_NAME_REGEX, "");
-
-            return getPlayerInfo(cleanSender, connection, null, null);
+            return getPlayerInfo(cleanSender, connection, profileNameCache, nicknameCache);
         } else {
-            Map<String, PlayerInfo> profileNameCache = new HashMap<>();
-            Map<String, PlayerInfo> nicknameCache = new HashMap<>();
-
             // check each word of the message consisting only out of allowed player name characters
             for (String word : message.getString().split(NON_NAME_REGEX)) {
                 if (word.isEmpty()) continue;
 
                 PlayerInfo player = getPlayerInfo(word, connection, profileNameCache, nicknameCache);
                 if (player != null) return player;
+            }
+        }
+
+        return null;
+    }
+
+    private static String getTellReceiver(Component component) {
+        ClickEvent clickEvent = component.getStyle().getClickEvent();
+
+        if (clickEvent != null) {
+            String cmd = clickEvent.getValue();
+
+            if (cmd.startsWith("/tell ")) {
+                String name = cmd.substring("/tell ".length()); // note: ends with space
+                return name.replaceAll(NON_NAME_REGEX, "");
             }
         }
 
