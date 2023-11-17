@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+issueTrackerURL = "https://github.com/dzwdz/chat_heads/issues"
+license = "MPL-2.0"
+
+[[mods]]
+modId = "chat_heads"
+version = "${mod_version}"
+displayName = "Chat Heads"
+authors = "dzwdz, Fourmisain"
+
+description = '''
+See who are you chatting with!
+This mod adds player heads next to their chat messages.
+'''
+logoFile = "icon.png"
+displayTest = "IGNORE_ALL_VERSION"
+
+[[dependencies.chat_heads]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[20.2,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.chat_heads]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${forge_game_version_range}"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.chat_heads]]
+modId = "cloth_config"
+mandatory = false
+versionRange = "[9.0.0,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[mixins]]
+config = "${mod_id}.mixins.json"
