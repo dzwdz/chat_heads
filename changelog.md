@@ -1,1 +1,1 @@
-StyledNicknames compatibility: try to get name from sender decoration click event /tell command
+fix server-side `/say` and `/tell` commands not showing up on client and erroring (thanks to spelunkhead!)
