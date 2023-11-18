@@ -191,6 +191,8 @@ public class ChatHeads {
 
     @Nullable
     private static PlayerInfo getPlayerInfo(String name, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache, Map<String, PlayerInfo> nicknameCache) {
+		if (name == null) return null;
+
         // manually translate nickname to profile name (needed for non-displayname nicknames)
         name = CONFIG.getProfileName(name).replaceAll(NON_NAME_REGEX, "");
 
