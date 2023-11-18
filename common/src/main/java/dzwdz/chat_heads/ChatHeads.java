@@ -143,8 +143,11 @@ public class ChatHeads {
         Component sender = getSenderDecoration(bound);
         if (sender != null) {
             // StyledNicknames compatibility: try to get player info from /tell click event
-            PlayerInfo player = getPlayerInfo(getTellReceiver(sender), connection, profileNameCache, nicknameCache);
-            if (player != null) return player;
+            String tellReceiver = getTellReceiver(sender);
+            if (tellReceiver != null) {
+                PlayerInfo player = getPlayerInfo(tellReceiver, connection, profileNameCache, nicknameCache);
+                if (player != null) return player;
+            }
 
             String cleanSender = sender.getString().replaceAll(NON_NAME_REGEX, "");
             return getPlayerInfo(cleanSender, connection, profileNameCache, nicknameCache);
@@ -161,6 +164,7 @@ public class ChatHeads {
         return null;
     }
 
+    @Nullable
     private static String getTellReceiver(Component component) {
         ClickEvent clickEvent = component.getStyle().getClickEvent();
 
@@ -190,9 +194,7 @@ public class ChatHeads {
     }
 
     @Nullable
-    private static PlayerInfo getPlayerInfo(String name, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache, Map<String, PlayerInfo> nicknameCache) {
-		if (name == null) return null;
-
+    private static PlayerInfo getPlayerInfo(@NotNull String name, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache, Map<String, PlayerInfo> nicknameCache) {
         // manually translate nickname to profile name (needed for non-displayname nicknames)
         name = CONFIG.getProfileName(name).replaceAll(NON_NAME_REGEX, "");
 
@@ -232,7 +234,8 @@ public class ChatHeads {
     }
 
     // plugins like HaoNick can change the profile names to contain illegal characters like formatting codes, so we can't simply use connection.getPlayerInfo()
-    public static PlayerInfo getPlayerFromProfileName(String word, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache) {
+    @Nullable
+    public static PlayerInfo getPlayerFromProfileName(@NotNull String word, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache) {
         return findByKey(connection.getOnlinePlayers(),
                 playerInfo -> playerInfo.getProfile().getName().replaceAll(NON_NAME_REGEX, ""),
                 word,
@@ -240,7 +243,7 @@ public class ChatHeads {
     }
 
     @Nullable
-    private static PlayerInfo getPlayerFromNickname(String word, ClientPacketListener connection, Map<String, PlayerInfo> nicknameCache) {
+    private static PlayerInfo getPlayerFromNickname(@NotNull String word, ClientPacketListener connection, Map<String, PlayerInfo> nicknameCache) {
         return findByKey(connection.getOnlinePlayers(),
                 playerInfo -> {
                     Component displayName = playerInfo.getTabListDisplayName();
