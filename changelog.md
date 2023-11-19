@@ -1,1 +1,1 @@
-fix server-side `/say` and `/tell` commands not showing up on client and erroring (thanks to spelunkhead!)
+better mod compatibility (e.g. with Clean Chat) by using MixinExtras

@@ -1,5 +1,8 @@
 package dzwdz.chat_heads.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
@@ -49,7 +52,7 @@ public abstract class ChatComponentMixin {
         return ChatHeads.lastChatOffset;
     }
 
-    @ModifyConstant(method = "getTagIconLeft(Lnet/minecraft/client/GuiMessage$Line;)I", constant = @Constant(intValue = 4))
+    @ModifyExpressionValue(method = "getTagIconLeft(Lnet/minecraft/client/GuiMessage$Line;)I", at = @At(value = "CONSTANT", args = "intValue=4"))
     private int chatheads$moveTagIcon(int four) {
         return four + ChatHeads.lastChatOffset;
     }
@@ -94,16 +97,16 @@ public abstract class ChatComponentMixin {
         return x - ChatHeads.lastChatOffset;
     }
 
-    @Redirect(
+    @ModifyExpressionValue(
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/components/ChatComponent;getWidth()I"
             ),
             method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"
     )
-    public int chatheads$fixTextOverflow(ChatComponent chatHud) {
+    public int chatheads$fixTextOverflow(int original) {
         // at this point, neither lastGuiMessage nor lastChatOffset are well-defined
-        return ChatComponent.getWidth(minecraft.options.chatWidth().get()) - ChatHeads.getChatOffset(ChatHeads.getLineOwner());
+        return original - ChatHeads.getChatOffset(ChatHeads.getLineOwner());
     }
 
     // Compact Chat calls this at the beginning of addMessage (to get rid of old duplicate messages)
