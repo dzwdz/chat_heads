@@ -1,2 +1,1 @@
- - better mod compatibility (e.g. with Clean Chat) by using MixinExtras
- - support NeoForge beta
+fix compatibility with Compact Chat 2.0.2
