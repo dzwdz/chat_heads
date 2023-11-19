@@ -12,6 +12,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 
     modApi "me.shedaniel.cloth:cloth-config:${project.cloth_config_version}"
+
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixinextras_version}"))
 }
 
 publishing {
