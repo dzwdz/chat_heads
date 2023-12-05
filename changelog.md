@@ -1,1 +1,1 @@
-fix compatibility with Compact Chat 2.0.2
+port to 1.20.3
