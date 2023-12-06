@@ -26,7 +26,7 @@
     "chat_heads.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.5",
+    "fabricloader": ">=0.15.0",
     "minecraft": "${fabric_game_version_range}"
   },
   "suggests": {

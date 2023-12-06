@@ -1,1 +1,2 @@
-port to 1.20.3
+- port to 1.20.3
+- don't include MixinExtras but require Fabric Loader 0.15
