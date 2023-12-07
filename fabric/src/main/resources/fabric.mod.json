@@ -23,7 +23,8 @@
     ]
   },
   "mixins": [
-    "chat_heads.mixins.json"
+    "chat_heads.mixins.json",
+    "chat_heads.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.15.0",

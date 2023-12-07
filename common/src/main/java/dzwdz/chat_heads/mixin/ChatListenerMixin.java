@@ -30,14 +30,7 @@ public abstract class ChatListenerMixin {
         ChatHeads.handleAddedMessage(message, bound, ((PlayerChatMessageAccessor) (Object) playerChatMessage).getPlayerInfo());
     }
 
-    // either called from handleDisguisedChatMessage directly, or after some potential chat delay
-    @Inject(
-        method = "method_45745", // lambda inside handleDisguisedChatMessage
-        at = @At("HEAD")
-    )
-    public void chatheads$handleAddedDisguisedMessage(ChatType.Bound bound, Component undecoratedMessage, Instant instant, CallbackInfoReturnable<Boolean> cir) {
-        ChatHeads.handleAddedMessage(undecoratedMessage, bound, null);
-    }
+    // handleDisguisedChatMessage: see project specific ChatListenerMixin
 
     // called for system messages
     @Inject(
