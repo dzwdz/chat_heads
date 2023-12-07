@@ -25,7 +25,7 @@ dependencies {
     modApi "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
 
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixinextras_version}"))
-    implementation(include("io.github.llamalad7:mixinextras-neoforge:${project.mixinextras_version}"))
+    implementation("io.github.llamalad7:mixinextras-neoforge:${project.mixinextras_version}")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }

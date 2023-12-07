@@ -1,4 +1,4 @@
-package dzwdz.chat_heads.forge.config;
+package dzwdz.chat_heads.neoforge.config;
 
 import dzwdz.chat_heads.config.ChatHeadsConfigData;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;

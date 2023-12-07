@@ -1,6 +1,6 @@
-package dzwdz.chat_heads.forge;
+package dzwdz.chat_heads.neoforge;
 
-import dzwdz.chat_heads.forge.config.ClothConfigImpl;
+import dzwdz.chat_heads.neoforge.config.ClothConfigImpl;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 

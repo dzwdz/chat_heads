@@ -54,7 +54,10 @@ subprojects {
         def stringProperties = providers.gradlePropertiesPrefixedBy('').get()
         stringProperties.each { inputs.property(it.key, it.value) }
 
-        ["${project.mod_id}.mixins.json", "fabric.mod.json", "META-INF/mods.toml"].each {
+        def files = ["${project.mod_id}.mixins.json", "fabric.mod.json", "META-INF/mods.toml"]
+        files += enabled_platforms.split(',').collect {"${project.mod_id}.${it}.mixins.json" }
+
+        files.each {
             filesMatching(it) {
                 expand(stringProperties) {
                     escapeBackslash = true
