@@ -1,1 +1,3 @@
-better mod compatibility (e.g. with Clean Chat) by using MixinExtras
+- don't include MixinExtras on Fabric/NeoForge but require Fabric Loader 0.15+, NeoForge 20.2.84+
+- fix mixin error on Forge 1.19.4+
+- update MixinExtras to 0.3.1 on Forge
