@@ -1,4 +1,4 @@
-package dzwdz.chat_heads.forge;
+package dzwdz.chat_heads.neoforge;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;

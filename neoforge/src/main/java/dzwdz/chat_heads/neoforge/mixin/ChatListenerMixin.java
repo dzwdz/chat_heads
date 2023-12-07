@@ -1,4 +1,4 @@
-package dzwdz.chat_heads.forge.mixin;
+package dzwdz.chat_heads.neoforge.mixin;
 
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.multiplayer.chat.ChatListener;
