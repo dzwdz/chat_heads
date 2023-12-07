@@ -21,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = ChatComponent.class, priority = 990) // apply before Quark's ChatComponentMixin
 public abstract class ChatComponentMixin {
-    @Shadow @Final private Minecraft minecraft;
-
     @ModifyVariable(
             at = @At(
                     value = "INVOKE",
