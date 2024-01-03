@@ -12,6 +12,8 @@
   "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "仅启发式方法",
   "text.autoconfig.chat_heads.option.smartHeuristics": "智能启发式方法",
   "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "得知服务器发送UUID后，自动关闭启发式方法。\n（发送者检测设为“UUID和启发式方法”时适用）",
+  "text.autoconfig.chat_heads.option.handleSystemMessages": "处理系统信息",
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "能否为“纯服务器消息”添加聊天头像\n注：许多服务器会将玩家消息转为服务器消息！（如装了 FreedomChat 插件的服务器）\n仅当你完全清楚自己在干什么的情况下禁用此选项！",
   "text.autoconfig.chat_heads.option.nameAliases": "别名",
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "一些服务器允许设置昵称，这些昵称不会自动匹配。\n你可以在这里手动将这些昵称和对应的用户名匹配起来。就像这样：\n昵称 -> 用户名\n昵称1 昵称2 昵称3 -> 用户名",
   "text.chat_heads.config.error.title": "无法打开配置菜单",
