@@ -1,1 +1,1 @@
-- update `zh_cn` Chinese translation, thanks to NumberSir!
+- update `ja_jp` Japanese translation, thanks to takejohn!
