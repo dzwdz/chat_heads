@@ -47,11 +47,14 @@ public abstract class CommandSuggestionSuggestionsListMixin {
 
     @Inject(at = @At("RETURN"), method = "<init>")
     public void chatheads$fixOutOfBoundChatHeads(CommandSuggestions commandSuggestions, int x, int y, int width, List<Suggestion> suggestions, boolean bl, CallbackInfo ci) {
+        var connection = Minecraft.getInstance().getConnection();
+        if (connection == null) return;
+
         // when chat head would render out of bounds
         if (rect.getX() - (2 + 8 + 2) < 3) {
             // and when a chat head could render at all
-            for (int i = 0; i < suggestionList.size(); i++) {
-                PlayerInfo playerInfo = Minecraft.getInstance().getConnection().getPlayerInfo(suggestionList.get(i).getText());
+            for (Suggestion suggestion : suggestionList) {
+                PlayerInfo playerInfo = connection.getPlayerInfo(suggestion.getText());
                 if (playerInfo != null) {
                     // move suggestions to accommodate for chat heads
                     rect.setPosition(3 + (2 + 8 + 2), rect.getY());
@@ -67,9 +70,11 @@ public abstract class CommandSuggestionSuggestionsListMixin {
             ordinal = 0
     )
     public Suggestion chatheads$captureSuggestion(Suggestion suggestion) {
+        var connection = Minecraft.getInstance().getConnection();
+
         // lookup by profile name - this should be fine on any server
         // since this applies to all suggestions, this might add chat heads in weird places, though very unlikely
-        chatheads$player = Minecraft.getInstance().getConnection().getPlayerInfo(suggestion.getText());
+        chatheads$player = (connection != null ? connection.getPlayerInfo(suggestion.getText()) : null);
         return suggestion;
     }
 
