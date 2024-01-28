@@ -1,1 +1,1 @@
-- update `ja_jp` Japanese translation, thanks to takejohn!
+- fix compatibility with Fancy Menu
