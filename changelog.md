@@ -1,1 +1,1 @@
-- fix compatibility with Fancy Menu
+- always try to get sender name from `/tell` click command (compatibility with Styled Nicknames for system messages)
