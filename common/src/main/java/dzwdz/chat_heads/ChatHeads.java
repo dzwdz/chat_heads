@@ -145,15 +145,22 @@ public class ChatHeads {
         Component sender = getSenderDecoration(bound);
         if (sender != null) {
             // StyledNicknames compatibility: try to get player info from /tell click event
-            String tellReceiver = getTellReceiver(sender);
-            if (tellReceiver != null) {
-                PlayerInfo player = getPlayerInfo(tellReceiver, connection, profileNameCache, nicknameCache);
+            Optional<String> tellReceiver = getTellReceiver(sender);
+            if (tellReceiver.isPresent()) {
+                PlayerInfo player = getPlayerInfo(tellReceiver.get(), connection, profileNameCache, nicknameCache);
                 if (player != null) return player;
             }
 
             String cleanSender = sender.getString().replaceAll(NON_NAME_REGEX, "");
             return getPlayerInfo(cleanSender, connection, profileNameCache, nicknameCache);
         } else {
+            // StyledNicknames compatibility: try to get player info from /tell click event
+            Optional<String> tellReceiver = getTellReceiver(message);
+            if (tellReceiver.isPresent()) {
+                PlayerInfo player = getPlayerInfo(tellReceiver.get(), connection, profileNameCache, nicknameCache);
+                if (player != null) return player;
+            }
+
             // check each word of the message consisting only out of allowed player name characters
             for (String word : message.getString().split(NON_NAME_REGEX)) {
                 if (word.isEmpty()) continue;
@@ -166,20 +173,21 @@ public class ChatHeads {
         return null;
     }
 
-    @Nullable
-    private static String getTellReceiver(Component component) {
-        ClickEvent clickEvent = component.getStyle().getClickEvent();
+    private static Optional<String> getTellReceiver(Component component) {
+        return component.visit((style, string) -> {
+            ClickEvent clickEvent = style.getClickEvent();
 
-        if (clickEvent != null) {
-            String cmd = clickEvent.getValue();
+            if (clickEvent != null) {
+                String cmd = clickEvent.getValue();
 
-            if (cmd.startsWith("/tell ")) {
-                String name = cmd.substring("/tell ".length()); // note: ends with space
-                return name.replaceAll(NON_NAME_REGEX, "");
+                if (cmd.startsWith("/tell ")) {
+                    String name = cmd.substring("/tell ".length()); // note: ends with space
+                    return Optional.of(name.replaceAll(NON_NAME_REGEX, ""));
+                }
             }
-        }
 
-        return null;
+            return Optional.empty();
+        }, Style.EMPTY);
     }
 
     @Nullable
