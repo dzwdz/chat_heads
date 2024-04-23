@@ -18,5 +18,6 @@
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "一些服务器允许设置昵称，这些昵称不会自动匹配。\n你可以在这里手动将这些昵称和对应的用户名匹配起来。就像这样：\n昵称 -> 用户名\n昵称1 昵称2 昵称3 -> 用户名",
   "text.chat_heads.config.error.title": "无法打开配置菜单",
   "text.chat_heads.config.error.no_cloth_config": "未安装Cloth Config！",
-  "text.chat_heads.config.error.cloth_config_link": "打开Cloth Config的CurseForge页面"
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "打开Cloth Config的CurseForge页面",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "打开Cloth Config的Modrinth页面"
 }
