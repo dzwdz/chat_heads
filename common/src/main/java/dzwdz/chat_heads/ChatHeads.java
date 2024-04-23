@@ -74,12 +74,6 @@ public class ChatHeads {
     @Nullable public static PlayerInfo lineOwner;
     @Nullable public static PlayerInfo refreshingLineOwner;
 
-    @Nullable
-    public static GuiMessage.Line lastGuiMessage;
-
-    public static int lastY = 0;
-    public static float lastOpacity = 0.0f;
-    public static int lastChatOffset;
     public static volatile boolean serverSentUuid = false;
     public static volatile boolean serverDisabledChatHeads = false;
 
