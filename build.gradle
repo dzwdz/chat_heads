@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.4-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
     id "com.matthewprenger.cursegradle" version "1.4.0" apply false
     id "com.modrinth.minotaur" version "2.+" apply false
 }
@@ -54,7 +54,7 @@ subprojects {
         def stringProperties = providers.gradlePropertiesPrefixedBy('').get()
         stringProperties.each { inputs.property(it.key, it.value) }
 
-        def files = ["${project.mod_id}.mixins.json", "fabric.mod.json", "META-INF/mods.toml"]
+        def files = ["${project.mod_id}.mixins.json", "fabric.mod.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml"]
         files += enabled_platforms.split(',').collect {"${project.mod_id}.${it}.mixins.json" }
 
         files.each {

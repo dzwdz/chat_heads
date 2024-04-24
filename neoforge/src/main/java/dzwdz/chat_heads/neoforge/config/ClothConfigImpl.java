@@ -6,7 +6,7 @@ import dzwdz.chat_heads.config.MissingClothConfigScreen;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.neoforge.client.ConfigScreenHandler;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 
 public class ClothConfigImpl {
@@ -15,14 +15,14 @@ public class ClothConfigImpl {
 	}
 
 	public static void registerConfigGui() {
-		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(
-				(client, parent) -> {
+		ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () ->
+			(client, parent) -> {
 					if (isInstalled()) {
 						return AutoConfig.getConfigScreen(ChatHeadsConfigData.class, parent).get();
 					} else {
 						return new MissingClothConfigScreen(parent);
 					}
-				}));
+				});
 	}
 
 	public static void loadConfig() {
