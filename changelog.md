@@ -1,1 +1,1 @@
-- always try to get sender name from `/tell` click command (compatibility with Styled Nicknames for system messages)
+port to 1.20.5
