@@ -1,24 +1,24 @@
 package dzwdz.chat_heads.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.FormattedCharSequence;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.Iterator;
 
 @Mixin(value = ChatComponent.class, priority = 990) // apply before Quark's ChatComponentMixin
 public abstract class ChatComponentMixin {
@@ -27,7 +27,7 @@ public abstract class ChatComponentMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/GuiMessage$Line;addedTime()I"
             ),
-            method = "render(Lnet/minecraft/client/gui/GuiGraphics;III)V"
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V"
     )
     public GuiMessage.Line chatheads$captureGuiMessage(GuiMessage.Line guiMessage) {
         ChatHeads.lastGuiMessage = guiMessage;
@@ -41,7 +41,7 @@ public abstract class ChatComponentMixin {
                     target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)I",
                     ordinal = 0
             ),
-            method = "render(Lnet/minecraft/client/gui/GuiGraphics;III)V",
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V",
             index = 2
     )
     public int chatheads$moveText(Font font, FormattedCharSequence formattedCharSequence, int x, int y, int color) {
@@ -61,10 +61,10 @@ public abstract class ChatComponentMixin {
                     target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)I",
                     ordinal = 0
             ),
-            method = "render(Lnet/minecraft/client/gui/GuiGraphics;III)V"
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V"
     )
-    public void chatheads$renderChatHead(GuiGraphics guiGraphics, int i, int j, int k, CallbackInfo ci) {
-        PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) ChatHeads.lastGuiMessage).chatheads$getOwner();
+    public void chatheads$renderChatHead(GuiGraphics guiGraphics, int i, int j, int k, boolean bl, CallbackInfo ci) {
+        PlayerInfo owner = ChatHeads.getOwner(ChatHeads.lastGuiMessage);
         if (owner != null) {
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ChatHeads.lastOpacity);
@@ -100,21 +100,49 @@ public abstract class ChatComponentMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/components/ChatComponent;getWidth()I"
             ),
-            method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"
+            method = "addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V"
     )
     public int chatheads$fixTextOverflow(int original) {
         // at this point, neither lastGuiMessage nor lastChatOffset are well-defined
         return original - ChatHeads.getChatOffset(ChatHeads.getLineOwner());
     }
 
-    // Compact Chat calls this at the beginning of addMessage (to get rid of old duplicate messages)
     @Inject(
-            method = "refreshTrimmedMessage",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"),
-            locals = LocalCapture.CAPTURE_FAILHARD
+        method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V"
+        )
     )
-    private void chatheads$transferMessageOwner(CallbackInfo ci, int i, GuiMessage guiMessage) {
-        // transfer owner from GuiMessage to new GuiMessage.Line
-        ChatHeads.refreshingLineOwner = ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
+    private void chatheads$nonRefreshingPath(CallbackInfo ci) {
+        ChatHeads.refreshing = false;
+    }
+
+    // Compact Chat might call this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
+    @ModifyArg(
+            method = "refreshTrimmedMessages()V",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V"
+            )
+    )
+    private GuiMessage chatheads$transferMessageOwner(GuiMessage guiMessage) {
+        // transfer owner from this GuiMessage to new GuiMessage.Line
+        ChatHeads.refreshing = true;
+        ChatHeads.refreshingLineOwner = ChatHeads.getOwner(guiMessage);
+        return guiMessage;
+    }
+
+    // Compact Chat might call this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
+    @Inject(
+            method = "refreshTrimmedMessages()V",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V",
+                shift = At.Shift.AFTER
+            )
+    )
+    private void chatheads$finishedRefreshing(CallbackInfo ci) {
+        ChatHeads.refreshing = false;
     }
 }

@@ -46,9 +46,8 @@ public class MissingClothConfigScreen extends Screen {
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-		renderDirtBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, delta);
 		guiGraphics.drawCenteredString(font, title, width / 2, 80, WHITE);
 		guiGraphics.drawCenteredString(font, message, width / 2, 100, WHITE);
-		super.render(guiGraphics, mouseX, mouseY, delta);
 	}
 }

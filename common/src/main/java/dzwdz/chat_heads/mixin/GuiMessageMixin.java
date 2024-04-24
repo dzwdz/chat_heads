@@ -19,7 +19,7 @@ public abstract class GuiMessageMixin implements GuiMessageOwnerAccessor {
     @Inject(method = "<init>", at = @At("TAIL"))
     public void chatheads$setOwner(CallbackInfo callbackInfo) {
         chatheads$owner = ChatHeads.lastSender;
-        ChatHeads.lastSender = null; // we're effectively at the end of a (non-refreshing) addMessage() call, good time as ever
+        ChatHeads.lastSender = null; // GuiMessage gets passed to where we need it
     }
 
     @Override

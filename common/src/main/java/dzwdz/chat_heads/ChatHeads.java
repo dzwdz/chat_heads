@@ -11,6 +11,8 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,28 +23,34 @@ import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
 /*
- * 22w42a changed chat a bit, here's the overview:
+ * small changes in 1.20.5:
  *
- * previous ClientboundPlayerChatPacket was split into ClientboundPlayerChatPacket and ClientboundDisguisedChatPacket
- * (ChatListener.handleChatMessage() -> ClientPacketListener.handlePlayerChat() and ClientPacketListener.handleDisguisedChat())
- * "disguised player messages" are the equivalent of the previous "system signed player messages" which were player messages with UUID 0
+ * addMessage(Component, MessageSignature, int, GuiMessageTag, boolean refreshing)
+ * was split into
+ * addMessageToDisplayQueue(GuiMessage)
+ * addMessageToQueue(GuiMessage)
+ * the latter was previously run when refreshing = false
+ *
  *
  * Call stack looks roughly like this:
  *
  * ClientPacketListener.handlePlayerChat()
  *  -> ChatListener.handlePlayerChatMessage(), note: doesn't take PlayerInfo but GameProfile instead
  *  -> ChatListener.showMessageToPlayer()
- *  -> ChatComponent.addMessage()
+ *  -> ChatComponent.addMessage(), new GuiMessage()
+ *  -> ChatComponent.addMessageToDisplayQueue()
  *  -> new GuiMessage.Line()
  *
  * ClientPacketListener.handleDisguisedChat()
  *  -> ChatListener.handleDisguisedChatMessage()
- *  -> ChatComponent.addMessage()
+ *  -> ChatComponent.addMessage(), new GuiMessage()
+ *  -> ChatComponent.addMessageToDisplayQueue()
  *  -> new GuiMessage.Line()
  *
  * ClientPacketListener.handleSystemChat()
  *  -> ChatListener.handleSystemMessage()
- *  -> ChatComponent.addMessage()
+ *  -> ChatComponent.addMessage(), new GuiMessage()
+ *  -> ChatComponent.addMessageToDisplayQueue()
  *  -> new GuiMessage.Line()
  *
  * FreedomChat (https://github.com/Oharass/FreedomChat) will likely work the same as before, converting chat messages
@@ -52,6 +60,7 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
     public static final String NON_NAME_REGEX = "(§.)|[^\\w]";
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ResourceLocation DISABLE_RESOURCE = new ResourceLocation(MOD_ID, "disable");
 
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
@@ -59,7 +68,7 @@ public class ChatHeads {
     @Nullable
     public static PlayerInfo lastSender;
 
-    // with Compact Chat, addMessage() can call refreshTrimmedMessage() and thus addMessage() with another owner inside itself,
+    // with Compact Chat, addMessageToDisplayQueue() might call refreshTrimmedMessage() and thus addMessageToDisplayQueue() with another owner inside itself,
     // we hence need two separate owner variables, distinguished by 'refreshing'
     public static boolean refreshing;
     @Nullable public static PlayerInfo lineOwner;
@@ -113,9 +122,18 @@ public class ChatHeads {
         ChatHeads.lastSender = ChatHeads.detectPlayer(message, bound);
     }
 
+    @Nullable
+    public static PlayerInfo getOwner(@NotNull GuiMessage.Line guiMessage) {
+        return ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
+    }
+
+    @Nullable
+    public static PlayerInfo getOwner(@NotNull GuiMessage guiMessage) {
+        return ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
+    }
+
     public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
-        PlayerInfo owner = ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
-        return getChatOffset(owner);
+        return getChatOffset(getOwner(guiMessage));
     }
 
     public static int getChatOffset(@Nullable PlayerInfo owner) {
@@ -192,7 +210,7 @@ public class ChatHeads {
     private static Component getSenderDecoration(@Nullable ChatType.Bound bound) {
         if (bound == null) return null;
 
-        for (var param : bound.chatType().chat().parameters()) {
+        for (var param : bound.chatType().value().chat().parameters()) {
             if (param == ChatTypeDecoration.Parameter.SENDER) {
                 return bound.name();
             }
