@@ -4,8 +4,10 @@
   "package": "dzwdz.chat_heads.forge.mixin",
   "compatibilityLevel": "JAVA_${java_version}",
   "client": [
-    "ChatListenerMixin"
+    "ChatListenerMixin",
+    "compat.QuarkShareItemS2CMessageMixin"
   ],
+  "plugin": "dzwdz.chat_heads.forge.MixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }
