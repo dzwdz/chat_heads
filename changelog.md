@@ -1,1 +1,2 @@
-- always try to get sender name from `/tell` click command (compatibility with Styled Nicknames for system messages)
+- support for Quark's Item Sharing messages
+- update MixinExtras to 0.3.5
