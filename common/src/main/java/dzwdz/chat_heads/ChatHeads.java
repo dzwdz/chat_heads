@@ -59,7 +59,7 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
-    public static final String NON_NAME_REGEX = "(§.)|[^\\w]";
+    public static final String NON_NAME_REGEX = "(§.)|[^\\p{L}\\p{N}_]";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ResourceLocation DISABLE_RESOURCE = new ResourceLocation(MOD_ID, "disable");
 
