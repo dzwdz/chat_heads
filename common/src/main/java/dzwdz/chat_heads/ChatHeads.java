@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
@@ -59,7 +58,7 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
-    public static final String NON_NAME_REGEX = "(§.)|[^\\w]";
+    public static final String FORMAT_REGEX = "§.";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ResourceLocation DISABLE_RESOURCE = new ResourceLocation(MOD_ID, "disable");
 
@@ -148,39 +147,25 @@ public class ChatHeads {
             return null;
         }
 
-        Map<String, PlayerInfo> profileNameCache = new HashMap<>();
-        Map<String, PlayerInfo> nicknameCache = new HashMap<>();
-
-        // try to get player info only from the sender decoration
         Component sender = getSenderDecoration(bound);
-        if (sender != null) {
-            // StyledNicknames compatibility: try to get player info from /tell click event
-            Optional<String> tellReceiver = getTellReceiver(sender);
-            if (tellReceiver.isPresent()) {
-                PlayerInfo player = getPlayerInfo(tellReceiver.get(), connection, profileNameCache, nicknameCache);
-                if (player != null) return player;
-            }
 
-            String cleanSender = sender.getString().replaceAll(NON_NAME_REGEX, "");
-            return getPlayerInfo(cleanSender, connection, profileNameCache, nicknameCache);
-        } else {
-            // StyledNicknames compatibility: try to get player info from /tell click event
-            Optional<String> tellReceiver = getTellReceiver(message);
-            if (tellReceiver.isPresent()) {
-                PlayerInfo player = getPlayerInfo(tellReceiver.get(), connection, profileNameCache, nicknameCache);
-                if (player != null) return player;
-            }
+        PlayerInfoCache playerInfoCache = new PlayerInfoCache(connection);
+        playerInfoCache.collectProfileNames();
 
-            // check each word of the message consisting only out of allowed player name characters
-            for (String word : message.getString().split(NON_NAME_REGEX)) {
-                if (word.isEmpty()) continue;
-
-                PlayerInfo player = getPlayerInfo(word, connection, profileNameCache, nicknameCache);
-                if (player != null) return player;
-            }
+        // StyledNicknames compatibility: try to get player info from /tell click event
+        PlayerInfo player = getTellReceiver(sender != null ? sender : message).map(playerInfoCache::get).orElse(null);
+        if (player != null) {
+            return player;
         }
 
-        return null;
+        playerInfoCache.collectAllNames();
+
+        // try to get player info only from the sender decoration
+        if (sender != null) {
+            return playerInfoCache.get(sender.getString());
+        } else {
+            return scanForPlayerName(message.getString(), playerInfoCache);
+        }
     }
 
     private static Optional<String> getTellReceiver(Component component) {
@@ -191,8 +176,8 @@ public class ChatHeads {
                 String cmd = clickEvent.getValue();
 
                 if (cmd.startsWith("/tell ")) {
-                    String name = cmd.substring("/tell ".length()); // note: ends with space
-                    return Optional.of(name.replaceAll(NON_NAME_REGEX, ""));
+                    String name = cmd.substring("/tell ".length()).trim();
+                    return Optional.of(name);
                 }
             }
 
@@ -214,63 +199,130 @@ public class ChatHeads {
     }
 
     @Nullable
-    private static PlayerInfo getPlayerInfo(@NotNull String name, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache, Map<String, PlayerInfo> nicknameCache) {
-        // manually translate nickname to profile name (needed for non-displayname nicknames)
-        name = CONFIG.getProfileName(name).replaceAll(NON_NAME_REGEX, "");
+    private static PlayerInfo scanForPlayerName(@NotNull String message, PlayerInfoCache playerInfoCache) {
+        message = message.replaceAll(FORMAT_REGEX, "");
 
-        // check if player name
-        PlayerInfo player = getPlayerFromProfileName(name, connection, profileNameCache);
-        if (player != null) return player;
+        // large optimization: prepare a names lookup to improve worst case runtime of the following triple nested loop
+        var namesByFirstCharacter = playerInfoCache.createNamesByFirstCharacterMap();
 
-        // check if nickname
-        return getPlayerFromNickname(name, connection, nicknameCache);
-    }
+        boolean insideWord = false;
 
-    /**
-     * Finds a value v in `collection` such that `keyFunction(v)` equals `key`.
-     * Uses an (initially empty) cache to speed up subsequent calls.
-     * This cache will either be full or empty after this method returns.
-     */
-    public static <V, K> V findByKey(Iterable<V> collection, Function<V, K> keyFunction, K key, @Nullable Map<K, V> cache) {
-        if (cache != null && !cache.isEmpty()) {
-            return cache.get(key);
-        } else {
-            for (V v : collection) {
-                K k = keyFunction.apply(v);
+        // scan through the message code point by code point
+        int[] messageSeq = message.codePoints().toArray();
+        for (int i = 0; i < messageSeq.length; i++) {
+            int c = messageSeq[i];
 
-                if (k != null) {
-                    if (key.equals(k)) {
-                        if (cache != null) cache.clear(); // make sure to not leave the cache in an incomplete state
-                        return v;
-                    }
+            // don't match words inside words ("tom" shouldn't match "custom")
+            if (insideWord && isWordCharacter(c))
+                continue; // note: don't need to update insideWord
 
-                    // fill cache for subsequent calls
-                    if (cache != null) cache.put(k, v);
+            // try to match with names starting with the given character
+            for (var name : namesByFirstCharacter.getOrDefault(c, List.of())) {
+                int[] nameSeq = name.codePoints().toArray();
+
+                // nothing left to match
+                if (i + nameSeq.length-1 >= messageSeq.length)
+                    continue;
+
+                // don't match word ending with more word characters ("tom" shouldn't match "tomato")
+                boolean nameEndsAsWord = isWordCharacter(nameSeq[nameSeq.length - 1]);
+                boolean nameIsFollowedByWord = i + nameSeq.length < messageSeq.length && isWordCharacter(messageSeq[i + nameSeq.length]);
+                if (nameEndsAsWord && nameIsFollowedByWord)
+                    continue;
+
+                if (containsSubsequenceAt(messageSeq, i, nameSeq)) {
+                    return playerInfoCache.get(name);
                 }
             }
 
-            return null;
+            insideWord = isWordCharacter(c);
+        }
+
+        return null;
+    }
+
+    static class PlayerInfoCache {
+        private final ClientPacketListener connection;
+        private final Map<String, PlayerInfo> playerInfos = new HashMap<>();
+        private boolean collectedProfileNames = false;
+        private boolean collectedEverything = false;
+
+        public PlayerInfoCache(ClientPacketListener connection) {
+            this.connection = connection;
+        }
+
+        public void collectProfileNames() {
+            if (collectedProfileNames) return;
+            collectedProfileNames = true;
+
+            for (var playerInfo : connection.getOnlinePlayers()) {
+                // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
+                String profileName = playerInfo.getProfile().getName().replaceAll(FORMAT_REGEX, "");
+                playerInfos.put(profileName, playerInfo);
+            }
+        }
+
+        public void collectAllNames() {
+            if (collectedEverything) return;
+            collectedEverything = true;
+
+            collectProfileNames();
+
+            // collect display names
+            for (var playerInfo : connection.getOnlinePlayers()) {
+                if (playerInfo.getTabListDisplayName() != null) {
+                    String displayName = playerInfo.getTabListDisplayName().getString().replaceAll(FORMAT_REGEX, "");
+                    playerInfos.putIfAbsent(displayName, playerInfo);
+                }
+            }
+
+            // add name aliases, copying player info from profile/display names
+            for (var entry : CONFIG.getNameAliases().entrySet()) {
+                PlayerInfo playerInfo = playerInfos.get(entry.getValue());
+                if (playerInfo != null) {
+                    playerInfos.putIfAbsent(entry.getKey(), playerInfo);
+                }
+            }
+        }
+
+        public HashMap<Integer, List<String>> createNamesByFirstCharacterMap() {
+            HashMap<Integer, List<String>> namesByFirstCharacter = new HashMap<>();
+
+            for (var name : playerInfos.keySet()) {
+                namesByFirstCharacter.compute(name.codePointAt(0), (key, value) -> {
+                    if (value == null) value = new ArrayList<>();
+                    value.add(name);
+                    return value;
+                });
+            }
+
+            return namesByFirstCharacter;
+        }
+
+        @Nullable
+        public PlayerInfo get(@NotNull String name) {
+            return playerInfos.get(name);
+        }
+
+        public Set<String> getNames() {
+            return playerInfos.keySet();
         }
     }
 
-    // plugins like HaoNick can change the profile names to contain illegal characters like formatting codes, so we can't simply use connection.getPlayerInfo()
-    @Nullable
-    public static PlayerInfo getPlayerFromProfileName(@NotNull String word, ClientPacketListener connection, Map<String, PlayerInfo> profileNameCache) {
-        return findByKey(connection.getOnlinePlayers(),
-                playerInfo -> playerInfo.getProfile().getName().replaceAll(NON_NAME_REGEX, ""),
-                word,
-                profileNameCache);
+    private static boolean isWordCharacter(int codePoint) {
+        return Character.isLetterOrDigit(codePoint) || codePoint == '_' || Character.getNumericValue(codePoint) != -1;
     }
 
-    @Nullable
-    private static PlayerInfo getPlayerFromNickname(@NotNull String word, ClientPacketListener connection, Map<String, PlayerInfo> nicknameCache) {
-        return findByKey(connection.getOnlinePlayers(),
-                playerInfo -> {
-                    Component displayName = playerInfo.getTabListDisplayName();
-                    return displayName != null ? displayName.getString().replaceAll(NON_NAME_REGEX, "") :  null;
-                },
-                word,
-                nicknameCache);
+    private static boolean containsSubsequenceAt(int[] sequence, int startIndex, int[] subsequence) {
+        // assumes startIndex + sequence.length-1 < subsequence.length
+
+        for (int j = 0; j < subsequence.length; j++) {
+            if (sequence[startIndex + j] != subsequence[j]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static NativeImage extractBlendedHead(NativeImage skin) {
