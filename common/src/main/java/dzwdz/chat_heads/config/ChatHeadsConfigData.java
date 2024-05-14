@@ -45,7 +45,7 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	}
 
 	@Override
-	public String getProfileName(String nickname) {
-		return nameAliases.getOrDefault(nickname, nickname);
+	public Map<String, String> getNameAliases() {
+		return nameAliases;
 	}
 }

@@ -26,7 +26,7 @@ side = "CLIENT"
 [[dependencies.chat_heads]]
 modId = "minecraft"
 mandatory = true
-versionRange = "${forge_game_version_range}"
+versionRange = "${neoforge_game_version_range}"
 ordering = "NONE"
 side = "CLIENT"
 
