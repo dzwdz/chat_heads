@@ -18,5 +18,6 @@
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Some servers allow setting nicknames which can't automatically be matched.\nHere you can manually match those nicknames to their profile name, like:\nnickname -> profilename\nnick1 nick2 nick3 -> profilename",
   "text.chat_heads.config.error.title": "Couldn't open config menu",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config is not installed!",
-  "text.chat_heads.config.error.cloth_config_link": "Open Cloth Config page on CurseForge"
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "Open Cloth Config page on CurseForge",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "Open Cloth Config page on Modrinth"
 }

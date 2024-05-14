@@ -15,5 +15,6 @@
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Деякі сервери дозволяють встановлювати псевдоніми, які автоматично\nне визначаються. Тут ви можете самостійно співставити псевдоніми\nта їх профільні імена за наступним зразком:\nпсевдонім -> ім'яПрофілю\nпсевдо1 псевдо2 псевдо3 -> ім'яПрофілю",
   "text.chat_heads.config.error.title": "Неможливо відкрити меню параметрів",
   "text.chat_heads.config.error.no_cloth_config": "Не встановлено мод Cloth Config!",
-  "text.chat_heads.config.error.cloth_config_link": "Відкрити сторінку мода Cloth Config на CurseForge"
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "Відкрити сторінку мода Cloth Config на CurseForge",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "Відкрити сторінку мода Cloth Config на Modrinth"
 }
