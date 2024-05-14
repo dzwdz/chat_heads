@@ -22,6 +22,7 @@ public abstract class DownloadedPackSourceMixin {
             try (PackResources resources = serverPack.open()) {
                 if (resources.getResource(PackType.CLIENT_RESOURCES, ChatHeads.DISABLE_RESOURCE) != null) {
                     ChatHeads.serverDisabledChatHeads = true;
+                    ChatHeads.LOGGER.info("Chat Heads disabled by server request");
                 }
             }
         }

@@ -19,5 +19,6 @@
 	"text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "自動的に一致させられないニックネームを設定できるサーバーもあります．\n以下のように，手動でニックネームをプロフィール名に対応させられます:\nニックネーム -> プロフィール名\nニックネーム1 ニックネーム2 -> プロフィール名",
 	"text.chat_heads.config.error.title": "設定画面を開けません！",
 	"text.chat_heads.config.error.no_cloth_config": "Cloth Configがインストールされていません",
-	"text.chat_heads.config.error.cloth_config_link": "CurseForgeでCloth Configのページを開く"
+	"text.chat_heads.config.error.cloth_config_curseforge_link": "CurseForgeでCloth Configのページを開く",
+	"text.chat_heads.config.error.cloth_config_modrinth_link": "ModrinthでCloth Configのページを開く"
 }

@@ -16,7 +16,7 @@ public abstract class GuiMessageLineMixin implements GuiMessageOwnerAccessor {
     @Unique @Nullable
     public PlayerInfo chatheads$owner;
 
-    @Inject(method = "<init>",  at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At("TAIL"))
     public void chatheads$setOwner(CallbackInfo callbackInfo) {
         chatheads$owner = ChatHeads.getLineOwner();
         ChatHeads.resetLineOwner(); // reset early so multi-line chats don't each receive a chat head
