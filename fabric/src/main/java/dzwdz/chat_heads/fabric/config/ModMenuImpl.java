@@ -15,11 +15,11 @@ public class ModMenuImpl implements ModMenuApi {
         // Mod Menu 2.0.14+ handles missing classes by disabling the config screen (and printing a warning)
         // we put a custom screen instead, to not confuse users
         return parent -> {
-            if (ClothConfigImpl.isInstalled()) {
-                return AutoConfig.getConfigScreen(ChatHeadsConfigData.class, parent).get();
-            } else {
+//            if (ClothConfigImpl.isInstalled()) {
+//                return AutoConfig.getConfigScreen(ChatHeadsConfigData.class, parent).get();
+//            } else {
                 return new MissingClothConfigScreen(parent);
-            }
+//            }
         };
     }
 }

@@ -1,5 +1,7 @@
 package dzwdz.chat_heads.config;
 
+import java.util.Map;
+
 public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	public static final boolean OFFSET_NON_PLAYER_TEXT = true;
 	public static final SenderDetection SENDER_DETECTION = SenderDetection.UUID_AND_HEURISTIC;
@@ -27,7 +29,7 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	}
 
 	@Override
-	public String getProfileName(String nickname) {
-		return nickname;
+	public Map<String, String> getNameAliases() {
+		return Map.of();
 	}
 }
