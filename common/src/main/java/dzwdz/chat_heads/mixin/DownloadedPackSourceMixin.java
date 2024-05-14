@@ -18,18 +18,19 @@ import java.util.concurrent.CompletableFuture;
 
 @Mixin(DownloadedPackSource.class)
 public abstract class DownloadedPackSourceMixin {
-	@Shadow @Nullable
-	private Pack serverPack;
+    @Shadow @Nullable
+    private Pack serverPack;
 
-	// note: runs on Netty Client IO thread
+    // note: runs on Netty Client IO thread
     @Inject(method = "setServerPack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;delayTextureReload()Ljava/util/concurrent/CompletableFuture;"))
     public void chatheads$checkForDisableResource(File file, PackSource packSource, CallbackInfoReturnable<CompletableFuture<Void>> cir) {
-		if (serverPack == null) return; // never null
+        if (serverPack == null) return; // never null
 
-		try (PackResources resources = serverPack.open()) {
-			if (resources.getResource(PackType.CLIENT_RESOURCES, ChatHeads.DISABLE_RESOURCE) != null) {
-				ChatHeads.serverDisabledChatHeads = true;
-			}
-		}
+        try (PackResources resources = serverPack.open()) {
+            if (resources.getResource(PackType.CLIENT_RESOURCES, ChatHeads.DISABLE_RESOURCE) != null) {
+                ChatHeads.serverDisabledChatHeads = true;
+                ChatHeads.LOGGER.info("Chat Heads disabled by server request");
+            }
+        }
     }
 }

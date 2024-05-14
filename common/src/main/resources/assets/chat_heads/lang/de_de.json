@@ -18,5 +18,6 @@
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Manche Server erlauben Spitznamen welche nicht automatisch zugeordnet\nwerden können. Hier können die Spitznamen wie folgt manuell zugeordnet werden:\nSpitzname -> Profilname\nName1 Name2 Name3 -> Profilname",
   "text.chat_heads.config.error.title": "Konnte Konfigurationsmenü nicht öffnen",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config ist nicht installiert!",
-  "text.chat_heads.config.error.cloth_config_link": "Cloth Config Seite auf CurseForge öffnen"
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "Cloth Config Seite auf CurseForge öffnen",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "Cloth Config Seite auf Modrinth öffnen"
 }
