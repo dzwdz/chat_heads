@@ -1,54 +1,60 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
-    id "com.matthewprenger.cursegradle" version "1.4.0" apply false
-    id "com.modrinth.minotaur" version "2.+" apply false
+    id 'dev.architectury.loom' version '1.6-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
+    id 'com.modrinth.minotaur' version '2.+' apply false
 }
 
 architectury {
     minecraft = project.minecraft_version
 }
 
-subprojects {
-    apply plugin: "dev.architectury.loom"
-
-    loom {
-        silentMojangMappingsLicense()
-    }
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${project.minecraft_version}"
-        mappings loom.officialMojangMappings()
-    }
+allprojects {
+    group = rootProject.maven_group
+    version = rootProject.mod_version
 }
 
-allprojects {
-    apply plugin: "java"
-    apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
-
-    // version = project.mod_version
-    group = project.maven_group
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
 
     base {
         archivesName = project.archives_base_name
     }
 
+    loom {
+        silentMojangMappingsLicense()
+    }
+
     repositories {
-        maven { url = "https://maven.shedaniel.me/" }
         maven { url = "https://maven.terraformersmc.com/" }
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
+    }
+
+    dependencies {
+        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+        mappings loom.layered {
+            officialMojangMappings()
+            if (project.parchment_version) {
+                parchment("org.parchmentmc.data:parchment-$rootProject.minecraft_version:${project.parchment_version}@zip")
+            }
+        }
+    }
+
+    java {
+        withSourcesJar()
+        targetCompatibility = sourceCompatibility = project.java_version as Integer
     }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = project.java_version as Integer
     }
 
-    java {
-        withSourcesJar()
-    }
-}
-
-subprojects {
     processResources {
         // expand every property from gradle.properties
         def stringProperties = providers.gradlePropertiesPrefixedBy('').get()

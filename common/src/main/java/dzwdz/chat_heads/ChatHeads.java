@@ -252,6 +252,9 @@ public class ChatHeads {
             for (var playerInfo : connection.getOnlinePlayers()) {
                 // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
                 String profileName = playerInfo.getProfile().getName().replaceAll(FORMAT_REGEX, "");
+                if (profileName.isEmpty())
+                    continue;
+
                 playerInfos.put(profileName, playerInfo);
             }
         }
@@ -266,6 +269,9 @@ public class ChatHeads {
             for (var playerInfo : connection.getOnlinePlayers()) {
                 if (playerInfo.getTabListDisplayName() != null) {
                     String displayName = playerInfo.getTabListDisplayName().getString().replaceAll(FORMAT_REGEX, "");
+                    if (displayName.isEmpty())
+                        continue;
+
                     playerInfos.putIfAbsent(displayName, playerInfo);
                 }
             }
@@ -279,8 +285,8 @@ public class ChatHeads {
             }
         }
 
-        public HashMap<Integer, List<String>> createNamesByFirstCharacterMap() {
-            HashMap<Integer, List<String>> namesByFirstCharacter = new HashMap<>();
+        public Map<Integer, List<String>> createNamesByFirstCharacterMap() {
+            Map<Integer, List<String>> namesByFirstCharacter = new HashMap<>();
 
             for (var name : playerInfos.keySet()) {
                 namesByFirstCharacter.compute(name.codePointAt(0), (key, value) -> {

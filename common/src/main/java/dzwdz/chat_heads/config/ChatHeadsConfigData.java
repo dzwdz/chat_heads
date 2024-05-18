@@ -48,4 +48,9 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	public Map<String, String> getNameAliases() {
 		return nameAliases;
 	}
+
+	@Override
+	public void validatePostLoad() throws ConfigData.ValidationException {
+		nameAliases.entrySet().removeIf(entry -> entry.getKey().isEmpty() || entry.getValue().isEmpty());
+	}
 }
