@@ -26,6 +26,8 @@ public abstract class SkinManagerMixin {
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     public void chatheads$rememberTextureLocation(MinecraftProfileTexture minecraftProfileTexture, CallbackInfoReturnable<CompletableFuture<ResourceLocation>> cir, String string, ResourceLocation id, Path path, CompletableFuture<?> completableFuture, HttpTexture httpTexture) {
-        ((HttpTextureAccessor) httpTexture).chatheads$setTextureLocation(id);
+        if (id.getPath().startsWith("skins/")) {
+            ((HttpTextureAccessor) httpTexture).chatheads$setTextureLocation(id);
+        }
     }
 }
