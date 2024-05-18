@@ -13,7 +13,7 @@
   "text.autoconfig.chat_heads.option.smartHeuristics": "Смарт эўрыстыка",
   "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Адключыць эўрыстыку, калі сервер дасылае UUIDs.\n(Дазваляльна для \"UUID и эўрыстыка\" выяўлення дасылальніка)",
   "text.autoconfig.chat_heads.option.nameAliases": "Псеўданімы імёнаў",
-  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Некаторыя сервера дазваляюць ставіць нікнеймы, якія не супадаюць.\nТут вы можаце звязаць нікнейм з именем, напрыклад:\nnickname -> profilename\nnick1 nick2 nick3 -> profilename",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Некаторыя сервера дазваляюць ставіць нікнеймы, якія не супадаюць.\nТут вы можаце звязаць нікнейм з именем, напрыклад:\nnickname -> profilename",
   "text.chat_heads.config.error.title": "Немагчыма адкрыць меню налад",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config адсутнічае!",
   "text.chat_heads.config.error.cloth_config_curseforge_link": "Адкрыць старонку Cloth Config на CurseForge",
