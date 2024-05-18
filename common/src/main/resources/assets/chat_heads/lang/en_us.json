@@ -15,7 +15,7 @@
   "text.autoconfig.chat_heads.option.handleSystemMessages": "Handle system messages",
   "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Whether heads can be added to \"pure\" server messages.\nNote that many servers (e.g. running the FreedomChat plugin)\nturn player messages into server messages!\nOnly disable this option if you know what you are doing!",
   "text.autoconfig.chat_heads.option.nameAliases": "Name aliases",
-  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Some servers allow setting nicknames which can't automatically be matched.\nHere you can manually match those nicknames to their profile name, like:\nnickname -> profilename\nnick1 nick2 nick3 -> profilename",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Some servers allow setting nicknames which can't automatically be matched.\nHere you can manually match those nicknames to their profile name, like:\nnickname -> profilename",
   "text.chat_heads.config.error.title": "Couldn't open config menu",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config is not installed!",
   "text.chat_heads.config.error.cloth_config_curseforge_link": "Open Cloth Config page on CurseForge",
