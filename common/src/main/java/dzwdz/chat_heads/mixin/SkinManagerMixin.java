@@ -27,6 +27,8 @@ public abstract class SkinManagerMixin {
     )
     public void chatheads$rememberTextureLocation(MinecraftProfileTexture minecraftProfileTexture, MinecraftProfileTexture.Type type, SkinManager.SkinTextureCallback skinTextureCallback, CallbackInfoReturnable<ResourceLocation> cir,
                                                   String string, ResourceLocation id, AbstractTexture abstractTexture, File file, File file2, HttpTexture httpTexture) {
-        ((HttpTextureAccessor) httpTexture).chatheads$setTextureLocation(id);
+        if (id.getPath().startsWith("skins/")) {
+            ((HttpTextureAccessor) httpTexture).chatheads$setTextureLocation(id);
+        }
     }
 }

@@ -10,28 +10,24 @@ import net.minecraft.network.chat.Component;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class AliasesGuiProvider implements GuiProvider {
-    /** Match "(nickname1 nickname2 ...) -> (profilename)" */
-    public static final Pattern PATTERN = Pattern.compile("\\s*(.+)\\s+->\\s+(\\S+)\\s*");
-
-    /** Convert a list of "nick1 nick2 -> profilename" strings to a map from nicks to profile names */
     public static Map<String, String> toAliases(List<String> aliasStrings) {
         Map<String, String> aliases = new LinkedHashMap<>();
 
         for (String s : aliasStrings) {
-            Matcher matcher = PATTERN.matcher(s);
-            if (matcher.matches()) {
-                String[] nicknames = matcher.group(1).split("\\s+");
-                String profileName = matcher.group(2);
+            String[] names = s.split("\\s+->\\s+");
+            if (names.length != 2)
+                throw new IllegalArgumentException();
 
-                for (String nick : nicknames) {
-                    aliases.put(nick, profileName);
-                }
-            } else throw new IllegalArgumentException();
+            String nickname = names[0].strip();
+            String profileName = names[1].strip();
+
+            if (nickname.isEmpty() || profileName.isEmpty())
+                throw new IllegalArgumentException();
+
+            aliases.put(nickname, profileName);
         }
 
         return aliases;
