@@ -30,11 +30,20 @@ subprojects {
 
     repositories {
         maven { url = "https://maven.terraformersmc.com/" }
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
     }
 
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
-        mappings loom.officialMojangMappings()
+        mappings loom.layered {
+            officialMojangMappings()
+            if (project.parchment_version) {
+                parchment("org.parchmentmc.data:parchment-$rootProject.minecraft_version:${project.parchment_version}@zip")
+            }
+        }
     }
 
     java {
