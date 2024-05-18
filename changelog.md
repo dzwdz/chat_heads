@@ -1,2 +1,2 @@
-major rewrite of the last resort heuristic (when there's no sender decoration or `/tell` click event)  
-fixes player detection issues with nicknames containing non-alphanumeric characters
+- fix crash in case of empty player names (?!)
+- allow spaces inside aliases (and remove one liner syntax for multiple nicks)
