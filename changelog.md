@@ -1,2 +1,1 @@
-- fix crash in case of empty player names (?!)
-- allow spaces inside aliases (and remove one liner syntax for multiple nicks)
+add Spanish translation, thanks to zeedif!
