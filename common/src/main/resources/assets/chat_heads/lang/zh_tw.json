@@ -1,0 +1,23 @@
+{
+  "modmenu.descriptionTranslation.chat_heads": "能看見誰在和你聊天！\n這個模組在玩家的聊天資訊旁邊加入了他們的頭像。",
+  "text.autoconfig.chat_heads.title": "聊天頭像",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "偏移非玩家聊天文字",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "啟用後所有文字都將對齊",
+  "text.autoconfig.chat_heads.option.explanation": "“UUID”？“啟發式方法”？",
+  "text.autoconfig.chat_heads.option.explanation.@Tooltip": "通常，伺服器會告訴我們誰發送了訊息，即發送者的UUID。\n但是，許多伺服器沒有這麼做，甚至會發送假的UUID。\n這時我們需要使用啟發式方法，即透過訊息內容去猜測。\n這種啟發式方法並不完美，因此它可能會弄錯頭像。",
+  "text.autoconfig.chat_heads.option.senderDetection": "發送者檢測",
+  "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "“UUID和啟發式方法”在大多數伺服器上都能正常工作。\n如果伺服器發送假的UUID，必須使用“僅啟發式方法”。",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "僅UUID",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_AND_HEURISTIC": "UUID和啟發式方法",
+  "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "僅啟發式方法",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "智慧啟發式方法",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "得知伺服器發送UUID後，自動關閉啟發式方法。\n（發送者檢測設為“UUID和啟發式方法”時適用）",
+  "text.autoconfig.chat_heads.option.handleSystemMessages": "處理系統資訊",
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "能否為“純伺服器訊息”加入聊天頭像\n註：許多伺服器會將玩家訊息轉為伺服器訊息！（如裝了 FreedomChat 插件的伺服器）\n僅當你完全清楚自己在幹什麼的情況下停用此選項！",
+  "text.autoconfig.chat_heads.option.nameAliases": "別名",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "一些伺服器允許設置暱稱，這些暱稱不會自動匹配。\n你可以在這裡手動將這些暱稱和對應的使用者名匹配起來。就像這樣：\n暱稱 -> 使用者名",
+  "text.chat_heads.config.error.title": "無法打開配置菜單",
+  "text.chat_heads.config.error.no_cloth_config": "未安裝Cloth Config！",
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "打開Cloth Config的CurseForge頁面",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "打開Cloth Config的Modrinth頁面"
+}
