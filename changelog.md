@@ -1,1 +1,1 @@
-add Traditional Chinese translation, thanks to yichifauzi!
+port to 1.21

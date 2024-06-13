@@ -60,7 +60,7 @@ public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
     public static final String FORMAT_REGEX = "§.";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
-    public static final ResourceLocation DISABLE_RESOURCE = new ResourceLocation(MOD_ID, "disable");
+    public static final ResourceLocation DISABLE_RESOURCE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "disable");
 
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
@@ -353,7 +353,7 @@ public class ChatHeads {
     }
 
     public static ResourceLocation getBlendedHeadLocation(ResourceLocation skinLocation) {
-        return new ResourceLocation(ChatHeads.MOD_ID, skinLocation.getPath());
+        return ResourceLocation.fromNamespaceAndPath(ChatHeads.MOD_ID, skinLocation.getPath());
     }
 
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner) {
