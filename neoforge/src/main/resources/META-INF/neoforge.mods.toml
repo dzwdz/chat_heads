@@ -19,7 +19,7 @@ displayTest = "IGNORE_ALL_VERSION"
 [[dependencies.chat_heads]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[20.2.84,)"
+versionRange = "[21.0.0-beta,)"
 ordering = "NONE"
 side = "CLIENT"
 
@@ -27,13 +27,6 @@ side = "CLIENT"
 modId = "minecraft"
 mandatory = true
 versionRange = "${neoforge_game_version_range}"
-ordering = "NONE"
-side = "CLIENT"
-
-[[dependencies.chat_heads]]
-modId = "cloth_config"
-mandatory = false
-versionRange = "[9.0.0,)"
 ordering = "NONE"
 side = "CLIENT"
 
