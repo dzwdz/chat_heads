@@ -1,1 +1,1 @@
-add Spanish translation, thanks to zeedif!
+add Traditional Chinese translation, thanks to yichifauzi!
