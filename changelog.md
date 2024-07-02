@@ -1,1 +1,1 @@
-add Traditional Chinese translation, thanks to yichifauzi!
+update Traditional Chinese translation, thanks to notlin4!
