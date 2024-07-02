@@ -1,0 +1,23 @@
+{
+  "modmenu.descriptionTranslation.chat_heads": "Vedi con chi stai scrivendo!\nQuesta mod aggiunge le teste dei giocatori nei messaggi in chat.",
+  "text.autoconfig.chat_heads.title": "Chat Heads",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Allineamento testo chat non dei giocatori",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "Tutto il testo verrà allineato se attivato",
+  "text.autoconfig.chat_heads.option.explanation": "\"UUID\"? \"Euristica\"?",
+  "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Normalmente, i server ci dicono chi invia un messaggo,\ne.s. il UUID del mittente. Tuttavia, molti server non lo fanno.\nPossono anche inviare UUID finti. In questi casi dobbiamo usare\nun'euristica, e.s. indovineremo dal contenuto del messaggio.\nQuesta euristica non è perfetta, perciò le teste potrebbero non combaciare.",
+  "text.autoconfig.chat_heads.option.senderDetection": "Rilevamento mittente",
+  "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "Per molti server \"UUID e euristica\" va bene.\nSe il server invia UUID finti, \"Solo euristica\"\ndeve essere attivato.",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "Solo UUID",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_AND_HEURISTIC": "UUID e euristica",
+  "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "Solo euristica",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "Euristica intelligente",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Disattiva l'euristica se il server è noto per l'invio di UUID.\n(Si applica per il rilevamento mittente \"UUID e euristica\")",
+  "text.autoconfig.chat_heads.option.handleSystemMessages": "Messaggi di sistema",
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Se le teste possono essere aggiunte ai messaggi del server \"puri\".\nNota bene che molti server (e.s. usano il plugin FreedomChat)\nfanno diventare i messaggi dei giocatori in messaggi del server!\nDisattiva questa opzione solo se sai quello che fai!",
+  "text.autoconfig.chat_heads.option.nameAliases": "Alias nomi",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Alcuni server consentono di aggiungere nickname che non possono essere combaciati automaticamente.\nQui puoi combaciare quei nickname ai loro nome profili manualmente, per esempio:\nnickname -> nomeprofilo",
+  "text.chat_heads.config.error.title": "Errore con il menu di configurazione",
+  "text.chat_heads.config.error.no_cloth_config": "Cloth Config non è installato!",
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "Apri la pagina di Cloth Config su CurseForge",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "Apri la pagina di Cloth Config su Modrinth"
+}
