@@ -1,3 +1,7 @@
+0.12.6
+
+- add Korean translation, thanks to kirito5572!
+
 0.12.5
 
 - add Italian translation, thanks to floatayy!
