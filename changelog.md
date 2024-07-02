@@ -1,1 +1,1 @@
-port to 1.21
+update Traditional Chinese translation, thanks to notlin4!
