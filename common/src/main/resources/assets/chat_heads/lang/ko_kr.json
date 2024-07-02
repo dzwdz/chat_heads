@@ -1,0 +1,23 @@
+{
+  "modmenu.descriptionTranslation.chat_heads": "누구랑 채팅하는지 확인하세요!\n이 모드는 플레이어의 채팅 앞에 해당 플레이어의 머리 아이콘을 추가해줍니다.",
+  "text.autoconfig.chat_heads.title": "Chat Heads",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "비 플레이어 채팅 정렬",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "활성화하면 모든 텍스트가 정렬됩니다.",
+  "text.autoconfig.chat_heads.option.explanation": "\"UUID\"? \"행위 기반 탐지\"?",
+  "text.autoconfig.chat_heads.option.explanation.@Tooltip": "일반적으로 서버는 메세지를 보낸 사람이 누구인지 알려줍니다.\n정확히는, 보낸사람의 UUID를 알려줍니다. 하지만 일부 서버에서는 가짜 UUID를 보낼수도 있습니다.\n이 경우에는 \"행위 기반 탐지\" 기술을 사용해야합니다. \n이 방법은 모드가 메세지를 보낸 사람을 추측하는것입니다.\n이 방법은 완벽하지 않으므로, 표시되는 머리 아이콘이 정확하지 않을수 있습니다.",
+  "text.autoconfig.chat_heads.option.senderDetection": "전송자 감지",
+  "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "대부분의 서버에선 \"UUID와 행위 기반 탐지\"로 설정했을때 잘 작동합니다.\n만약 서버에서 가짜 UUID를 보내주고 있다면, \"행위 기반 탐지만\"을 사용해야 합니다.",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "UUID만",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_AND_HEURISTIC": "UUID와 행위 기반 탐지",
+  "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "행위 기반 탐지만",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "발전된 행위 기반 탐지",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "서버가 정확한 UUID를 보내는 경우 발전된 행위 기반 탐지를 끄세요.\n(\"전송자 감지\"의 설정값이 \"UUID와 행위 기반 탐지\"일때 적용됩니다.)",
+  "text.autoconfig.chat_heads.option.handleSystemMessages": "시스템 메시지 처리",
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "\"순수한\" 서버 메세지에 머리 아이콘 추가 여부를 결정합니다. \n많은 서버에서 플레이어 메세지를 서버 메세지로 전환한다는 점에 유의하세요!\n(특히 FreedomChat 플러그인 사용시에!)\n자신이 무엇을 하고 있는지 알고 있는 경우에만 이 옵션을 비활성화하십시오!",
+  "text.autoconfig.chat_heads.option.nameAliases": "수동 프로필 설정",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "일부 서버에서는 닉네임 변경을 허용하여 닉네임과 프로필명이 일치하지 않을수 있습니다.\n여기서 해당 닉네임과 프로필명을 수동으로 일치시킬 수 있습니다.\n사용법: <닉네임> -> <프로필명>",
+  "text.chat_heads.config.error.title": "설정 메뉴를 열 수 없습니다.",
+  "text.chat_heads.config.error.no_cloth_config": "Cloth Config가 설치되지 않았습니다!",
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "CurseForge에서 Cloth Config 페이지를 엽니다",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "Modrinth에서 Cloth Config 페이지를 엽니다"
+}
