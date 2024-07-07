@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
-import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
+import dzwdz.chat_heads.mixininterface.Ownable;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -113,12 +113,25 @@ public class ChatHeads {
 
     @Nullable
     public static PlayerInfo getOwner(@NotNull GuiMessage.Line guiMessage) {
-        return ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
+        return ((Ownable) (Object) guiMessage).chatheads$getOwner();
     }
 
     @Nullable
     public static PlayerInfo getOwner(@NotNull GuiMessage guiMessage) {
-        return ((GuiMessageOwnerAccessor) (Object) guiMessage).chatheads$getOwner();
+        return ((Ownable) (Object) guiMessage).chatheads$getOwner();
+    }
+
+    @Nullable
+    public static PlayerInfo getOwner(@NotNull PlayerChatMessage message) {
+        return ((Ownable) (Object) message).chatheads$getOwner();
+    }
+
+    public static void setOwner(@NotNull GuiMessage guiMessage, PlayerInfo owner) {
+        ((Ownable) (Object) guiMessage).chatheads$setOwner(owner);
+    }
+
+    public static void setOwner(@NotNull PlayerChatMessage message, PlayerInfo owner) {
+        ((Ownable) (Object) message).chatheads$setOwner(owner);
     }
 
     public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
