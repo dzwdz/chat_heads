@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ChatComponent.class, priority = 10100) // apply after Compact Chat's potential refreshTrimmedMessage() and recursive addMessageToDisplayQueue() call
 public abstract class ChatComponentMixin2 {
     @Inject(
-            method = "addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V",
+            method = "addMessageToDisplayQueue",
             at = @At("HEAD")
     )
     private void chatheads$transferMessageOwner(GuiMessage guiMessage, CallbackInfo ci) {
