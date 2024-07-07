@@ -14,6 +14,7 @@ import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -22,6 +23,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ChatComponent.class, priority = 990) // apply before Quark's ChatComponentMixin
 public abstract class ChatComponentMixin {
+    @Unique
+    int chatheads$chatOffset; // used in render and getTagIconLeft
+
     @ModifyVariable(
             at = @At(
                     value = "INVOKE",
@@ -30,9 +34,9 @@ public abstract class ChatComponentMixin {
             method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V"
     )
     public GuiMessage.Line chatheads$captureGuiMessage(GuiMessage.Line guiMessage,
-            @Share("guiMessage") LocalRef<GuiMessage.Line> guiMessageRef, @Share("chatOffset") LocalIntRef chatOffsetRef) {
+            @Share("guiMessage") LocalRef<GuiMessage.Line> guiMessageRef) {
         guiMessageRef.set(guiMessage);
-        chatOffsetRef.set(ChatHeads.getChatOffset(guiMessage));
+        chatheads$chatOffset = ChatHeads.getChatOffset(guiMessage);
         return guiMessage;
     }
 
@@ -46,15 +50,15 @@ public abstract class ChatComponentMixin {
             index = 2
     )
     public int chatheads$moveText(Font font, FormattedCharSequence formattedCharSequence, int x, int y, int color,
-            @Share("chatOffset") LocalIntRef chatOffsetRef, @Share("y") LocalIntRef yRef, @Share("opacity") LocalFloatRef opacityRef) {
+            @Share("y") LocalIntRef yRef, @Share("opacity") LocalFloatRef opacityRef) {
         yRef.set(y);
         opacityRef.set((((color >> 24) + 256) % 256) / 255f); // haha yes
-        return chatOffsetRef.get();
+        return chatheads$chatOffset;
     }
 
     @ModifyExpressionValue(method = "getTagIconLeft(Lnet/minecraft/client/GuiMessage$Line;)I", at = @At(value = "CONSTANT", args = "intValue=4"))
-    private int chatheads$moveTagIcon(int four, @Share("chatOffset") LocalIntRef chatOffsetRef) {
-        return four + chatOffsetRef.get();
+    private int chatheads$moveTagIcon(int four) {
+        return four + chatheads$chatOffset;
     }
 
     @Inject(
