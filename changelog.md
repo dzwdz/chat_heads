@@ -1,11 +1,4 @@
-0.12.6
-
-- add Korean translation, thanks to kirito5572!
-
-0.12.5
-
-- add Italian translation, thanks to floatayy!
-
-0.12.4
-
-- update Traditional Chinese translation, thanks to notlin4!
+- fix No Chat Reports encrypted messages not receiving chat heads
+- fix message tag icons not being offset anymore (since 0.11.0)
+- fix server knowledge not being reset on joining regular multiplayer server anymore (since 1.20.5)
+- fix config being inaccessible on fabric (1.19.2)

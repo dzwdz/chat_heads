@@ -35,8 +35,6 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}"))
-
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }
