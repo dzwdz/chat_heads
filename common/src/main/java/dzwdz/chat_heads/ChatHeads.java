@@ -130,6 +130,10 @@ public class ChatHeads {
         return ((Ownable) (Object) message).chatheads$getOwner();
     }
 
+    public static void setOwner(@NotNull GuiMessage guiMessage, PlayerInfo owner) {
+        ((Ownable) (Object) guiMessage).chatheads$setOwner(owner);
+    }
+
     public static void setOwner(@NotNull PlayerChatMessage message, PlayerInfo owner) {
         ((Ownable) (Object) message).chatheads$setOwner(owner);
     }
