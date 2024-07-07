@@ -1,6 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
-import dzwdz.chat_heads.mixinterface.PlayerChatMessageAccessor;
+import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.PlayerChatMessage;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public abstract class ClientPacketListenerMixin {
 	@Shadow
 	@Nullable
-	public abstract PlayerInfo getPlayerInfo(UUID uUID);
+	public abstract PlayerInfo getPlayerInfo(UUID uuid);
 
 	@Unique
 	private PlayerInfo chatheads$senderInfo;
@@ -47,7 +47,7 @@ public abstract class ClientPacketListenerMixin {
 			index = 0
 	)
 	public PlayerChatMessage chatheads$rememberSenderInfo(PlayerChatMessage playerChatMessage) {
-		((PlayerChatMessageAccessor) (Object) playerChatMessage).setPlayerInfo(chatheads$senderInfo);
+		ChatHeads.setOwner(playerChatMessage, chatheads$senderInfo);
 		return playerChatMessage;
 	}
 }

@@ -2,7 +2,6 @@ package dzwdz.chat_heads.mixin;
 
 import com.mojang.authlib.GameProfile;
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.mixinterface.PlayerChatMessageAccessor;
 import net.minecraft.client.multiplayer.chat.ChatListener;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -27,7 +26,7 @@ public abstract class ChatListenerMixin {
     )
     public void chatheads$handleAddedPlayerMessage(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component message, GameProfile gameProfile, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir) {
         // it looks like gameProfile.getId() *could* be different from the sender UUID (or null), so we use the latter instead
-        ChatHeads.handleAddedMessage(message, bound, ((PlayerChatMessageAccessor) (Object) playerChatMessage).getPlayerInfo());
+        ChatHeads.handleAddedMessage(message, bound, ChatHeads.getOwner(playerChatMessage));
     }
 
     // handleDisguisedChatMessage: see project specific ChatListenerMixin

@@ -1,7 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.Mixin;

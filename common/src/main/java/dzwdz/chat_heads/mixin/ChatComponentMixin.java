@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.mixinterface.GuiMessageOwnerAccessor;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,9 +19,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.Iterator;
 
 @Mixin(value = ChatComponent.class, priority = 990) // apply before Quark's ChatComponentMixin
 public abstract class ChatComponentMixin {
