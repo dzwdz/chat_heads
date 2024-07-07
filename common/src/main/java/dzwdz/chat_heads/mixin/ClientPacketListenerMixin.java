@@ -1,5 +1,7 @@
 package dzwdz.chat_heads.mixin;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -8,7 +10,6 @@ import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -23,9 +24,6 @@ public abstract class ClientPacketListenerMixin {
 	@Nullable
 	public abstract PlayerInfo getPlayerInfo(UUID uuid);
 
-	@Unique
-	private PlayerInfo chatheads$senderInfo;
-
 	@Inject(
 			method = "handlePlayerChat(Lnet/minecraft/network/protocol/game/ClientboundPlayerChatPacket;)V",
 			at = @At(
@@ -33,9 +31,10 @@ public abstract class ClientPacketListenerMixin {
 					target = "Lnet/minecraft/client/multiplayer/chat/ChatListener;handlePlayerChatMessage(Lnet/minecraft/network/chat/PlayerChatMessage;Lcom/mojang/authlib/GameProfile;Lnet/minecraft/network/chat/ChatType$Bound;)V"
 			)
 	)
-	public void chatheads$captureSenderInfo(ClientboundPlayerChatPacket packet, CallbackInfo ci) {
-		// could use a locals capture but this feels more compatible (and it's just a map lookup)
-		chatheads$senderInfo = getPlayerInfo(packet.sender());
+	public void chatheads$captureSenderInfo(ClientboundPlayerChatPacket packet, CallbackInfo ci,
+			@Share("senderInfo") LocalRef<PlayerInfo> senderInfo) {
+		var playerInfo = getPlayerInfo(packet.sender());
+		senderInfo.set(playerInfo);
 	}
 
 	@ModifyArg(
@@ -46,8 +45,9 @@ public abstract class ClientPacketListenerMixin {
 			),
 			index = 0
 	)
-	public PlayerChatMessage chatheads$rememberSenderInfo(PlayerChatMessage playerChatMessage) {
-		ChatHeads.setOwner(playerChatMessage, chatheads$senderInfo);
+	public PlayerChatMessage chatheads$rememberSenderInfo(PlayerChatMessage playerChatMessage,
+			@Share("senderInfo") LocalRef<PlayerInfo> senderInfo) {
+		ChatHeads.setOwner(playerChatMessage, senderInfo.get());
 		return playerChatMessage;
 	}
 }
