@@ -13,17 +13,9 @@ import java.net.SocketAddress;
 @Mixin(Connection.class)
 public abstract class ConnectionMixin {
     // note: can run on different threads
-    @Inject(method = "connectToServer", at = @At("HEAD"))
-    private static void chatheads$resetServerKnowledge(InetSocketAddress inetSocketAddress, boolean bl, CallbackInfoReturnable<Connection> cir) {
+    @Inject(method = {"connectToServer", "connectToLocalServer"}, at = @At("HEAD"))
+    private static void chatheads$resetServerKnowledge(CallbackInfoReturnable<Connection> cir) {
         // reset every time we build a multiplayer connection
-        ChatHeads.serverSentUuid = false;
-        ChatHeads.serverDisabledChatHeads = false;
-    }
-
-    // note: can run on different threads
-    @Inject(method = "connectToLocalServer", at = @At("HEAD"))
-    private static void chatheads$resetServerKnowledgeSP(SocketAddress socketAddress, CallbackInfoReturnable<Connection> cir) {
-        // reset every time we build a singleplayer connection
         ChatHeads.serverSentUuid = false;
         ChatHeads.serverDisabledChatHeads = false;
     }
