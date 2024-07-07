@@ -2,7 +2,7 @@ package dzwdz.chat_heads.mixin;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.mixinterface.HttpTextureAccessor;
+import dzwdz.chat_heads.mixininterface.TextureLocationSettable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.HttpTexture;
@@ -20,7 +20,7 @@ import static dzwdz.chat_heads.ChatHeads.getBlendedHeadLocation;
 // extract blended head and register as separate texture
 // note that this won't work with OfflineSkins / SkinChanger since they use their own skin loading methods
 @Mixin(HttpTexture.class)
-public abstract class HttpTextureMixin implements HttpTextureAccessor {
+public abstract class HttpTextureMixin implements TextureLocationSettable {
     @Unique @Nullable
     private ResourceLocation chatheads$textureLocation;
 
