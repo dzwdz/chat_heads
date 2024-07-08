@@ -1,27 +1,28 @@
 package dzwdz.chat_heads.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import dzwdz.chat_heads.mixininterface.TextureLocationSettable;
 import net.minecraft.client.renderer.texture.HttpTexture;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.concurrent.CompletableFuture;
 
 @Mixin(SkinManager.class)
 public abstract class SkinManagerMixin {
-    @ModifyArgs(
+    // ModifyArgs crashes Forge
+    @Inject(
             method = "registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinTextureCallback;)Lnet/minecraft/resources/ResourceLocation;",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/texture/TextureManager;register(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V"
             )
     )
-    public void chatheads$rememberTextureLocation(Args args) {
-        ResourceLocation id = args.get(0);
-        HttpTexture httpTexture = args.get(1);
-
+    public void chatheads$rememberTextureLocation(CallbackInfoReturnable<CompletableFuture<ResourceLocation>> cir, @Local ResourceLocation id, @Local HttpTexture httpTexture) {
         if (id.getPath().startsWith("skins/")) {
             ((TextureLocationSettable) httpTexture).chatheads$setTextureLocation(id);
         }
