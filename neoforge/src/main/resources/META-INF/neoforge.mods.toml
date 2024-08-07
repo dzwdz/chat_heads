@@ -19,7 +19,7 @@ displayTest = "IGNORE_ALL_VERSION"
 [[dependencies.chat_heads]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[21.0.0-beta,)"
+versionRange = "[21.0.110-beta,)"
 ordering = "NONE"
 side = "CLIENT"
 
