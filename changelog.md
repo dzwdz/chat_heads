@@ -1,1 +1,1 @@
-add Russian translation, thanks to cutiegin!
+add Brazilian Portuguese translation, thanks to chocotoneg!

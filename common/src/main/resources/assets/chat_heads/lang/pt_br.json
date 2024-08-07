@@ -1,0 +1,23 @@
+{
+  "modmenu.descriptionTranslation.chat_heads": "Veja com quem você está conversando!\nEste mod adiciona cabeças de jogadores ao lado de suas mensagens de chat.",
+  "text.autoconfig.chat_heads.title": "Cabeças no Chat",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText": "Deslocar texto de chat não-jogador",
+  "text.autoconfig.chat_heads.option.offsetNonPlayerText.@Tooltip": "Todo o texto será alinhado se ativado",
+  "text.autoconfig.chat_heads.option.explanation": "\"UUIDs\"? \"Heurísticas\"?",
+  "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Normalmente, os servidores nos dizem quem enviou uma mensagem,\nou seja, o UUID do remetente. No entanto, muitos servidores não fazem isso.\nEles podem até enviar UUIDs falsos. Nesses casos, precisamos usar\numa heurística, ou seja, adivinhar pelo conteúdo da mensagem.\nEssa heurística não é perfeita, então pode haver correspondências incorretas de cabeças.",
+  "text.autoconfig.chat_heads.option.senderDetection": "Detecção de Remetente",
+  "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "Para a maioria dos servidores, \"UUID e heurística\" funciona bem.\nSe o servidor enviar UUIDs falsos, \"Apenas heurística\"\ndeve ser usado.",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "Apenas UUID",
+  "text.autoconfig.chat_heads.option.senderDetection.UUID_AND_HEURISTIC": "UUID e heurística",
+  "text.autoconfig.chat_heads.option.senderDetection.HEURISTIC_ONLY": "Apenas heurística",
+  "text.autoconfig.chat_heads.option.smartHeuristics": "Heurísticas inteligentes",
+  "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Desativar heurísticas se o servidor for conhecido por enviar UUIDs.\n(Aplica-se à detecção de remetente \"UUID e heurística\")",
+  "text.autoconfig.chat_heads.option.handleSystemMessages": "Lidar com mensagens do sistema",
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Permitir que cabeças sejam adicionadas a mensagens \"puras\" do servidor.\nNote que muitos servidores (por exemplo, rodando o plugin FreedomChat)\ntransformam mensagens de jogadores em mensagens do servidor!\nDesative esta opção apenas se souber o que está fazendo!"
+  "text.autoconfig.chat_heads.option.nameAliases": "Apelidos",
+  "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Alguns servidores permitem a mudança de nomes no qual não automaticamente coincidem com o nome original.\nAqui você pode manualmente corresponder os nomes com o apelido, tipo:\napelido -> nome original",
+  "text.chat_heads.config.error.title": "Não foi possível abrir o menu de configuração",
+  "text.chat_heads.config.error.no_cloth_config": "Cloth Config não está instalado!",
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "Abrir página do Cloth Config no Curseforge",
+  "text.chat_heads.config.error.cloth_config_modrinth_link": "Abrir página do Cloth Config no Modrinth"
+}
