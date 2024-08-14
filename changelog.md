@@ -1,1 +1,1 @@
-fix breaking change in NeoForge 21.0.110-beta's config GUI (you should install the latest stable version)
+update Forge

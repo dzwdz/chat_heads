@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[44,)"
+loaderVersion = "[51,)"
 issueTrackerURL = "https://github.com/dzwdz/chat_heads/issues"
 license = "MPL-2.0"
 
@@ -19,7 +19,7 @@ displayTest = "IGNORE_ALL_VERSION"
 [[dependencies.chat_heads]]
 modId = "forge"
 mandatory = true
-versionRange = "[44.0.1,)"
+versionRange = "[51.0.23,)"
 ordering = "NONE"
 side = "CLIENT"
 
@@ -27,12 +27,5 @@ side = "CLIENT"
 modId = "minecraft"
 mandatory = true
 versionRange = "${forge_game_version_range}"
-ordering = "NONE"
-side = "CLIENT"
-
-[[dependencies.chat_heads]]
-modId = "cloth_config"
-mandatory = false
-versionRange = "[9.0.0,)"
 ordering = "NONE"
 side = "CLIENT"
