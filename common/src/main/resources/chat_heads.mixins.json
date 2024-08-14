@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dzwdz.chat_heads.mixin",
-  "compatibilityLevel": "JAVA_${java_version}",
+  "compatibilityLevel": "JAVA_17",
   "client": [
     "ChatComponentMixin",
     "ChatComponentMixin2",

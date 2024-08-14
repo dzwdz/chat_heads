@@ -2,11 +2,10 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dzwdz.chat_heads.forge.mixin",
-  "compatibilityLevel": "JAVA_${java_version}",
+  "compatibilityLevel": "JAVA_17",
   "client": [
     "ChatListenerMixin"
   ],
-  "plugin": "dzwdz.chat_heads.forge.MixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }
