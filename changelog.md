@@ -1,1 +1,1 @@
-add Brazilian Portuguese translation, thanks to chocotoneg!
+- fix Forge specific mixins not actually applying

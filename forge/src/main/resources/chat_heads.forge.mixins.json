@@ -6,7 +6,6 @@
   "client": [
     "ChatListenerMixin"
   ],
-  "plugin": "dzwdz.chat_heads.forge.MixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }
