@@ -1,1 +1,2 @@
-add Brazilian Portuguese translation, thanks to chocotoneg!
+- fix Brazilian Portuguese pt_br translation not working
+- update to MixinExtras 0.4.1 (Forge)
