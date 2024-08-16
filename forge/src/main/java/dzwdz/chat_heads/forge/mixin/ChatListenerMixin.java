@@ -16,7 +16,8 @@ public abstract class ChatListenerMixin {
     // either called from handleDisguisedChatMessage directly, or after some potential chat delay
     @Inject(
         method = "m_244709_", // lambda inside handleDisguisedChatMessage
-        at = @At("HEAD")
+        at = @At("HEAD"),
+        remap = false
     )
     public void chatheads$handleAddedDisguisedMessage(ChatType.Bound bound, Component undecoratedMessage, Instant instant, CallbackInfoReturnable<Boolean> cir) {
         ChatHeads.handleAddedMessage(undecoratedMessage, bound, null);
