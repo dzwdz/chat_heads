@@ -13,7 +13,7 @@
   "text.autoconfig.chat_heads.option.smartHeuristics": "Heurísticas inteligentes",
   "text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "Desativar heurísticas se o servidor for conhecido por enviar UUIDs.\n(Aplica-se à detecção de remetente \"UUID e heurística\")",
   "text.autoconfig.chat_heads.option.handleSystemMessages": "Lidar com mensagens do sistema",
-  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Permitir que cabeças sejam adicionadas a mensagens \"puras\" do servidor.\nNote que muitos servidores (por exemplo, rodando o plugin FreedomChat)\ntransformam mensagens de jogadores em mensagens do servidor!\nDesative esta opção apenas se souber o que está fazendo!"
+  "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Permitir que cabeças sejam adicionadas a mensagens \"puras\" do servidor.\nNote que muitos servidores (por exemplo, rodando o plugin FreedomChat)\ntransformam mensagens de jogadores em mensagens do servidor!\nDesative esta opção apenas se souber o que está fazendo!",
   "text.autoconfig.chat_heads.option.nameAliases": "Apelidos",
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Alguns servidores permitem a mudança de nomes no qual não automaticamente coincidem com o nome original.\nAqui você pode manualmente corresponder os nomes com o apelido, tipo:\napelido -> nome original",
   "text.chat_heads.config.error.title": "Não foi possível abrir o menu de configuração",
