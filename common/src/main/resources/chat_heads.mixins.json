@@ -11,6 +11,8 @@
     "CommandSuggestionSuggestionsListMixin",
     "ConnectionMixin",
     "DownloadedPackSourceMixin",
+    "FontStringRenderOutputMixin",
+    "GuiGraphicsMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
     "HttpTextureMixin",
@@ -19,5 +21,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "PlayerMixin"
+  ]
 }

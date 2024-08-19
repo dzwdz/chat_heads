@@ -1,6 +1,7 @@
 package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.ChatHeads;
+import dzwdz.chat_heads.HeadData;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,8 +16,8 @@ public abstract class ChatComponentMixin2 {
             method = "addMessageToDisplayQueue",
             at = @At("HEAD")
     )
-    private void chatheads$transferMessageOwner(GuiMessage guiMessage, CallbackInfo ci) {
-        ChatHeads.lineOwner = ChatHeads.getOwner(guiMessage); // only really need to set when not refreshing
+    private void chatheads$transferHeadData(GuiMessage guiMessage, CallbackInfo ci) {
+        ChatHeads.lineData = ChatHeads.getHeadData(guiMessage); // only really need to set when not refreshing
     }
 
     @ModifyArg(
@@ -26,8 +27,8 @@ public abstract class ChatComponentMixin2 {
                     target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V"
             )
     )
-    private GuiMessage chatheads$setOwner(GuiMessage message) {
-        ChatHeads.setOwner(message, ChatHeads.lastSender);
+    private GuiMessage chatheads$setHeadData(GuiMessage message) {
+        ChatHeads.setHeadData(message, ChatHeads.lastSenderData);
         return message;
     }
 
@@ -39,8 +40,8 @@ public abstract class ChatComponentMixin2 {
                     target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V"
             )
     )
-    private GuiMessage chatheads$setOwner2(GuiMessage message) {
-        ChatHeads.setOwner(message, ChatHeads.lastSender);
+    private GuiMessage chatheads$setHeadData2(GuiMessage message) {
+        ChatHeads.setHeadData(message, ChatHeads.lastSenderData);
         return message;
     }
 
@@ -48,7 +49,7 @@ public abstract class ChatComponentMixin2 {
             method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V",
             at = @At("RETURN")
     )
-    private void chatheads$forgetSender(CallbackInfo ci) {
-        ChatHeads.lastSender = null;
+    private void chatheads$forgetSenderData(CallbackInfo ci) {
+        ChatHeads.lastSenderData = HeadData.EMPTY;
     }
 }

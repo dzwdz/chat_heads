@@ -3,6 +3,8 @@ package dzwdz.chat_heads;
 import com.mojang.blaze3d.platform.NativeImage;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
+import dzwdz.chat_heads.config.RenderPosition;
+import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
@@ -64,65 +66,106 @@ public class ChatHeads {
 
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
-    @Nullable
-    public static PlayerInfo lastSender;
+    @NotNull
+    public static HeadData lastSenderData = HeadData.EMPTY;
 
     // with Compact Chat, addMessageToDisplayQueue() might call refreshTrimmedMessage() and thus addMessageToDisplayQueue() with another owner inside itself,
     // we hence need two separate owner variables, distinguished by 'refreshing'
     public static boolean refreshing;
-    @Nullable public static PlayerInfo lineOwner;
-    @Nullable public static PlayerInfo refreshingLineOwner;
+    @NotNull public static HeadData lineData = HeadData.EMPTY;
+    @NotNull public static HeadData refreshingLineData = HeadData.EMPTY;
 
     public static volatile boolean serverSentUuid = false;
     public static volatile boolean serverDisabledChatHeads = false;
 
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
-    public static PlayerInfo getLineOwner() {
-        return refreshing ? refreshingLineOwner : lineOwner;
+    @NotNull public static HeadData renderHeadData = HeadData.EMPTY;
+    public static GuiGraphics guiGraphics = null;
+    public static int charsRendered;
+
+    @NotNull
+    public static HeadData getLineData() {
+        return refreshing ? refreshingLineData : lineData;
     }
 
     public static void resetLineOwner() {
         if (refreshing) {
-            refreshingLineOwner = null;
+            refreshingLineData = HeadData.EMPTY;
         } else {
-            lineOwner = null;
+            lineData = HeadData.EMPTY;
         }
     }
 
     public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
         if (ChatHeads.serverDisabledChatHeads) {
-            ChatHeads.lastSender = null;
+            ChatHeads.lastSenderData = HeadData.EMPTY;
             return;
         }
 
+        HeadData headData = detectPlayer(message, bound, playerInfo);
+
+        // heuristic may have already got us the head position
+        if (headData.hasHeadPosition()) {
+            ChatHeads.lastSenderData = headData;
+            return;
+        }
+
+        ClientPacketListener connection = Minecraft.getInstance().getConnection();
+        if (connection != null) {
+            ChatHeads.LOGGER.warn("scanning");
+            // scan for names of this specific player
+            PlayerInfoCache playerInfoCache = new PlayerInfoCache(connection);
+            playerInfoCache.add(headData.playerInfo());
+            HeadData foundHeadData = scanForPlayerName(message.getString(), playerInfoCache);
+            ChatHeads.LOGGER.warn("got {}, {}", foundHeadData.playerInfo().getProfile().getName(), foundHeadData.codePointIndex());
+
+            // possible weirdness
+            if (!foundHeadData.hasHead()) {
+                ChatHeads.LOGGER.warn("couldn't find player inside chat message. profile name: {}", headData.playerInfo().getProfile().getName());
+            } else if (!foundHeadData.playerInfo().equals(headData.playerInfo())) {
+                ChatHeads.LOGGER.warn("found a different player than which was searched for. started with: {}, found: {}", headData.playerInfo().getProfile().getName(), foundHeadData.playerInfo().getProfile().getName());
+            }
+
+            if (foundHeadData.hasHeadPosition()) {
+                ChatHeads.LOGGER.warn("2");
+                ChatHeads.lastSenderData = foundHeadData;
+                return;
+            }
+        }
+
+        // fallback to rendering at the beginning
+        ChatHeads.LOGGER.warn("3");
+        ChatHeads.lastSenderData = new HeadData(headData.playerInfo(), 0);
+    }
+
+    @NotNull
+    private static HeadData detectPlayer(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
             if (playerInfo != null) {
-                ChatHeads.lastSender = playerInfo;
                 ChatHeads.serverSentUuid = true;
-                return;
+                return HeadData.of(playerInfo);
             }
 
             // no PlayerInfo/UUID, message is either not from a player or the server didn't wanna tell
 
             if (ChatHeads.CONFIG.senderDetection() == UUID_ONLY || ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics()) {
-                ChatHeads.lastSender = null;
-                return;
+                return HeadData.EMPTY;
             }
         }
 
         // use heuristic to find sender
-        ChatHeads.lastSender = ChatHeads.detectPlayer(message, bound);
+        return ChatHeads.detectPlayerByHeuristic(message, bound);
     }
 
-    @Nullable
-    public static PlayerInfo getOwner(@NotNull GuiMessage.Line guiMessage) {
-        return ((Ownable) (Object) guiMessage).chatheads$getOwner();
+    @NotNull
+    public static HeadData getHeadData(@NotNull GuiMessage.Line guiMessage) {
+        return ((HeadRenderable) (Object) guiMessage).chatheads$getHeadData();
     }
 
-    @Nullable
-    public static PlayerInfo getOwner(@NotNull GuiMessage guiMessage) {
-        return ((Ownable) (Object) guiMessage).chatheads$getOwner();
+    @NotNull
+    public static HeadData getHeadData(@NotNull GuiMessage guiMessage) {
+        return ((HeadRenderable) (Object) guiMessage).chatheads$getHeadData();
     }
 
     @Nullable
@@ -130,8 +173,8 @@ public class ChatHeads {
         return ((Ownable) (Object) message).chatheads$getOwner();
     }
 
-    public static void setOwner(@NotNull GuiMessage guiMessage, PlayerInfo owner) {
-        ((Ownable) (Object) guiMessage).chatheads$setOwner(owner);
+    public static void setHeadData(@NotNull GuiMessage guiMessage, @NotNull HeadData data) {
+        ((HeadRenderable) (Object) guiMessage).chatheads$setHeadData(data);
     }
 
     public static void setOwner(@NotNull PlayerChatMessage message, PlayerInfo owner) {
@@ -139,25 +182,28 @@ public class ChatHeads {
     }
 
     public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
-        return getChatOffset(getOwner(guiMessage));
+        return getChatOffset(getHeadData(guiMessage));
     }
 
-    public static int getChatOffset(@Nullable PlayerInfo owner) {
-        if (owner != null || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
-            return 10;
+    public static int getChatOffset(@NotNull HeadData headData) {
+        if (ChatHeads.CONFIG.renderPosition() != RenderPosition.BEFORE_LINE)
+            return 0;
+
+        if (headData.hasHead() || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
+            return 8 + 2;
         } else {
             return 0;
         }
     }
 
     /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
-    @Nullable
-    public static PlayerInfo detectPlayer(Component message, @Nullable ChatType.Bound bound) {
+    @NotNull
+    public static HeadData detectPlayerByHeuristic(Component message, @Nullable ChatType.Bound bound) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
 
         // When Polymer's early play networking API is used, messages can be received pre-login, in which case we disable chat heads
         if (connection == null) {
-            return null;
+            return HeadData.EMPTY;
         }
 
         Component sender = getSenderDecoration(bound);
@@ -168,14 +214,14 @@ public class ChatHeads {
         // StyledNicknames compatibility: try to get player info from /tell click event
         PlayerInfo player = getTellReceiver(sender != null ? sender : message).map(playerInfoCache::get).orElse(null);
         if (player != null) {
-            return player;
+            return HeadData.of(player);
         }
 
         playerInfoCache.collectAllNames();
 
         // try to get player info only from the sender decoration
         if (sender != null) {
-            return playerInfoCache.get(sender.getString());
+            return HeadData.of(playerInfoCache.get(sender.getString()));
         } else {
             return scanForPlayerName(message.getString(), playerInfoCache);
         }
@@ -211,8 +257,8 @@ public class ChatHeads {
         return null;
     }
 
-    @Nullable
-    private static PlayerInfo scanForPlayerName(@NotNull String message, PlayerInfoCache playerInfoCache) {
+    @NotNull
+    private static HeadData scanForPlayerName(@NotNull String message, PlayerInfoCache playerInfoCache) {
         message = message.replaceAll(FORMAT_REGEX, "");
 
         // large optimization: prepare a names lookup to improve worst case runtime of the following triple nested loop
@@ -244,14 +290,14 @@ public class ChatHeads {
                     continue;
 
                 if (containsSubsequenceAt(messageSeq, i, nameSeq)) {
-                    return playerInfoCache.get(name);
+                    return new HeadData(playerInfoCache.get(name), i);
                 }
             }
 
             insideWord = isWordCharacter(c);
         }
 
-        return null;
+        return HeadData.EMPTY;
     }
 
     static class PlayerInfoCache {
@@ -269,13 +315,17 @@ public class ChatHeads {
             collectedProfileNames = true;
 
             for (var playerInfo : connection.getOnlinePlayers()) {
-                // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
-                String profileName = playerInfo.getProfile().getName().replaceAll(FORMAT_REGEX, "");
-                if (profileName.isEmpty())
-                    continue;
-
-                playerInfos.put(profileName, playerInfo);
+                addProfileName(playerInfo);
             }
+        }
+
+        private void addProfileName(PlayerInfo playerInfo) {
+            // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
+            String profileName = playerInfo.getProfile().getName().replaceAll(FORMAT_REGEX, "");
+            if (profileName.isEmpty())
+                return;
+
+            playerInfos.put(profileName, playerInfo);
         }
 
         public void collectAllNames() {
@@ -286,22 +336,36 @@ public class ChatHeads {
 
             // collect display names
             for (var playerInfo : connection.getOnlinePlayers()) {
-                if (playerInfo.getTabListDisplayName() != null) {
-                    String displayName = playerInfo.getTabListDisplayName().getString().replaceAll(FORMAT_REGEX, "");
-                    if (displayName.isEmpty())
-                        continue;
-
-                    playerInfos.putIfAbsent(displayName, playerInfo);
-                }
+                addDisplayName(playerInfo);
             }
 
             // add name aliases, copying player info from profile/display names
+            addNameAliases();
+        }
+
+        private void addNameAliases() {
             for (var entry : CONFIG.getNameAliases().entrySet()) {
                 PlayerInfo playerInfo = playerInfos.get(entry.getValue());
                 if (playerInfo != null) {
                     playerInfos.putIfAbsent(entry.getKey(), playerInfo);
                 }
             }
+        }
+
+        private void addDisplayName(PlayerInfo playerInfo) {
+            if (playerInfo.getTabListDisplayName() != null) {
+                String displayName = playerInfo.getTabListDisplayName().getString().replaceAll(FORMAT_REGEX, "");
+                if (displayName.isEmpty())
+                    return;
+
+                playerInfos.putIfAbsent(displayName, playerInfo);
+            }
+        }
+
+        public void add(PlayerInfo playerInfo) {
+            addProfileName(playerInfo);
+            addDisplayName(playerInfo);
+            addNameAliases();
         }
 
         public Map<Integer, List<String>> createNamesByFirstCharacterMap() {
