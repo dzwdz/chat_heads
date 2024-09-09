@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.HeadData;
 import dzwdz.chat_heads.config.RenderPosition;
@@ -73,17 +72,14 @@ public abstract class ChatComponentMixin {
     public void chatheads$renderChatHead(GuiGraphics guiGraphics, int tickCount, int mouseX, int mouseY, boolean focused, CallbackInfo ci,
             @Share("guiMessage") LocalRef<GuiMessage.Line> guiMessage, @Share("y") LocalIntRef yRef, @Share("opacity") LocalFloatRef opacityRef) {
         HeadData headData = ChatHeads.getHeadData(guiMessage.get());
-        if (!headData.hasHead())
+        if (headData.playerInfo() == null)
             return;
 
         if (ChatHeads.CONFIG.renderPosition() == RenderPosition.BEFORE_LINE) {
-            RenderSystem.enableBlend();
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacityRef.get());
-            ChatHeads.renderChatHead(guiGraphics, 0, yRef.get(), headData.playerInfo());
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderSystem.disableBlend();
+            ChatHeads.renderChatHead(guiGraphics, 0, yRef.get(), headData.playerInfo(), opacityRef.get());
         } else {
             ChatHeads.renderHeadData = headData;
+            ChatHeads.renderHeadOpacity = opacityRef.get();
         }
     }
 

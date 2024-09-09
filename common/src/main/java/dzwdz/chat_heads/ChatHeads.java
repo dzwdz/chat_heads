@@ -1,14 +1,17 @@
 package dzwdz.chat_heads;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.RenderPosition;
+import dzwdz.chat_heads.mixin.AbstractClientPlayerInvoker;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.*;
@@ -19,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
@@ -80,7 +84,9 @@ public class ChatHeads {
 
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
+    // for rendering inside text:
     @NotNull public static HeadData renderHeadData = HeadData.EMPTY;
+    public static float renderHeadOpacity;
     public static GuiGraphics guiGraphics = null;
     public static int charsRendered;
 
@@ -105,23 +111,23 @@ public class ChatHeads {
 
         HeadData headData = detectPlayer(message, bound, playerInfo);
 
-        // heuristic may have already got us the head position
-        if (headData.hasHeadPosition()) {
+        if (headData == HeadData.EMPTY || headData.hasHeadPosition()) { // heuristic may have already got us the head position
             ChatHeads.lastSenderData = headData;
             return;
         }
 
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
         if (connection != null) {
-            ChatHeads.LOGGER.warn("scanning");
+            ChatHeads.LOGGER.warn("scanning for {}", headData.playerInfo().getProfile().getName());
             // scan for names of this specific player
             PlayerInfoCache playerInfoCache = new PlayerInfoCache(connection);
             playerInfoCache.add(headData.playerInfo());
             HeadData foundHeadData = scanForPlayerName(message.getString(), playerInfoCache);
-            ChatHeads.LOGGER.warn("got {}, {}", foundHeadData.playerInfo().getProfile().getName(), foundHeadData.codePointIndex());
+
+            ChatHeads.LOGGER.warn("got {}, {}", foundHeadData.playerInfo() == null ? null : foundHeadData.playerInfo().getProfile().getName(), foundHeadData.codePointIndex());
 
             // possible weirdness
-            if (!foundHeadData.hasHead()) {
+            if (foundHeadData == HeadData.EMPTY) {
                 ChatHeads.LOGGER.warn("couldn't find player inside chat message. profile name: {}", headData.playerInfo().getProfile().getName());
             } else if (!foundHeadData.playerInfo().equals(headData.playerInfo())) {
                 ChatHeads.LOGGER.warn("found a different player than which was searched for. started with: {}, found: {}", headData.playerInfo().getProfile().getName(), foundHeadData.playerInfo().getProfile().getName());
@@ -189,7 +195,7 @@ public class ChatHeads {
         if (ChatHeads.CONFIG.renderPosition() != RenderPosition.BEFORE_LINE)
             return 0;
 
-        if (headData.hasHead() || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
+        if (headData.playerInfo() != null || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
             return 8 + 2;
         } else {
             return 0;
@@ -300,6 +306,7 @@ public class ChatHeads {
         return HeadData.EMPTY;
     }
 
+    @SuppressWarnings("ConstantValue")
     static class PlayerInfoCache {
         private final ClientPacketListener connection;
         private final Map<String, PlayerInfo> playerInfos = new HashMap<>();
@@ -339,6 +346,8 @@ public class ChatHeads {
                 addDisplayName(playerInfo);
             }
 
+            addEntityNames();
+
             // add name aliases, copying player info from profile/display names
             addNameAliases();
         }
@@ -362,10 +371,44 @@ public class ChatHeads {
             }
         }
 
+        private void addEntityName(PlayerInfo playerInfo) {
+            ClientLevel level = connection.getLevel();
+            if (level == null)
+                return;
+
+            for (var player : level.players()) {
+                if (player.getUUID().equals(playerInfo.getProfile().getId())) {
+                    String name = player.getName().getString().replaceAll(FORMAT_REGEX, "");
+                    LOGGER.warn("entity {}", name);
+
+                    playerInfos.putIfAbsent(name, playerInfo);
+                }
+            }
+        }
+
+        private void addEntityNames() {
+            ClientLevel level = connection.getLevel();
+            if (level == null)
+                return;
+
+            for (var player : level.players()) {
+                String name = player.getName().getString().replaceAll(FORMAT_REGEX, "");
+                PlayerInfo playerInfo = ((AbstractClientPlayerInvoker) player).chatheads$playerInfo();
+
+                playerInfos.putIfAbsent(name, playerInfo);
+            }
+        }
+
         public void add(PlayerInfo playerInfo) {
             addProfileName(playerInfo);
             addDisplayName(playerInfo);
+            addEntityName(playerInfo);
             addNameAliases();
+
+            LOGGER.warn("playerInfos = {}", playerInfos.entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(Map.Entry::getKey,
+                            e -> e.getValue().getProfile().getName())));
         }
 
         public Map<Integer, List<String>> createNamesByFirstCharacterMap() {
@@ -433,8 +476,13 @@ public class ChatHeads {
         return ResourceLocation.fromNamespaceAndPath(ChatHeads.MOD_ID, skinLocation.getPath());
     }
 
-    public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner) {
+    public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity) {
         ResourceLocation skinLocation = owner.getSkin().texture();
+
+        if (opacity != 1.0f) {
+            RenderSystem.enableBlend();
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacity);
+        }
 
         if (blendedHeadTextures.contains(skinLocation)) {
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
@@ -444,6 +492,11 @@ public class ChatHeads {
             guiGraphics.blit(skinLocation, x, y, 8, 8, 8.0f, 8, 8, 8, 64, 64);
             // draw hat
             guiGraphics.blit(skinLocation, x, y, 8, 8, 40.0f, 8, 8, 8, 64, 64);
+        }
+
+        if (opacity != 1.0f) {
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderSystem.disableBlend();
         }
     }
 }

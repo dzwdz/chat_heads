@@ -43,7 +43,7 @@ public abstract class FontStringRenderOutputMixin {
                 poseStack.setIdentity();
                 poseStack.mulPose(pose);
 
-                ChatHeads.renderChatHead(ChatHeads.guiGraphics, (int) x + 1, (int) y, ChatHeads.renderHeadData.playerInfo());
+                ChatHeads.renderChatHead(ChatHeads.guiGraphics, (int) x + 1, (int) y, ChatHeads.renderHeadData.playerInfo(), ChatHeads.renderHeadOpacity);
 
                 poseStack.popPose();
             }
