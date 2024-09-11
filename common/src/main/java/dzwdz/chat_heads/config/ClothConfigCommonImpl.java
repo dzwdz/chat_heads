@@ -25,6 +25,11 @@ public class ClothConfigCommonImpl {
 		);
 
 		guiRegistry.registerPredicateProvider(
+				new RenderPositionGuiProvider(),
+				field -> field.getName().equals("renderPosition")
+		);
+
+		guiRegistry.registerPredicateProvider(
 				new AliasesGuiProvider(),
 				field -> field.getName().equals("nameAliases")
 		);

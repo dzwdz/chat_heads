@@ -94,7 +94,7 @@ public abstract class CommandSuggestionSuggestionsListMixin {
         int x = rect.getX() - (8 + 2);
 
         if (playerRef.get() != null) {
-            ChatHeads.renderChatHead(graphicsRef.get(), x, y, playerRef.get());
+            ChatHeads.renderChatHead(graphicsRef.get(), x, y, playerRef.get(), 1.0f);
         }
 
         return y;
