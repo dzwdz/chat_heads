@@ -5,13 +5,13 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.ChatHeads;
+import dzwdz.chat_heads.HeadData;
+import dzwdz.chat_heads.config.RenderPosition;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
-import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -71,14 +71,32 @@ public abstract class ChatComponentMixin {
     )
     public void chatheads$renderChatHead(GuiGraphics guiGraphics, int tickCount, int mouseX, int mouseY, boolean focused, CallbackInfo ci,
             @Share("guiMessage") LocalRef<GuiMessage.Line> guiMessage, @Share("y") LocalIntRef yRef, @Share("opacity") LocalFloatRef opacityRef) {
-        PlayerInfo owner = ChatHeads.getOwner(guiMessage.get());
-        if (owner != null) {
-            RenderSystem.enableBlend();
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacityRef.get());
-            ChatHeads.renderChatHead(guiGraphics, 0, yRef.get(), owner);
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderSystem.disableBlend();
+        HeadData headData = ChatHeads.getHeadData(guiMessage.get());
+        if (headData == HeadData.EMPTY)
+            return;
+
+        if (ChatHeads.CONFIG.renderPosition() == RenderPosition.BEFORE_LINE) {
+            ChatHeads.renderChatHead(guiGraphics, 0, yRef.get(), headData.playerInfo(), opacityRef.get());
+        } else {
+            // -> FontStringRenderOutputMixin
+            ChatHeads.guiGraphics = guiGraphics;
+            ChatHeads.renderHeadData = headData;
+            ChatHeads.renderHeadOpacity = opacityRef.get();
         }
+    }
+
+    @Inject(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)I",
+                    ordinal = 0,
+                    shift = At.Shift.AFTER
+            )
+    )
+    public void chatheads$forgetRenderData(GuiGraphics guiGraphics, int tickCount, int mouseX, int mouseY, boolean focused, CallbackInfo ci) {
+        ChatHeads.guiGraphics = null;
+        ChatHeads.renderHeadData = HeadData.EMPTY;
     }
 
     @ModifyVariable(method = "getClickedComponentStyleAt", at = @At("STORE"))
@@ -108,7 +126,7 @@ public abstract class ChatComponentMixin {
     )
     public int chatheads$fixTextOverflow(int original) {
         // at this point, neither guiMessage nor chatOffset are well-defined
-        return original - ChatHeads.getChatOffset(ChatHeads.getLineOwner());
+        return original - ChatHeads.getChatOffset(ChatHeads.getLineData());
     }
 
     @Inject(
@@ -122,7 +140,7 @@ public abstract class ChatComponentMixin {
         ChatHeads.refreshing = false;
     }
 
-    // Compact Chat might call this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
+    // Compact Chat calls this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
     @ModifyArg(
             method = "refreshTrimmedMessages",
             at = @At(
@@ -133,11 +151,11 @@ public abstract class ChatComponentMixin {
     private GuiMessage chatheads$transferMessageOwner(GuiMessage guiMessage) {
         // transfer owner from this GuiMessage to new GuiMessage.Line
         ChatHeads.refreshing = true;
-        ChatHeads.refreshingLineOwner = ChatHeads.getOwner(guiMessage);
+        ChatHeads.refreshingLineData = ChatHeads.getHeadData(guiMessage);
         return guiMessage;
     }
 
-    // Compact Chat might call this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
+    // Compact Chat calls this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
     @Inject(
             method = "refreshTrimmedMessages",
             at = @At(

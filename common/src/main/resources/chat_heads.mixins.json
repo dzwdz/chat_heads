@@ -11,6 +11,7 @@
     "CommandSuggestionSuggestionsListMixin",
     "ConnectionMixin",
     "DownloadedPackSourceMixin",
+    "FontStringRenderOutputMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
     "HttpTextureMixin",
