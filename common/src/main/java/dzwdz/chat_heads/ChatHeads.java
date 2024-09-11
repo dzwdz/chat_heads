@@ -84,7 +84,6 @@ public class ChatHeads {
     public static GuiGraphics guiGraphics;
     @NotNull public static HeadData renderHeadData = HeadData.EMPTY;
     public static float renderHeadOpacity;
-    public static int charsRendered;
 
     @NotNull
     public static HeadData getLineData() {
