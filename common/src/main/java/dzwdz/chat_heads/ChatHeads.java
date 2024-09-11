@@ -185,7 +185,8 @@ public class ChatHeads {
 
         // try to get player info only from the sender decoration
         if (sender != null) {
-            return HeadData.of(playerInfoCache.get(sender.getString()));
+            String cleanSender = sender.getString().replaceAll(FORMAT_REGEX, "");
+            return HeadData.of(playerInfoCache.get(cleanSender));
         } else {
             return scanForPlayerName(message.getString(), playerInfoCache);
         }
