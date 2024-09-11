@@ -13,6 +13,8 @@ import java.util.Map;
 @Config(name = ChatHeads.MOD_ID)
 public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	@ConfigEntry.Gui.Tooltip()
+	public RenderPosition renderPosition = ChatHeadsConfigDefaults.RENDER_POSITION;
+	@ConfigEntry.Gui.Tooltip()
 	public boolean offsetNonPlayerText = ChatHeadsConfigDefaults.OFFSET_NON_PLAYER_TEXT;
 	@ConfigEntry.Gui.Tooltip()
 	public SenderDetection senderDetection = ChatHeadsConfigDefaults.SENDER_DETECTION;
@@ -23,6 +25,11 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 
 	@ConfigEntry.Gui.Tooltip()
 	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
+
+	@Override
+	public RenderPosition renderPosition() {
+		return renderPosition;
+	}
 
 	@Override
 	public boolean offsetNonPlayerText() {
