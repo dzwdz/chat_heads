@@ -99,7 +99,7 @@ public class ChatHeads {
             return;
         }
 
-        // note: while this may get us a head position, the message may be modified (e.g. by Compact Chat)
+        // note: while this may get us a head position, the message may be modified (e.g. by Chat Timestamps)
         // we hence update the position at the last possible moment, see chatheads$updateHeadPosition
         ChatHeads.lastSenderData = detectPlayer(message, bound, playerInfo);
     }
