@@ -1,6 +1,7 @@
 package dzwdz.chat_heads.forge.mixin.compat;
 
 import dzwdz.chat_heads.ChatHeads;
+import dzwdz.chat_heads.HeadData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +28,7 @@ public abstract class QuarkShareItemS2CMessageMixin {
 	private void chatheads$setOwner(CallbackInfo ci) {
 		ClientPacketListener connection = Minecraft.getInstance().getConnection();
 		if (connection != null) {
-			ChatHeads.lastSender = connection.getPlayerInfo(senderUuid);
+			ChatHeads.lastSenderData = HeadData.of(connection.getPlayerInfo(senderUuid));
 		}
 	}
 }
