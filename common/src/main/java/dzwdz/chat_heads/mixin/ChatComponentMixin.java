@@ -140,7 +140,7 @@ public abstract class ChatComponentMixin {
         ChatHeads.refreshing = false;
     }
 
-    // Compact Chat might call this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
+    // Compact Chat calls this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
     @ModifyArg(
             method = "refreshTrimmedMessages",
             at = @At(
@@ -155,7 +155,7 @@ public abstract class ChatComponentMixin {
         return guiMessage;
     }
 
-    // Compact Chat might call this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
+    // Compact Chat calls this at the beginning of addMessageToDisplayQueue (to get rid of old duplicate messages)
     @Inject(
             method = "refreshTrimmedMessages",
             at = @At(

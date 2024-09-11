@@ -69,7 +69,7 @@ public class ChatHeads {
 
     @NotNull public static HeadData lastSenderData = HeadData.EMPTY;
 
-    // with Compact Chat, addMessageToDisplayQueue() might call refreshTrimmedMessage() and thus addMessageToDisplayQueue() with another owner inside itself,
+    // with Compact Chat, addMessageToDisplayQueue() calls refreshTrimmedMessage() and thus addMessageToDisplayQueue() with another owner inside itself,
     // we hence need two separate owner variables, distinguished by 'refreshing'
     public static boolean refreshing;
     @NotNull public static HeadData lineData = HeadData.EMPTY;
@@ -105,7 +105,7 @@ public class ChatHeads {
             return;
         }
 
-        // note: while this may get us a head position, the message may be modified (e.g. by Compact Chat)
+        // note: while this may get us a head position, the message may be modified (e.g. by Chat Timestamps)
         // we hence update the position at the last possible moment, see chatheads$updateHeadPosition
         ChatHeads.lastSenderData = detectPlayer(message, bound, playerInfo);
     }

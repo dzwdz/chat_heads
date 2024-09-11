@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-// needs to apply after Compact Chat's potential refreshTrimmedMessage() and recursive addMessage() call
+// needs to apply after Compact Chat's refreshTrimmedMessage() and recursive addMessage() call
 // also after Chat Timestamps so the head position is correct
 @Mixin(value = ChatComponent.class, priority = 10100)
 public abstract class ChatComponentMixin2 {
