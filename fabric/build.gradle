@@ -7,6 +7,10 @@ architectury {
     fabric()
 }
 
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
 configurations {
     common {
         canBeResolved = true
@@ -30,6 +34,10 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
         exclude(group: "net.fabricmc")
     }
+
+    modRuntimeOnly "maven.modrinth:plagues-chat-timestamps:1.0.1+1.19.x"
+    modRuntimeOnly "maven.modrinth:compact-chat:2.0.0"
+    modRuntimeOnly "maven.modrinth:owo-lib:0.9.3+1.19"
 
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")

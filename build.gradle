@@ -26,6 +26,10 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
+
+        runClient {
+            jvmArgs('-Dmixin.debug.export=true')
+        }
     }
 
     repositories {
@@ -33,6 +37,17 @@ subprojects {
         maven {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org'
+        }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
         }
     }
 
