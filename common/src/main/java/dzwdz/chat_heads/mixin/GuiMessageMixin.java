@@ -13,7 +13,7 @@ public abstract class GuiMessageMixin implements HeadRenderable {
     public HeadData chatheads$headData = HeadData.EMPTY;
 
     @Override
-    public void chatheads$setHeadData(HeadData headData) {
+    public void chatheads$setHeadData(@NotNull HeadData headData) {
         chatheads$headData = headData;
     }
 
