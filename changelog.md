@@ -1,2 +1,1 @@
-- update Traditional Chinese (zh_tw) translation, thanks to yichifauzi!
-- fix typo in German translation
+update Russian (ru_ru) translation, thanks to cutiegin!
