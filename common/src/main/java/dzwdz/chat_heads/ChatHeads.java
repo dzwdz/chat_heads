@@ -23,6 +23,7 @@ import java.util.*;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
+import static net.minecraft.network.chat.ClickEvent.Action.SUGGEST_COMMAND;
 
 /*
  * 22w42a changed chat a bit, here's the overview:
@@ -196,10 +197,11 @@ public class ChatHeads {
         return component.visit((style, string) -> {
             ClickEvent clickEvent = style.getClickEvent();
 
-            if (clickEvent != null) {
+            if (clickEvent != null && clickEvent.getAction() == SUGGEST_COMMAND) {
                 String cmd = clickEvent.getValue();
 
-                if (cmd.startsWith("/tell ")) {
+                //noinspection ConstantValue  can apparently be null, see issue #112
+                if (cmd != null && cmd.startsWith("/tell ")) {
                     String name = cmd.substring("/tell ".length()).trim();
                     return Optional.of(name);
                 }
