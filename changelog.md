@@ -1,1 +1,1 @@
-update Russian (ru_ru) translation, thanks to cutiegin!
+fix a crash when server sends click event without a string value
