@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
@@ -85,6 +86,18 @@ public class ChatHeads {
     public static GuiGraphics guiGraphics;
     @NotNull public static HeadData renderHeadData = HeadData.EMPTY;
     public static float renderHeadOpacity;
+
+    public static boolean forceBeforeLine;
+    public static List<String> modsIncompatibleWithBeforeName = List.of("caxton", "modernui");
+
+    public static void disableBeforeName(Predicate<String> modIdLoaded) {
+        for (var modId : modsIncompatibleWithBeforeName) {
+            if (modIdLoaded.test(modId)) {
+                forceBeforeLine = true;
+                ChatHeads.LOGGER.warn("disabled \"Before Name\" rendermode due to incompatibility with {}", modId);
+            }
+        }
+    }
 
     @NotNull
     public static HeadData getLineData() {
