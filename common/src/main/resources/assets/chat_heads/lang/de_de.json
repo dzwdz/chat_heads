@@ -6,7 +6,7 @@
   "text.autoconfig.chat_heads.option.explanation": "\"UUID\"? \"Heuristik\"?",
   "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Normalerweise sagen Server wer eine Nachricht sendet, d.h. die Sender-UUID.\nViele Server tun dies jedoch nicht, sie können sogar falsche UUIDs senden.\nIn diesem Fall nutzen wir eine Heuristik, d.h. wir raten den Sender durch\nden Nachrichteninhalt. Diese Heuristik ist nicht perfekt und kann Köpfe\nfalsch zuordnen.",
   "text.autoconfig.chat_heads.option.renderPosition": "Render-Position",
-  "text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "Wo Spielerköpfe gerendert werden",
+  "text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "Wo Spielerköpfe gerendert werden\n\nBemerke dass \"Vor dem Namen\" mit manchen Mods inkompatibel sein kann.\nFür Caxton und Modern UI, wird automatisch \"Vor der Zeile\" benutzt.",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_LINE": "Vor der Zeile",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_NAME": "Vor dem Namen",
   "text.autoconfig.chat_heads.option.senderDetection": "Sender-Erkennung",

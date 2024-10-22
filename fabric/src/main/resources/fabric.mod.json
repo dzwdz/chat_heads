@@ -16,7 +16,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "dzwdz.chat_heads.fabric.ChatHeads"
+      "dzwdz.chat_heads.fabric.ChatHeadsFabric"
     ],
     "modmenu": [
       "dzwdz.chat_heads.fabric.config.ModMenuImpl"
