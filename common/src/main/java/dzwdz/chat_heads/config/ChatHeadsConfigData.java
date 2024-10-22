@@ -28,6 +28,9 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 
 	@Override
 	public RenderPosition renderPosition() {
+		if (ChatHeads.forceBeforeLine)
+			return RenderPosition.BEFORE_LINE;
+
 		return renderPosition;
 	}
 
