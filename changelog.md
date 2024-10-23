@@ -1,1 +1,1 @@
-automatically use "Before Line" rendering when Caxton or Modern UI is installed, as "Before Name" rendering is currently incompatible
+update to 1.21.2
