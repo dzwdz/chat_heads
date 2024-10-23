@@ -1,7 +1,6 @@
 package dzwdz.chat_heads;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.RenderSystem;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.RenderPosition;
@@ -12,8 +11,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -402,16 +403,43 @@ public class ChatHeads {
 
         for (int y = 0; y < head.getHeight(); y++) {
             for (int x = 0; x < head.getWidth(); x++) {
-                int headColor = skin.getPixelRGBA(8 * xScale + x, 8 * yScale + y);
-                int hatColor = skin.getPixelRGBA(40 * xScale + x, 8 * yScale + y);
+                int headColor = skin.getPixel(8 * xScale + x, 8 * yScale + y);
+                int hatColor = skin.getPixel(40 * xScale + x, 8 * yScale + y);
 
                 // blend layers together
-                head.setPixelRGBA(x, y, headColor);
-                head.blendPixel(x, y, hatColor);
+                head.setPixel(x, y, blendColors(headColor, hatColor));
             }
         }
 
         return head;
+    }
+
+    /** blend color2 onto color1 */
+    public static int blendColors(int color1, int color2) {
+        // note: this also works for ABGR
+        float a1 = ARGB.alpha(color1) / 255f;
+        float r1 = ARGB.red(color1)   / 255f;
+        float g1 = ARGB.green(color1) / 255f;
+        float b1 = ARGB.blue(color1)  / 255f;
+
+        float a2 = ARGB.alpha(color2) / 255f;
+        float r2 = ARGB.red(color2)   / 255f;
+        float g2 = ARGB.green(color2) / 255f;
+        float b2 = ARGB.blue(color2)  / 255f;
+
+        // if a2 is 1, take color2, if it is 0, take color1
+        float a3 = a2 * a2 + (1 - a2) * a1;
+        float r3 = a2 * r2 + (1 - a2) * r1;
+        float g3 = a2 * g2 + (1 - a2) * g1;
+        float b3 = a2 * b2 + (1 - a2) * b1;
+
+        // unsure if clamping is needed, better safe than sorry
+        return ARGB.color(
+            (int) Math.clamp(a3 * 255f, 0, 255f),
+            (int) Math.clamp(r3 * 255f, 0, 255f),
+            (int) Math.clamp(g3 * 255f, 0, 255f),
+            (int) Math.clamp(b3 * 255f, 0, 255f)
+        );
     }
 
     public static ResourceLocation getBlendedHeadLocation(ResourceLocation skinLocation) {
@@ -421,24 +449,16 @@ public class ChatHeads {
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity) {
         ResourceLocation skinLocation = owner.getSkin().texture();
 
-        if (opacity != 1.0f) {
-            RenderSystem.enableBlend();
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacity);
-        }
+        int color = ARGB.white(opacity);
 
         if (blendedHeadTextures.contains(skinLocation)) {
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
-            guiGraphics.blit(getBlendedHeadLocation(skinLocation), x, y, 8, 8, 0, 0, 8, 8, 8, 8);
+            guiGraphics.blit(RenderType::guiTextured, getBlendedHeadLocation(skinLocation), x, y, 0, 0, 8, 8, 8, 8, 8, 8, color);
         } else {
             // draw base layer
-            guiGraphics.blit(skinLocation, x, y, 8, 8, 8.0f, 8, 8, 8, 64, 64);
+            guiGraphics.blit(RenderType::guiTextured, skinLocation, x, y,  8.0f, 8, 8, 8, 8, 8, 64, 64, color);
             // draw hat
-            guiGraphics.blit(skinLocation, x, y, 8, 8, 40.0f, 8, 8, 8, 64, 64);
-        }
-
-        if (opacity != 1.0f) {
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderSystem.disableBlend();
+            guiGraphics.blit(RenderType::guiTextured, skinLocation, x, y, 40.0f, 8, 8, 8, 8, 8, 64, 64, color);
         }
     }
 }
