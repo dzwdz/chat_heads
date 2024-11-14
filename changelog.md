@@ -1,1 +1,1 @@
-update to 1.21.2
+update Simplified Chinese (zh_cn) translation thanks to NumberSir!
