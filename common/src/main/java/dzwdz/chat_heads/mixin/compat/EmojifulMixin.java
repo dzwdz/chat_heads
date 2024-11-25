@@ -1,11 +1,9 @@
 package dzwdz.chat_heads.mixin.compat;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.HeadData;
 import net.minecraft.network.chat.Style;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,17 +33,13 @@ public abstract class EmojifulMixin {
 
         if (chatheads$charsRendered == renderIndex) {
             if (!dropShadow) {
-                PoseStack poseStack = ChatHeads.guiGraphics.pose();
-
-                poseStack.pushPose();
-                poseStack.setIdentity();
-                poseStack.mulPoseMatrix(matrix);
-
-                ChatHeads.renderChatHead(ChatHeads.guiGraphics, (int) x + 1, (int) y, ChatHeads.renderHeadData.playerInfo(), ChatHeads.renderHeadOpacity);
-
-                poseStack.popPose();
+                // -> chatheads$renderChatHeadBeforeName
+                ChatHeads.renderHeadX = (int) x + 1;
+                ChatHeads.renderHeadY = (int) y;
+                ChatHeads.renderHeadPose = matrix;
             }
 
+            // leave space for the head
             x += 8 + 2;
         }
 

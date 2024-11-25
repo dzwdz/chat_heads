@@ -14,5 +14,5 @@ dependencies {
 
     modApi "me.shedaniel.cloth:cloth-config:${project.cloth_config_version}"
 
-    modCompileOnly "maven.modrinth:emojiful:4.2.0"
+    modCompileOnly "maven.modrinth:emojiful:4.0.4"
 }
