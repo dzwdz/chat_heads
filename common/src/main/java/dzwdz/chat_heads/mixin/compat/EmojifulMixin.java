@@ -25,7 +25,7 @@ public abstract class EmojifulMixin {
     @Unique
     private int chatheads$charsRendered = 0;
 
-    @Inject(method = "accept", at = @At("HEAD"), require = 0)
+    @Inject(method = "accept", at = @At("HEAD"), require = 0, remap = true)
     public void f(int pos, Style style, int charInt, CallbackInfoReturnable<Boolean> cir) {
         if (ChatHeads.renderHeadData == HeadData.EMPTY)
             return;
