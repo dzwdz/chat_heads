@@ -16,8 +16,10 @@
     "GuiMessageMixin",
     "HttpTextureMixin",
     "PlayerChatMessageMixin",
-    "SkinManagerMixin"
+    "SkinManagerMixin",
+    "compat.EmojifulMixin"
   ],
+  "plugin": "dzwdz.chat_heads.MixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }

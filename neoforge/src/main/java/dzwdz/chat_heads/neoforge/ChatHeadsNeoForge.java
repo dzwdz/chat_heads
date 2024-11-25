@@ -6,10 +6,10 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 
 @Mod("chat_heads")
-public class ChatHeads {
-	public ChatHeads(IEventBus modBus) {
+public class ChatHeadsNeoForge {
+	public ChatHeadsNeoForge(IEventBus modBus) {
 		if (FMLEnvironment.dist == Dist.CLIENT) {
-			ChatHeadsClient.init(modBus);
+			ChatHeadsNeoForgeClient.init(modBus);
 		}
 	}
 }
