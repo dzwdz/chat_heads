@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // essentially a copy of FontStringRenderOutputMixin
-@Debug(export = true)
 @Mixin(targets = "com.hrznstudio.emojiful.render.EmojiFontRenderer$EmojiCharacterRenderer", remap = false)
 public abstract class EmojifulMixin {
     @Shadow
