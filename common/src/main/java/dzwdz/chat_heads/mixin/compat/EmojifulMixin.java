@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // essentially a copy of FontStringRenderOutputMixin
-@Debug(export = true)
 @Mixin(targets = "com.hrznstudio.emojiful.render.EmojiFontRenderer$EmojiCharacterRenderer", remap = false)
 public abstract class EmojifulMixin {
     @Shadow
@@ -35,15 +34,10 @@ public abstract class EmojifulMixin {
 
         if (chatheads$charsRendered == renderIndex) {
             if (!dropShadow) {
-                PoseStack poseStack = ChatHeads.guiGraphics.pose();
-
-                poseStack.pushPose();
-                poseStack.setIdentity();
-                poseStack.mulPoseMatrix(matrix);
-
-                ChatHeads.renderChatHead(ChatHeads.guiGraphics, (int) x + 1, (int) y, ChatHeads.renderHeadData.playerInfo(), ChatHeads.renderHeadOpacity);
-
-                poseStack.popPose();
+                // -> chatheads$renderChatHeadBeforeName
+                ChatHeads.renderHeadX = (int) x + 1;
+                ChatHeads.renderHeadY = (int) y;
+                ChatHeads.renderHeadPose = matrix;
             }
 
             x += 8 + 2;
