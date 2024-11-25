@@ -1,1 +1,2 @@
-update Simplified Chinese (zh_cn) translation thanks to NumberSir!
+ - compatibility with Emojiful when using "Before Name" rendering
+ - use @ExpectPlatform to simplify cross-platform logic
