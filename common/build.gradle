@@ -13,4 +13,6 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
     modApi "me.shedaniel.cloth:cloth-config:${project.cloth_config_version}"
+
+    modCompileOnly "maven.modrinth:emojiful:1.21-5.1.5"
 }

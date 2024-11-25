@@ -3,6 +3,7 @@ package dzwdz.chat_heads;
 import com.mojang.blaze3d.platform.NativeImage;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
+import dzwdz.chat_heads.config.ClothConfigCommonImpl;
 import dzwdz.chat_heads.config.RenderPosition;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
@@ -91,12 +92,16 @@ public class ChatHeads {
     public static boolean forceBeforeLine;
     public static List<String> modsIncompatibleWithBeforeName = List.of("caxton", "modernui");
 
-    public static void disableBeforeName(Predicate<String> modIdLoaded) {
+    public static void init() {
         for (var modId : modsIncompatibleWithBeforeName) {
-            if (modIdLoaded.test(modId)) {
+            if (Compat.isModLoaded(modId)) {
                 forceBeforeLine = true;
                 ChatHeads.LOGGER.warn("disabled \"Before Name\" rendermode due to incompatibility with {}", modId);
             }
+        }
+
+        if (Compat.isClothConfigLoaded()) {
+            ClothConfigCommonImpl.loadConfig();
         }
     }
 
