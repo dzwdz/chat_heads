@@ -1,2 +1,1 @@
- - compatibility with Emojiful when using "Before Name" rendering
- - use @ExpectPlatform to simplify cross-platform logic
+port to 1.21.4
