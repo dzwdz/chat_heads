@@ -14,9 +14,8 @@
     "FontStringRenderOutputMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
-    "HttpTextureMixin",
     "PlayerChatMessageMixin",
-    "SkinManagerMixin",
+    "SkinTextureDownloaderMixin",
     "compat.EmojifulMixin"
   ],
   "plugin": "dzwdz.chat_heads.MixinPlugin",

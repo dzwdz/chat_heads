@@ -19,7 +19,6 @@ public abstract class FontStringRenderOutputMixin {
     @Shadow float x;
     @Shadow float y;
     @Shadow @Final private Matrix4f pose;
-    @Shadow @Final private boolean dropShadow;
 
     @Unique
     private int chatheads$charsRendered = 0;
@@ -32,17 +31,15 @@ public abstract class FontStringRenderOutputMixin {
         int renderIndex = Math.max(ChatHeads.renderHeadData.codePointIndex(), 0); // fallback to rendering at beginning
 
         if (chatheads$charsRendered == renderIndex) {
-            if (!dropShadow) {
-                PoseStack poseStack = ChatHeads.guiGraphics.pose();
+            PoseStack poseStack = ChatHeads.guiGraphics.pose();
 
-                poseStack.pushPose();
-                poseStack.setIdentity();
-                poseStack.mulPose(pose);
+            poseStack.pushPose();
+            poseStack.setIdentity();
+            poseStack.mulPose(pose);
 
-                ChatHeads.renderChatHead(ChatHeads.guiGraphics, (int) x + 1, (int) y, ChatHeads.renderHeadData.playerInfo(), ChatHeads.renderHeadOpacity);
+            ChatHeads.renderChatHead(ChatHeads.guiGraphics, (int) x + 1, (int) y, ChatHeads.renderHeadData.playerInfo(), ChatHeads.renderHeadOpacity);
 
-                poseStack.popPose();
-            }
+            poseStack.popPose();
 
             x += 8 + 2;
         }
