@@ -6,10 +6,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ChatHeadsForgeClient {
-	public static void init() {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(ChatHeadsForgeClient::commonSetup);
+	public static void init(FMLJavaModLoadingContext context) {
+		context.getModEventBus().addListener(ChatHeadsForgeClient::commonSetup);
 
-		ClothConfigImpl.registerConfigGui();
+		ClothConfigImpl.registerConfigGui(context);
 	}
 
 	private static void commonSetup(FMLCommonSetupEvent event) {
