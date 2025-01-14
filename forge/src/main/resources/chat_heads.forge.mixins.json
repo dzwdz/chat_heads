@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_${java_version}",
   "client": [
     "ChatListenerMixin",
+    "compat.QuarkItemSharingModuleMixin",
     "compat.QuarkShareItemS2CMessageMixin"
   ],
   "plugin": "dzwdz.chat_heads.forge.MixinPlugin",

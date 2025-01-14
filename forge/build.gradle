@@ -26,6 +26,8 @@ dependencies {
 
     modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
 
+    modCompileOnly "maven.modrinth:quark:${project.quark_version}"
+
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixinextras_version}"))
     implementation(include("io.github.llamalad7:mixinextras-forge:${project.mixinextras_version}"))
 

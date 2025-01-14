@@ -22,7 +22,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.endsWith("QuarkShareItemS2CMessageMixin")) {
+		if (mixinClassName.endsWith("QuarkShareItemS2CMessageMixin") || mixinClassName.endsWith("QuarkItemSharingModuleMixin") ) {
 			return isModInstalled("quark");
 		}
 
