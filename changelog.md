@@ -1,2 +1,1 @@
- - compatibility with Emojiful when using "Before Name" rendering
- - use @ExpectPlatform to simplify cross-platform logic
+workaround for Quark's item share rendering being offset when using "before name" rendering
