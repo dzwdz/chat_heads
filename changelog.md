@@ -1,1 +1,1 @@
-update Forge
+fix hang on server join when server resource pack is invalid
