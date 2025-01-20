@@ -1,1 +1,1 @@
-workaround for Quark's item share rendering being offset when using "before name" rendering
+fix hang on server join when server resource pack is invalid
