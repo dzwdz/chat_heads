@@ -1,2 +1,1 @@
- - compatibility with Emojiful when using "Before Name" rendering
- - use @ExpectPlatform to simplify cross-platform logic
+fix hang on server join when server resource pack is invalid

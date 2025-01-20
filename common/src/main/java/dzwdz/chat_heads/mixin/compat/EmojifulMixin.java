@@ -5,8 +5,10 @@ import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.HeadData;
 import net.minecraft.network.chat.Style;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -25,7 +27,7 @@ public abstract class EmojifulMixin {
     @Unique
     private int chatheads$charsRendered = 0;
 
-    @Inject(method = "accept", at = @At("HEAD"), require = 0)
+    @Inject(method = "accept", at = @At("HEAD"), require = 0, remap = true)
     public void f(int pos, Style style, int charInt, CallbackInfoReturnable<Boolean> cir) {
         if (ChatHeads.renderHeadData == HeadData.EMPTY)
             return;
