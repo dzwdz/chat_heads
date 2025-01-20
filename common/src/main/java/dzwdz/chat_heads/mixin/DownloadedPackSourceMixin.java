@@ -17,7 +17,10 @@ import java.util.List;
 public abstract class DownloadedPackSourceMixin {
     @Inject(method = "loadRequestedPacks", at = @At(value = "RETURN"))
     public void chatheads$checkForDisableResource(List<PackReloadConfig.IdAndPath> list, CallbackInfoReturnable<List<Pack>> cir) {
-        for (Pack serverPack : cir.getReturnValue()) {
+        List<Pack> packs = cir.getReturnValue();
+        if (packs == null) return; // in the rare case the server pack is invalid
+
+        for (Pack serverPack : packs) {
             try (PackResources resources = serverPack.open()) {
                 if (resources.getResource(PackType.CLIENT_RESOURCES, ChatHeads.DISABLE_RESOURCE) != null) {
                     ChatHeads.serverDisabledChatHeads = true;
