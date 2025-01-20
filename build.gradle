@@ -1,7 +1,7 @@
 plugins {
-    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.9-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'com.gradleup.shadow' version '8.3.5' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
 }
@@ -73,16 +73,11 @@ subprojects {
     processResources {
         // expand every property from gradle.properties
         def stringProperties = providers.gradlePropertiesPrefixedBy('').get()
-        stringProperties.each { inputs.property(it.key, it.value) }
+        inputs.properties(stringProperties)
 
-        def files = ["*.mixins.json", "*.mod.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml"]
-        files += enabled_platforms.split(',').collect {"${project.mod_id}.${it}.mixins.json" }
-
-        files.each {
-            filesMatching(it) {
-                expand(stringProperties) {
-                    escapeBackslash = true
-                }
+        filesMatching(["*.mixins.json", "*.mod.json", "META-INF/*mods.toml"]) {
+            expand(stringProperties) {
+                escapeBackslash = true
             }
         }
     }
