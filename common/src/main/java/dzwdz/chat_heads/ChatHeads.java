@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BooleanSupplier;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
@@ -89,11 +90,35 @@ public class ChatHeads {
     public static float renderHeadOpacity;
 
     public static boolean forceBeforeLine;
-    public static List<String> modsIncompatibleWithBeforeName = List.of("caxton", "modernui");
+    private static final Map<String, BooleanSupplier> beforeNameIncompatibility = Map.of(
+            "caxton", () -> true,
+            "modernui", () -> {
+                try {
+                    // Emojiful makes Modern UI sort of compatible
+                    if (Compat.isModLoaded("emojiful"))
+                        return false;
+
+                    Class<?> modernUi;
+                    try {
+                        modernUi = Class.forName("icyllis.modernui.mc.ModernUIMod");
+                    } catch (ClassNotFoundException e) {
+                        // old Forge versions
+                        modernUi = Class.forName("icyllis.modernui.mc.forge.ModernUIForge");
+                    }
+
+                    return (Boolean) modernUi.getMethod("isTextEngineEnabled").invoke(null);
+                } catch (Exception e) {
+                    LOGGER.warn("couldn't invoke isTextEngineEnabled: {}: {}", e.getClass().getSimpleName(), e.getMessage());
+                    return false;
+                }
+            }
+    );
 
     public static void init() {
-        for (var modId : modsIncompatibleWithBeforeName) {
-            if (Compat.isModLoaded(modId)) {
+        for (var entry : beforeNameIncompatibility.entrySet()) {
+            String modId = entry.getKey();
+
+            if (Compat.isModLoaded(modId) && entry.getValue().getAsBoolean()) {
                 forceBeforeLine = true;
                 ChatHeads.LOGGER.warn("disabled \"Before Name\" rendermode due to incompatibility with {}", modId);
             }
