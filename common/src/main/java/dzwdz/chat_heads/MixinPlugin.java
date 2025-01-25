@@ -1,6 +1,5 @@
 package dzwdz.chat_heads;
 
-import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -11,8 +10,6 @@ import java.util.Set;
 public class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        LogManager.getLogger("debug").warn("{} {} {}", mixinClassName, mixinClassName.endsWith("EmojifulMixin"), Compat.isModLoaded("emojiful"));
-
         if (mixinClassName.endsWith("EmojifulMixin")) {
             return Compat.isModLoaded("emojiful");
         }
