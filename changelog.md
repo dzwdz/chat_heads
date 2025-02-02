@@ -1,1 +1,1 @@
-allow "Before Name" rendering when Modern UI's text engine is disabled
+update Japanese (ja_jp) translation, thanks to takejohn!
