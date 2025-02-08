@@ -1,1 +1,1 @@
-update Japanese (ja_jp) translation, thanks to takejohn!
+update Russian (ru_ru) translation, thanks to cutiegin!
