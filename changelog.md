@@ -1,1 +1,1 @@
-update Russian (ru_ru) translation, thanks to cutiegin!
+workaround issue with loading legacy skins when using CustomSkinLoader
