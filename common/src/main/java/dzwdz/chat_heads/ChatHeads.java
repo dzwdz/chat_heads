@@ -424,9 +424,12 @@ public class ChatHeads {
     }
 
     public static NativeImage extractBlendedHead(NativeImage skin) {
+        // workaround for CustomSkinLoader. at this point legacy skins are normally already converted to squares, but this appears to have broken in 1.21.4
+        boolean isLegacy = skin.getWidth() / 2 == skin.getHeight();
+
         // vanilla skins are 64x64 pixels, HD skins (e.g. with CustomSkinLoader) 128x128
         int xScale = skin.getWidth() / 64;
-        int yScale = skin.getHeight() / 64;
+        int yScale = skin.getHeight() / (isLegacy ? 32 : 64);
 
         NativeImage head = new NativeImage(8 * xScale, 8 * yScale, false);
 
