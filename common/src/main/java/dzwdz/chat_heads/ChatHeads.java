@@ -14,6 +14,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.ClickEvent.SuggestCommand;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import org.apache.logging.log4j.LogManager;
@@ -243,14 +244,10 @@ public class ChatHeads {
 
     private static Optional<String> getTellReceiver(Component component) {
         return component.visit((style, string) -> {
-            ClickEvent clickEvent = style.getClickEvent();
-
-            if (clickEvent != null && clickEvent.getAction() == SUGGEST_COMMAND) {
-                String cmd = clickEvent.getValue();
-
+            if (style.getClickEvent() instanceof SuggestCommand(String command)) {
                 //noinspection ConstantValue  can apparently be null, see issue #112
-                if (cmd != null && cmd.startsWith("/tell ")) {
-                    String name = cmd.substring("/tell ".length()).trim();
+                if (command != null && command.startsWith("/tell ")) {
+                    String name = command.substring("/tell ".length()).trim();
                     return Optional.of(name);
                 }
             }

@@ -27,7 +27,7 @@ public abstract class SkinTextureDownloaderMixin implements TextureLocationSetta
             // runs on Render thread
             if (textureLocation.getPath().startsWith("skins/")) {
                 Minecraft.getInstance().getTextureManager()
-                        .register(getBlendedHeadLocation(textureLocation), new DynamicTexture(extractBlendedHead(image)));
+                        .register(getBlendedHeadLocation(textureLocation), new DynamicTexture(() -> "Chat Head of " + textureLocation.getPath(), extractBlendedHead(image)));
 
                 ChatHeads.blendedHeadTextures.add(textureLocation);
             }

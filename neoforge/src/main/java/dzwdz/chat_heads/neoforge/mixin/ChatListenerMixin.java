@@ -15,8 +15,9 @@ import java.time.Instant;
 public abstract class ChatListenerMixin {
     // either called from handleDisguisedChatMessage directly, or after some potential chat delay
     @Inject(
-        method = "method_45745", // lambda inside handleDisguisedChatMessage
-        at = @At("HEAD")
+        method = {"method_45745", "lambda$handleDisguisedChatMessage$3"}, // lambda inside handleDisguisedChatMessage, for some reason changes in release
+        at = @At("HEAD"),
+        require = 1
     )
     public void chatheads$handleAddedDisguisedMessage(ChatType.Bound bound, Component undecoratedMessage, Instant instant, CallbackInfoReturnable<Boolean> cir) {
         ChatHeads.handleAddedMessage(undecoratedMessage, bound, null);
