@@ -1,1 +1,2 @@
-update Russian (ru_ru) translation, thanks to cutiegin!
+- compat with Showcase Item (just like the Quark item sharing feature)
+- fix shared item offset being wrong by 2 pixels
