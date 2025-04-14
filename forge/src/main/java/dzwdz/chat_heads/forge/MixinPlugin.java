@@ -26,6 +26,9 @@ public class MixinPlugin implements IMixinConfigPlugin {
 			return isModInstalled("quark");
 		}
 
+		if (mixinClassName.endsWith("ShowcaseItemFeature"))
+			return isModInstalled("showcaseitem");
+
 		return true;
 	}
 

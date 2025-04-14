@@ -6,7 +6,8 @@
   "client": [
     "ChatListenerMixin",
     "compat.QuarkItemSharingModuleMixin",
-    "compat.QuarkShareItemS2CMessageMixin"
+    "compat.QuarkShareItemS2CMessageMixin",
+    "compat.ShowcaseItemFeatureMixin"
   ],
   "plugin": "dzwdz.chat_heads.forge.MixinPlugin",
   "injectors": {
