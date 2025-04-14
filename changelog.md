@@ -1,1 +1,1 @@
-update Russian (ru_ru) translation, thanks to cutiegin!
+compat with Showcase Item
