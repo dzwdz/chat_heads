@@ -1,1 +1,1 @@
-workaround issue with loading legacy skins when using CustomSkinLoader
+compat with Showcase Item
