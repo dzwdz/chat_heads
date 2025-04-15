@@ -1,2 +1,1 @@
-- compat with Showcase Item (just like the Quark item sharing feature)
-- fix shared item offset being wrong by 2 pixels
+detect Showcase Item message sender directly (fix showcase messages not always having a head)

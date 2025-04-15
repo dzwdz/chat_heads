@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -149,6 +150,9 @@ public class ChatHeads {
 
     @NotNull
     private static HeadData detectPlayer(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
+        HeadData headData = detectShowcaseItemMessage(message);
+        if (headData != null) return headData;
+
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
             if (playerInfo != null) {
                 ChatHeads.serverSentUuid = true;
@@ -163,6 +167,24 @@ public class ChatHeads {
         }
 
         return ChatHeads.detectPlayerByHeuristic(message, bound);
+    }
+
+    @Nullable
+    private static HeadData detectShowcaseItemMessage(Component message) {
+        if (message.getContents() instanceof TranslatableContents contents
+                && Objects.equals(contents.getKey(), "showcaseitem.misc.shared_item")
+                && contents.getArgs().length > 0 && contents.getArgs()[0] instanceof Component playerName) {
+            var connection = Minecraft.getInstance().getConnection();
+            if (connection == null)
+                return null;
+
+            var playerInfoCache = new PlayerInfoCache(connection);
+            playerInfoCache.collectAllNames();
+
+            return HeadData.of(playerInfoCache.get(playerName.getString()));
+        }
+
+        return null;
     }
 
     @NotNull
@@ -418,9 +440,12 @@ public class ChatHeads {
     }
 
     public static NativeImage extractBlendedHead(NativeImage skin) {
+        // workaround for CustomSkinLoader. at this point legacy skins are normally already converted to squares, but this appears to have broken in 1.21.4
+        boolean isLegacy = skin.getWidth() / 2 == skin.getHeight();
+
         // vanilla skins are 64x64 pixels, HD skins (e.g. with CustomSkinLoader) 128x128
         int xScale = skin.getWidth() / 64;
-        int yScale = skin.getHeight() / 64;
+        int yScale = skin.getHeight() / (isLegacy ? 32 : 64);
 
         NativeImage head = new NativeImage(8 * xScale, 8 * yScale, false);
 
