@@ -1,1 +1,1 @@
-compat with Showcase Item
+detect Showcase Item message sender directly (fix showcase messages not always having a head)
