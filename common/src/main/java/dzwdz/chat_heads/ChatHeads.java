@@ -14,6 +14,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import org.apache.logging.log4j.LogManager;
@@ -155,6 +156,9 @@ public class ChatHeads {
 
     @NotNull
     private static HeadData detectPlayer(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
+        HeadData headData = detectShowcaseItemMessage(message);
+        if (headData != null) return headData;
+
         if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
             if (playerInfo != null) {
                 ChatHeads.serverSentUuid = true;
@@ -169,6 +173,25 @@ public class ChatHeads {
         }
 
         return ChatHeads.detectPlayerByHeuristic(message, bound);
+    }
+
+    @Nullable
+    private static HeadData detectShowcaseItemMessage(Component message) {
+        if (message.getContents() instanceof TranslatableContents contents
+                && Objects.equals(contents.getKey(), "showcaseitem.misc.shared_item")
+                && contents.getArgs().length > 0 && contents.getArgs()[0] instanceof String playerName) {
+            var connection = Minecraft.getInstance().getConnection();
+            if (connection == null)
+                return null;
+
+            var playerInfoCache = new PlayerInfoCache(connection);
+            playerInfoCache.collectAllNames();
+            playerInfoCache.get(playerName);
+
+            return HeadData.of(playerInfoCache.get(playerName));
+        }
+
+        return null;
     }
 
     @NotNull
