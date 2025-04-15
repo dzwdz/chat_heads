@@ -178,14 +178,22 @@ public class ChatHeads {
     private static HeadData detectShowcaseItemMessage(Component message) {
         if (message.getContents() instanceof TranslatableContents contents
                 && Objects.equals(contents.getKey(), "showcaseitem.misc.shared_item")
-                && contents.getArgs().length > 0 && contents.getArgs()[0] instanceof String playerName) {
+                && contents.getArgs().length > 0) {
             var connection = Minecraft.getInstance().getConnection();
             if (connection == null)
                 return null;
 
+            String playerName;
+            if (contents.getArgs()[0] instanceof String s) {
+                playerName = s;
+            } else if (contents.getArgs()[0] instanceof Component c) {
+                playerName = c.getString();
+            } else {
+                return null;
+            }
+
             var playerInfoCache = new PlayerInfoCache(connection);
             playerInfoCache.collectAllNames();
-            playerInfoCache.get(playerName);
 
             return HeadData.of(playerInfoCache.get(playerName));
         }
