@@ -22,7 +22,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.endsWith("ShowcaseItemFeature"))
+        if (mixinClassName.endsWith("ShowcaseItemFeatureMixin"))
             return isModInstalled("showcaseitem");
 
         return true;
