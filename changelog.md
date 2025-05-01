@@ -1,1 +1,1 @@
-update Russian (ru_ru) translation, thanks to cutiegin!
+add Argentine Spanish (es_ar) translation, thanks to Texaliuz!
