@@ -1,1 +1,1 @@
-detect Showcase Item message sender directly (fix showcase messages not always having a head)
+add Argentine Spanish (es_ar) translation, thanks to Texaliuz!
