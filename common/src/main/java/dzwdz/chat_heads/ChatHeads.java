@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.NativeImage;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;
-import dzwdz.chat_heads.config.RenderPosition;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
 import net.minecraft.client.GuiMessage;
@@ -12,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.SuggestCommand;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -26,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 
+import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
@@ -69,6 +69,8 @@ public class ChatHeads {
     public static final String FORMAT_REGEX = "§.";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ResourceLocation DISABLE_RESOURCE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "disable");
+
+    public static final int HEAD_WIDTH = 8 + 2; // pixels the head takes up (including padding)
 
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
@@ -225,19 +227,24 @@ public class ChatHeads {
         ((Ownable) (Object) message).chatheads$setOwner(owner);
     }
 
-    public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
-        return getChatOffset(getHeadData(guiMessage));
+    public static boolean offsetChat(@NotNull HeadData headData) {
+        if (ChatHeads.CONFIG.renderPosition() != BEFORE_LINE)
+            return false;
+
+        return headData != HeadData.EMPTY || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads);
     }
 
     public static int getChatOffset(@NotNull HeadData headData) {
-        if (ChatHeads.CONFIG.renderPosition() != RenderPosition.BEFORE_LINE)
-            return 0;
+        return offsetChat(headData) ? HEAD_WIDTH : 0;
+    }
 
-        if (headData != HeadData.EMPTY || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
-            return 8 + 2;
-        } else {
-            return 0;
-        }
+    public static int getTextWidthDifference(@NotNull GuiMessage.Line guiMessage) {
+        return getTextWidthDifference(getHeadData(guiMessage));
+    }
+
+    public static int getTextWidthDifference(@NotNull HeadData headData) {
+        // whenever a head is rendered or chat is being offset
+        return (headData != HeadData.EMPTY || offsetChat(headData)) ? HEAD_WIDTH : 0;
     }
 
     /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
@@ -512,12 +519,12 @@ public class ChatHeads {
 
         if (blendedHeadTextures.contains(skinLocation)) {
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
-            guiGraphics.blit(RenderType::guiTextured, getBlendedHeadLocation(skinLocation), x, y, 0, 0, 8, 8, 8, 8, 8, 8, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x, y, 0, 0, 8, 8, 8, 8, 8, 8, color);
         } else {
             // draw base layer
-            guiGraphics.blit(RenderType::guiTextured, skinLocation, x, y,  8.0f, 8, 8, 8, 8, 8, 64, 64, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y,  8.0f, 8, 8, 8, 8, 8, 64, 64, color);
             // draw hat
-            guiGraphics.blit(RenderType::guiTextured, skinLocation, x, y, 40.0f, 8, 8, 8, 8, 8, 64, 64, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y, 40.0f, 8, 8, 8, 8, 8, 64, 64, color);
         }
     }
 }

@@ -11,12 +11,11 @@
     "CommandSuggestionSuggestionsListMixin",
     "ConnectionMixin",
     "DownloadedPackSourceMixin",
-    "FontStringRenderOutputMixin",
+    "FontPreparedTextBuilderMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
     "PlayerChatMessageMixin",
-    "SkinTextureDownloaderMixin",
-    "compat.EmojifulMixin"
+    "SkinTextureDownloaderMixin"
   ],
   "plugin": "dzwdz.chat_heads.MixinPlugin",
   "injectors": {

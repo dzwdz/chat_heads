@@ -1,3 +1,4 @@
 accessWidener v2 named
 accessible class net/minecraft/client/resources/SkinManager$TextureCache
-accessible class net/minecraft/client/gui/Font$StringRenderOutput
+accessible class net/minecraft/client/gui/Font$PreparedTextBuilder
+accessible class net/minecraft/client/gui/components/ChatComponent$LineConsumer
