@@ -1,1 +1,3 @@
-add Argentine Spanish (es_ar) translation, thanks to Texaliuz!
+- port to 1.21.6
+- remove Emojiful compatibility for now (needs a rewrite once it is out)
+- fix some chat positioning issues (text overflow, tag icons, click positions) in "before name" render mode
