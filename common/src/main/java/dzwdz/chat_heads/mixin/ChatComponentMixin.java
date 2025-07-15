@@ -43,7 +43,7 @@ public abstract class ChatComponentMixin {
         if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
             ChatHeads.renderChatHead(guiGraphics, x, y, headData.playerInfo(), opacity);
         } else {
-            // -> FontStringRenderOutputMixin
+            // -> FontPreparedTextBuilderMixin
             ChatHeads.guiGraphics = guiGraphics;
             ChatHeads.renderHeadData = headData;
             ChatHeads.renderHeadOpacity = opacity;
