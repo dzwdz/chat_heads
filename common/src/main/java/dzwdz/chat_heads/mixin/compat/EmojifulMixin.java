@@ -14,7 +14,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // essentially a copy of FontStringRenderOutputMixin
-@Mixin(targets = "com.hrznstudio.emojiful.render.EmojiFontRenderer$EmojiCharacterRenderer", remap = false)
+@Mixin(targets = {
+        "com.hrznstudio.emojiful.render.EmojiFontRenderer$EmojiCharacterRenderer",
+        "com.hrznstudio.emojiful.render.EmojiFontHelper$EmojiCharacterRenderer"
+}, remap = false)
 public abstract class EmojifulMixin {
     @Shadow
     private float x;
