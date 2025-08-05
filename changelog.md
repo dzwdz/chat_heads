@@ -1,1 +1,1 @@
-add Argentine Spanish (es_ar) translation, thanks to Texaliuz!
+update Emojiful compatibility for 5.2.x
