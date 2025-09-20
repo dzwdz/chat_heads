@@ -9,14 +9,17 @@ import dzwdz.chat_heads.mixininterface.Ownable;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.SuggestCommand;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -517,14 +520,21 @@ public class ChatHeads {
 
         int color = ARGB.white(opacity);
 
+        ClientLevel level = Minecraft.getInstance().level;
+        Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
+        boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
+
+        int yOffset = (upsideDown ? 8 : 0);
+        int yDirection = (upsideDown ? -1 : 1);
+
         if (blendedHeadTextures.contains(skinLocation)) {
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x, y, 0, 0, 8, 8, 8, 8, 8, 8, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x, y, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, color);
         } else {
             // draw base layer
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y,  8.0f, 8, 8, 8, 8, 8, 64, 64, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
             // draw hat
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y, 40.0f, 8, 8, 8, 8, 8, 64, 64, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
         }
     }
 }
