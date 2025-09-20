@@ -1,2 +1,2 @@
-- add option to render shadow below chat heads (off by default)
+- add option to render shadow below chat heads (on by default)
 - render upside down players upside down
