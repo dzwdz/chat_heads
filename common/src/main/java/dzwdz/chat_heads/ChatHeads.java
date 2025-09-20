@@ -11,10 +11,13 @@ import dzwdz.chat_heads.mixininterface.Ownable;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -206,6 +209,15 @@ public class ChatHeads {
         } else {
             return 0;
         }
+    }
+
+    public static int headWidth() {
+        return headWidth(ChatHeads.CONFIG.drawShadow());
+    }
+
+    // pixels the head takes up (including padding)
+    public static int headWidth(boolean drawShadow) {
+        return 8 + 2 + (drawShadow ? 1 : 0);
     }
 
     /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
@@ -448,21 +460,49 @@ public class ChatHeads {
     }
 
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity) {
+        renderChatHead(guiGraphics, x, y, owner, opacity, ChatHeads.CONFIG.drawShadow());
+    }
+
+    public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity, boolean drawShadow) {
         ResourceLocation skinLocation = owner.getSkin().texture();
 
-        if (opacity != 1.0f) {
+        if (opacity != 1.0f)
             RenderSystem.enableBlend();
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacity);
-        }
+
+        int shadowOffset = drawShadow ? -1 : 0;
+
+        ClientLevel level = Minecraft.getInstance().level;
+        Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
+        boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
+
+        int yOffset = (upsideDown ? 8 : 0);
+        int yDirection = (upsideDown ? -1 : 1);
 
         if (blendedHeadTextures.contains(skinLocation)) {
+            if (drawShadow) {
+                RenderSystem.setShaderColor(0.25f, 0.25f, 0.25f, opacity);
+                guiGraphics.blit(getBlendedHeadLocation(skinLocation), x + 1, y, 8, 8, 0, yOffset, 8, yDirection * 8, 8, 8);
+            }
+
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacity);
+
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
-            guiGraphics.blit(getBlendedHeadLocation(skinLocation), x, y, 8, 8, 0, 0, 8, 8, 8, 8);
+            guiGraphics.blit(getBlendedHeadLocation(skinLocation), x, y + shadowOffset, 8, 8, 0, yOffset, 8, yDirection * 8, 8, 8);
         } else {
+            if (drawShadow) {
+                RenderSystem.setShaderColor(0.25f, 0.25f, 0.25f, opacity);
+                // draw base layer
+                guiGraphics.blit(skinLocation, x + 1, y,  8, 8, 8, 8 + yOffset, 8, yDirection * 8, 64, 64);
+                // draw hat
+                guiGraphics.blit(skinLocation, x + 1, y, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
+            }
+
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacity);
+
             // draw base layer
-            guiGraphics.blit(skinLocation, x, y, 8, 8, 8.0f, 8, 8, 8, 64, 64);
+            guiGraphics.blit(skinLocation, x, y + shadowOffset, 8, 8, 8.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
             // draw hat
-            guiGraphics.blit(skinLocation, x, y, 8, 8, 40.0f, 8, 8, 8, 64, 64);
+            guiGraphics.blit(skinLocation, x, y + shadowOffset, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
         }
 
         if (opacity != 1.0f) {
