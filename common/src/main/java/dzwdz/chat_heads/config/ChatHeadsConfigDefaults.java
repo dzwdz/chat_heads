@@ -10,6 +10,7 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	public static final SenderDetection SENDER_DETECTION = SenderDetection.UUID_AND_HEURISTIC;
 	public static final boolean SMART_HEURISTICS = true;
 	public static final boolean HANDLE_SYSTEM_MESSAGES = true;
+	public static final boolean DRAW_SHADOW = true;
 
 	@Override
 	public RenderPosition renderPosition() {
@@ -42,5 +43,10 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	@Override
 	public Map<String, String> getNameAliases() {
 		return Map.of();
+	}
+
+	@Override
+	public boolean drawShadow() {
+		return DRAW_SHADOW;
 	}
 }

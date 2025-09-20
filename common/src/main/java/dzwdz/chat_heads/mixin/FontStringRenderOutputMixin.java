@@ -40,7 +40,7 @@ public abstract class FontStringRenderOutputMixin {
             }
 
             // leave space for the head
-            x += 8 + 2;
+            x += ChatHeads.headWidth();
         }
 
         chatheads$charsRendered++;
