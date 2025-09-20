@@ -42,7 +42,7 @@ public abstract class EmojifulMixin {
                 ChatHeads.renderHeadPose = matrix;
             }
 
-            x += 8 + 2;
+            x += ChatHeads.headWidth();
         }
 
         chatheads$charsRendered++;

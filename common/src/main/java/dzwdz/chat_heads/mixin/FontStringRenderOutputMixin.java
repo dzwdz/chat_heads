@@ -39,7 +39,7 @@ public abstract class FontStringRenderOutputMixin {
                 ChatHeads.renderHeadPose = pose;
             }
 
-            x += 8 + 2;
+            x += ChatHeads.headWidth();
         }
 
         chatheads$charsRendered++;
