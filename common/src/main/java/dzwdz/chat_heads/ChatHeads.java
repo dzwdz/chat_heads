@@ -205,7 +205,7 @@ public class ChatHeads {
             return 0;
 
         if (headData != HeadData.EMPTY || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
-            return 8 + 2;
+            return ChatHeads.headWidth();
         } else {
             return 0;
         }
