@@ -1,3 +1,2 @@
-- port to 1.21.6
-- remove Emojiful compatibility for now (needs a rewrite once it is out)
-- fix some chat positioning issues (text overflow, tag icons, click positions) in "before name" render mode
+- add option to render shadow below chat heads (off by default)
+- render upside down players upside down
