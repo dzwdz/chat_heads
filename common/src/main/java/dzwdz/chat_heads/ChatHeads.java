@@ -471,9 +471,6 @@ public class ChatHeads {
         Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
         boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
 
-        // TODO
-        upsideDown = true;
-
         int yOffset = (upsideDown ? 8 : 0);
         int yDirection = (upsideDown ? -1 : 1);
 
