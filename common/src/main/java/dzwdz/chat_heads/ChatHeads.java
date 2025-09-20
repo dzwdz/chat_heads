@@ -73,8 +73,6 @@ public class ChatHeads {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ResourceLocation DISABLE_RESOURCE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "disable");
 
-    public static final int HEAD_WIDTH = 8 + 2; // pixels the head takes up (including padding)
-
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
     @NotNull public static HeadData lastSenderData = HeadData.EMPTY;
@@ -238,7 +236,7 @@ public class ChatHeads {
     }
 
     public static int getChatOffset(@NotNull HeadData headData) {
-        return offsetChat(headData) ? HEAD_WIDTH : 0;
+        return offsetChat(headData) ? headWidth() : 0;
     }
 
     public static int getTextWidthDifference(@NotNull GuiMessage.Line guiMessage) {
@@ -247,7 +245,16 @@ public class ChatHeads {
 
     public static int getTextWidthDifference(@NotNull HeadData headData) {
         // whenever a head is rendered or chat is being offset
-        return (headData != HeadData.EMPTY || offsetChat(headData)) ? HEAD_WIDTH : 0;
+        return (headData != HeadData.EMPTY || offsetChat(headData)) ? headWidth() : 0;
+    }
+
+    public static int headWidth() {
+        return headWidth(ChatHeads.CONFIG.drawShadow());
+    }
+
+    // pixels the head takes up (including padding)
+    public static int headWidth(boolean drawShadow) {
+        return 8 + 2 + (drawShadow ? 1 : 0);
     }
 
     /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
@@ -516,9 +523,15 @@ public class ChatHeads {
     }
 
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity) {
+        renderChatHead(guiGraphics, x, y, owner, opacity, ChatHeads.CONFIG.drawShadow());
+    }
+
+    public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity, boolean drawShadow) {
         ResourceLocation skinLocation = owner.getSkin().texture();
 
         int color = ARGB.white(opacity);
+        int shadowColor = ARGB.scaleRGB(color, 0.25F);
+        int shadowOffset = drawShadow ? -1 : 0;
 
         ClientLevel level = Minecraft.getInstance().level;
         Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
@@ -528,8 +541,11 @@ public class ChatHeads {
         int yDirection = (upsideDown ? -1 : 1);
 
         if (blendedHeadTextures.contains(skinLocation)) {
+            if (drawShadow)
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x + 1, y, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, shadowColor);
+
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x, y, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x, y + shadowOffset, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, color);
         } else {
             // draw base layer
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);

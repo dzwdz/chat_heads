@@ -29,7 +29,7 @@ public abstract class FontPreparedTextBuilderMixin {
         if (chatheads$charsRendered == renderIndex) {
             ChatHeads.renderChatHead(ChatHeads.guiGraphics, (int) x + 1, (int) y, ChatHeads.renderHeadData.playerInfo(), ChatHeads.renderHeadOpacity);
 
-            x += ChatHeads.HEAD_WIDTH;
+            x += ChatHeads.headWidth();
         }
 
         chatheads$charsRendered++;
