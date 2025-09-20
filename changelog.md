@@ -1,1 +1,2 @@
-update Emojiful compatibility for 5.2.x
+- add option to render shadow below chat heads (off by default)
+- render upside down players upside down

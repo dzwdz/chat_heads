@@ -9,4 +9,5 @@ public interface ChatHeadsConfig {
 	boolean smartHeuristics();
 	boolean handleSystemMessages();
 	Map<String, String> getNameAliases();
+	boolean drawShadow();
 }
