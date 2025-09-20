@@ -22,6 +22,7 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	public boolean smartHeuristics = ChatHeadsConfigDefaults.SMART_HEURISTICS;
 	@ConfigEntry.Gui.Tooltip()
 	public boolean handleSystemMessages = ChatHeadsConfigDefaults.HANDLE_SYSTEM_MESSAGES;
+	public boolean drawShadow = ChatHeadsConfigDefaults.DRAW_SHADOW;
 
 	@ConfigEntry.Gui.Tooltip()
 	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
@@ -57,6 +58,11 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	@Override
 	public Map<String, String> getNameAliases() {
 		return nameAliases;
+	}
+
+	@Override
+	public boolean drawShadow() {
+		return drawShadow;
 	}
 
 	@Override
