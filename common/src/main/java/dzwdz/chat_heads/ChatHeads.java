@@ -547,10 +547,17 @@ public class ChatHeads {
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x, y + shadowOffset, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, color);
         } else {
+            if (drawShadow) {
+                // draw base layer
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x + 1, y,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
+                // draw hat
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x + 1, y, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
+            }
+
             // draw base layer
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y + shadowOffset,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
             // draw hat
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y + shadowOffset, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
         }
     }
 }
