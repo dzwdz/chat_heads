@@ -27,8 +27,11 @@ subprojects {
     loom {
         silentMojangMappingsLicense()
 
-        runClient {
-            jvmArgs('-Dmixin.debug.export=true')
+        runs {
+            client {
+                vmArgs "-Dmixin.debug.export=true"
+                programArgs "--username", "Player"
+            }
         }
     }
 
