@@ -1,6 +1,7 @@
 package dzwdz.chat_heads;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.datafixers.util.Pair;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;
@@ -13,9 +14,9 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.network.chat.*;
-import net.minecraft.network.chat.ClickEvent.SuggestCommand;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
@@ -88,10 +89,8 @@ public class ChatHeads {
 
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
-    // for "before name" rendering:
-    public static GuiGraphics guiGraphics;
-    @NotNull public static HeadData renderHeadData = HeadData.EMPTY;
-    public static float renderHeadOpacity;
+    // for "before name" / vanilla rendering:
+    public static boolean insideChat;
 
     public static boolean forceBeforeLine;
     private static final Map<String, BooleanSupplier> beforeNameIncompatibility = Map.of(
@@ -146,63 +145,95 @@ public class ChatHeads {
         }
     }
 
-    public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
-        if (ChatHeads.serverDisabledChatHeads) {
-            ChatHeads.lastSenderData = HeadData.EMPTY;
-            return;
-        }
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    public static Component handleAddedMessage(Component originalMessage, @Nullable PlayerInfo playerInfo) {
+        // note: lastSenderData is used for the BEFORE_LINE rendering, the returned message for the BEFORE_NAME rendering
+        ChatHeads.lastSenderData = HeadData.EMPTY;
 
-        // note: while this may get us a head position, the message may be modified (e.g. by Chat Timestamps)
-        // we hence update the position at the last possible moment, see chatheads$updateHeadPosition
-        ChatHeads.lastSenderData = detectPlayer(message, bound, playerInfo);
-    }
+        if (ChatHeads.serverDisabledChatHeads)
+            return originalMessage;
 
-    @NotNull
-    private static HeadData detectPlayer(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
-        HeadData headData = detectShowcaseItemMessage(message);
-        if (headData != null) return headData;
+        boolean forceHeuristic = isShowcaseItemMessage(originalMessage);
 
-        if (ChatHeads.CONFIG.senderDetection() != HEURISTIC_ONLY) {
+        if (ChatHeads.CONFIG.senderDetection() == HEURISTIC_ONLY || forceHeuristic) {
+            // don't use any prior knowledge
+            playerInfo = null;
+        } else {
             if (playerInfo != null) {
                 ChatHeads.serverSentUuid = true;
-                return HeadData.of(playerInfo);
-            }
+            } else {
+                // no PlayerInfo/UUID, message is either not from a player or the server didn't wanna tell
 
-            // no PlayerInfo/UUID, message is either not from a player or the server didn't wanna tell
-
-            if (ChatHeads.CONFIG.senderDetection() == UUID_ONLY || ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics()) {
-                return HeadData.EMPTY;
+                if (ChatHeads.CONFIG.senderDetection() == UUID_ONLY || ChatHeads.serverSentUuid && ChatHeads.CONFIG.smartHeuristics()) {
+                    return originalMessage;
+                }
             }
         }
 
-        return ChatHeads.detectPlayerByHeuristic(message, bound);
+        var messageAndData = detectPlayerAndAddChatHead(originalMessage, playerInfo);
+        if (messageAndData == null)
+            return originalMessage;
+
+        var decoratedMessage = messageAndData.getFirst();
+        var headData = messageAndData.getSecond();
+
+        ChatHeads.lastSenderData = headData;
+
+        if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
+            return originalMessage;
+        } else {
+            return decoratedMessage;
+        }
     }
 
+    /**
+     * Returns <code>message<code/> decorated with a chat head and the <code>PlayerInfo<code/> used for the head.
+     * Returns <code>null<code/> if no head was/should be added.
+     */
     @Nullable
-    private static HeadData detectShowcaseItemMessage(Component message) {
-        if (message.getContents() instanceof TranslatableContents contents
-                && Objects.equals(contents.getKey(), "showcaseitem.misc.shared_item")
-                && contents.getArgs().length > 0) {
-            var connection = Minecraft.getInstance().getConnection();
-            if (connection == null)
-                return null;
+    public static Pair<Component, HeadData> detectPlayerAndAddChatHead(Component message, @Nullable PlayerInfo givenPlayerInfo) {
+        var connection = Minecraft.getInstance().getConnection();
 
-            String playerName;
-            if (contents.getArgs()[0] instanceof String s) {
-                playerName = s;
-            } else if (contents.getArgs()[0] instanceof Component c) {
-                playerName = c.getString();
-            } else {
-                return null;
-            }
+        // When Polymer's early play networking API is used, messages can be received pre-login, in which case we disable chat heads
+        if (connection == null)
+            return null;
 
-            var playerInfoCache = new PlayerInfoCache(connection);
-            playerInfoCache.collectAllNames();
+        var playerInfoCache = new PlayerInfoCache(connection);
 
-            return HeadData.of(playerInfoCache.get(playerName));
+        if (givenPlayerInfo != null) {
+            playerInfoCache.add(givenPlayerInfo);
+        } else {
+            playerInfoCache.collectProfileNames();
         }
 
+        // to simplify processing massively, the component tree graph is turned into a list of lone components, without siblings
+        var split = ComponentProcessor.split(message);
+
+        // (A4) don't place a head if there already is one
+        if (ComponentProcessor.containsPlayerSprite(split))
+            return null;
+
+        PlayerInfo foundPlayerInfo = ComponentProcessor.addChatHeadForClickTellCommand(split, playerInfoCache);
+        if (foundPlayerInfo != null)
+            return new Pair<>(ComponentProcessor.join(split), HeadData.of(foundPlayerInfo));
+
+        if (givenPlayerInfo != null)
+            playerInfoCache.collectAllNames();
+
+        foundPlayerInfo = ComponentProcessor.addChatHeadForPlayerName(split, playerInfoCache);
+        if (foundPlayerInfo != null)
+            return new Pair<>(ComponentProcessor.join(split), HeadData.of(foundPlayerInfo));
+
+        // fallback: put head at the front
+        if (givenPlayerInfo != null)
+            return new Pair<>(ComponentProcessor.createChatHeadComponent(givenPlayerInfo).append(message), HeadData.of(givenPlayerInfo));
+
         return null;
+    }
+
+    private static boolean isShowcaseItemMessage(Component message) {
+        return message.getContents() instanceof TranslatableContents contents
+                && Objects.equals(contents.getKey(), "showcaseitem.misc.shared_item");
     }
 
     @NotNull
@@ -255,65 +286,6 @@ public class ChatHeads {
     // pixels the head takes up (including padding)
     public static int headWidth(boolean drawShadow) {
         return 8 + 2 + (drawShadow ? 1 : 0);
-    }
-
-    /** Heuristic to detect the sender of a message, needed if there's no sender UUID */
-    @NotNull
-    public static HeadData detectPlayerByHeuristic(Component message, @Nullable ChatType.Bound bound) {
-        var connection = Minecraft.getInstance().getConnection();
-
-        // When Polymer's early play networking API is used, messages can be received pre-login, in which case we disable chat heads
-        if (connection == null) {
-            return HeadData.EMPTY;
-        }
-
-        Component sender = getSenderDecoration(bound);
-
-        var playerInfoCache = new PlayerInfoCache(connection);
-        playerInfoCache.collectProfileNames();
-
-        // StyledNicknames compatibility: try to get player info from /tell click event
-        PlayerInfo player = getTellReceiver(sender != null ? sender : message).map(playerInfoCache::get).orElse(null);
-        if (player != null) {
-            return HeadData.of(player);
-        }
-
-        playerInfoCache.collectAllNames();
-
-        // try to get player info only from the sender decoration
-        if (sender != null) {
-            String cleanSender = sender.getString().replaceAll(FORMAT_REGEX, "");
-            return HeadData.of(playerInfoCache.get(cleanSender));
-        } else {
-            return scanForPlayerName(message.getString(), playerInfoCache);
-        }
-    }
-
-    private static Optional<String> getTellReceiver(Component component) {
-        return component.visit((style, string) -> {
-            if (style.getClickEvent() instanceof SuggestCommand(String command)) {
-                //noinspection ConstantValue  can apparently be null, see issue #112
-                if (command != null && command.startsWith("/tell ")) {
-                    String name = command.substring("/tell ".length()).trim();
-                    return Optional.of(name);
-                }
-            }
-
-            return Optional.empty();
-        }, Style.EMPTY);
-    }
-
-    @Nullable
-    private static Component getSenderDecoration(@Nullable ChatType.Bound bound) {
-        if (bound == null) return null;
-
-        for (var param : bound.chatType().value().chat().parameters()) {
-            if (param == ChatTypeDecoration.Parameter.SENDER) {
-                return bound.name();
-            }
-        }
-
-        return null;
     }
 
     @NotNull
@@ -380,7 +352,7 @@ public class ChatHeads {
 
         private void addProfileName(PlayerInfo playerInfo) {
             // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
-            String profileName = playerInfo.getProfile().getName().replaceAll(FORMAT_REGEX, "");
+            String profileName = playerInfo.getProfile().name().replaceAll(FORMAT_REGEX, "");
             if (profileName.isEmpty())
                 return;
 
@@ -527,15 +499,15 @@ public class ChatHeads {
     }
 
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity, boolean drawShadow) {
-        ResourceLocation skinLocation = owner.getSkin().texture();
+        ResourceLocation skinLocation = owner.getSkin().body().texturePath();
 
         int color = ARGB.white(opacity);
         int shadowColor = ARGB.scaleRGB(color, 0.25F);
         int shadowOffset = drawShadow ? -1 : 0;
 
         ClientLevel level = Minecraft.getInstance().level;
-        Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
-        boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
+        Player player = level != null ? level.getPlayerByUUID(owner.getProfile().id()) : null;
+        boolean upsideDown = player != null && AvatarRenderer.isPlayerUpsideDown(player);
 
         boolean showHat = owner.showHat();
 
@@ -562,4 +534,5 @@ public class ChatHeads {
             }
         }
     }
+
 }

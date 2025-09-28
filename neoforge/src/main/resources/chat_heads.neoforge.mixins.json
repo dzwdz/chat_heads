@@ -4,8 +4,7 @@
   "package": "dzwdz.chat_heads.neoforge.mixin",
   "compatibilityLevel": "JAVA_${java_version}",
   "client": [
-    "ChatListenerMixin",
-    "compat.ShowcaseItemFeatureMixin"
+    "ChatListenerMixin"
   ],
   "plugin": "dzwdz.chat_heads.neoforge.MixinPlugin",
   "injectors": {

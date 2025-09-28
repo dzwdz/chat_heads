@@ -38,32 +38,12 @@ public abstract class ChatComponentMixin {
         if (headData == HeadData.EMPTY)
             return newX;
 
-        float opacity = ARGB.alpha(color) / 255f;
-
         if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
+            float opacity = ARGB.alpha(color) / 255f;
             ChatHeads.renderChatHead(guiGraphics, x, y, headData.playerInfo(), opacity);
-        } else {
-            // -> FontPreparedTextBuilderMixin
-            ChatHeads.guiGraphics = guiGraphics;
-            ChatHeads.renderHeadData = headData;
-            ChatHeads.renderHeadOpacity = opacity;
         }
 
         return newX;
-    }
-
-    @Inject(
-            method = "method_71991",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)V",
-                    ordinal = 0,
-                    shift = At.Shift.AFTER
-            )
-    )
-    public void chatheads$forgetRenderData(int i, GuiGraphics guiGraphics, float f, int j, int k, int l, GuiMessage.Line line, int m, float g, CallbackInfo ci) {
-        ChatHeads.guiGraphics = null;
-        ChatHeads.renderHeadData = HeadData.EMPTY;
     }
 
     @ModifyExpressionValue(method = "getTagIconLeft", at = @At(value = "CONSTANT", args = "intValue=4"))

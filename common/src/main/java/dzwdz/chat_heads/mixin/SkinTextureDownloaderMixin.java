@@ -7,7 +7,7 @@ import dzwdz.chat_heads.mixininterface.TextureLocationSettable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SkinTextureDownloader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.ClientAsset;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -22,8 +22,10 @@ import static dzwdz.chat_heads.ChatHeads.getBlendedHeadLocation;
 @Mixin(SkinTextureDownloader.class)
 public abstract class SkinTextureDownloaderMixin implements TextureLocationSettable {
     @ModifyArg(method = "registerTextureInManager", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;supplyAsync(Ljava/util/function/Supplier;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;"))
-    private static Supplier<ResourceLocation> chatheads$registerBlendedHeadTexture(Supplier<ResourceLocation> supplier, @Local(argsOnly = true) ResourceLocation textureLocation, @Local(argsOnly = true) NativeImage image) {
+    private static Supplier<?> chatheads$registerBlendedHeadTexture(Supplier<?> supplier, @Local(argsOnly = true) ClientAsset.Texture texture, @Local(argsOnly = true) NativeImage image) {
         return () -> {
+            var textureLocation = texture.texturePath();
+
             // runs on Render thread
             if (textureLocation.getPath().startsWith("skins/")) {
                 Minecraft.getInstance().getTextureManager()

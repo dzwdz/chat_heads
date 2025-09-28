@@ -6,15 +6,16 @@
   "client": [
     "ChatComponentMixin",
     "ChatComponentMixin2",
+    "ChatComponentRenderMixin",
     "ChatListenerMixin",
     "ClientPacketListenerMixin",
     "CommandSuggestionSuggestionsListMixin",
     "ConnectionMixin",
     "DownloadedPackSourceMixin",
-    "FontPreparedTextBuilderMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
     "PlayerChatMessageMixin",
+    "PlayerGlyphProviderMixin",
     "SkinTextureDownloaderMixin"
   ],
   "plugin": "dzwdz.chat_heads.MixinPlugin",
