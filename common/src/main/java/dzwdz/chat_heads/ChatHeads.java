@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.BooleanSupplier;
 
 import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
@@ -92,41 +91,7 @@ public class ChatHeads {
     // for "before name" / vanilla rendering:
     public static boolean insideChat;
 
-    public static boolean forceBeforeLine;
-    private static final Map<String, BooleanSupplier> beforeNameIncompatibility = Map.of(
-            "caxton", () -> true,
-            "modernui", () -> {
-                try {
-                    // Emojiful makes Modern UI sort of compatible
-                    if (Compat.isModLoaded("emojiful"))
-                        return false;
-
-                    Class<?> modernUi;
-                    try {
-                        modernUi = Class.forName("icyllis.modernui.mc.ModernUIMod");
-                    } catch (ClassNotFoundException e) {
-                        // old Forge versions
-                        modernUi = Class.forName("icyllis.modernui.mc.forge.ModernUIForge");
-                    }
-
-                    return (Boolean) modernUi.getMethod("isTextEngineEnabled").invoke(null);
-                } catch (Exception e) {
-                    LOGGER.warn("couldn't invoke isTextEngineEnabled: {}: {}", e.getClass().getSimpleName(), e.getMessage());
-                    return false;
-                }
-            }
-    );
-
     public static void init() {
-        for (var entry : beforeNameIncompatibility.entrySet()) {
-            String modId = entry.getKey();
-
-            if (Compat.isModLoaded(modId) && entry.getValue().getAsBoolean()) {
-                forceBeforeLine = true;
-                ChatHeads.LOGGER.warn("disabled \"Before Name\" rendermode due to incompatibility with {}", modId);
-            }
-        }
-
         if (Compat.isClothConfigLoaded()) {
             ClothConfigCommonImpl.loadConfig();
         }

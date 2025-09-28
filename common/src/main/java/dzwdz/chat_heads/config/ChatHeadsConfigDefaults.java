@@ -1,7 +1,5 @@
 package dzwdz.chat_heads.config;
 
-import dzwdz.chat_heads.ChatHeads;
-
 import java.util.Map;
 
 public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
@@ -14,9 +12,6 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 
 	@Override
 	public RenderPosition renderPosition() {
-		if (ChatHeads.forceBeforeLine)
-			return RenderPosition.BEFORE_LINE;
-
 		return RENDER_POSITION;
 	}
 
