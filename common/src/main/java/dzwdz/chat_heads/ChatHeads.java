@@ -20,6 +20,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerModelPart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -536,7 +537,7 @@ public class ChatHeads {
         Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
         boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
 
-        boolean showHat = owner.showHat();
+        boolean showHat = player != null && player.isModelPartShown(PlayerModelPart.HAT);
 
         int yOffset = (upsideDown ? 8 : 0);
         int yDirection = (upsideDown ? -1 : 1);
