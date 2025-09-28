@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerModelPart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -467,10 +468,12 @@ public class ChatHeads {
         Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
         boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
 
+        boolean showHat = player != null && player.isModelPartShown(PlayerModelPart.HAT);
+
         int yOffset = (upsideDown ? 8 : 0);
         int yDirection = (upsideDown ? -1 : 1);
 
-        if (blendedHeadTextures.contains(skinLocation)) {
+        if (showHat && blendedHeadTextures.contains(skinLocation)) {
             RenderSystem.setShaderTexture(0, getBlendedHeadLocation(skinLocation));
 
             if (drawShadow) {
@@ -488,18 +491,18 @@ public class ChatHeads {
             if (drawShadow) {
                 RenderSystem.setShaderColor(0.25f, 0.25f, 0.25f, opacity);
 
-                // draw base layer
                 GuiComponent.blit(matrixStack, x + 1, y, 8, 8, 8.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
-                // draw hat
-                GuiComponent.blit(matrixStack, x + 1, y, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
+                if (showHat) {
+                    GuiComponent.blit(matrixStack, x + 1, y, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
+                }
             }
 
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opacity);
 
-            // draw base layer
             GuiComponent.blit(matrixStack, x, y + shadowOffset, 8, 8, 8.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
-            // draw hat
-            GuiComponent.blit(matrixStack, x, y + shadowOffset, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
+            if (showHat) {
+                GuiComponent.blit(matrixStack, x, y + shadowOffset, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
+            }
         }
 
         if (opacity != 1.0f) {
