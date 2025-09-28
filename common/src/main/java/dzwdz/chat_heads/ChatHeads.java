@@ -536,10 +536,12 @@ public class ChatHeads {
         Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
         boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
 
+        boolean showHat = owner.showHat();
+
         int yOffset = (upsideDown ? 8 : 0);
         int yDirection = (upsideDown ? -1 : 1);
 
-        if (blendedHeadTextures.contains(skinLocation)) {
+        if (showHat && blendedHeadTextures.contains(skinLocation)) {
             if (drawShadow)
                 guiGraphics.blit(RenderType::guiTextured, getBlendedHeadLocation(skinLocation), x + 1, y, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, shadowColor);
 
@@ -547,16 +549,16 @@ public class ChatHeads {
             guiGraphics.blit(RenderType::guiTextured, getBlendedHeadLocation(skinLocation), x, y + shadowOffset, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, color);
         } else {
             if (drawShadow) {
-                // draw base layer
                 guiGraphics.blit(RenderType::guiTextured, skinLocation, x + 1, y,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
-                // draw hat
-                guiGraphics.blit(RenderType::guiTextured, skinLocation, x + 1, y, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
+                if (showHat) {
+                    guiGraphics.blit(RenderType::guiTextured, skinLocation, x + 1, y, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
+                }
             }
 
-            // draw base layer
             guiGraphics.blit(RenderType::guiTextured, skinLocation, x, y + shadowOffset,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
-            // draw hat
-            guiGraphics.blit(RenderType::guiTextured, skinLocation, x, y + shadowOffset, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
+            if (showHat) {
+                guiGraphics.blit(RenderType::guiTextured, skinLocation, x, y + shadowOffset, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
+            }
         }
     }
 }
