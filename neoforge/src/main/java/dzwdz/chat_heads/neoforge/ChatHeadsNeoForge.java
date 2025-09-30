@@ -8,7 +8,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 @Mod("chat_heads")
 public class ChatHeadsNeoForge {
 	public ChatHeadsNeoForge(IEventBus modBus) {
-		if (FMLEnvironment.dist == Dist.CLIENT) {
+		if (FMLEnvironment.getDist() == Dist.CLIENT) {
 			ChatHeadsNeoForgeClient.init(modBus);
 		}
 	}

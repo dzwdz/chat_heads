@@ -13,7 +13,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
     public static boolean isModInstalled(String modId) {
         // ModList seems to always be null when shouldApplyMixin is executed
         // While not ideal, we can check which mods are loading
-        for (ModInfo mod : FMLLoader.getLoadingModList().getMods())
+        for (ModInfo mod : FMLLoader.getCurrent().getLoadingModList().getMods())
             if (mod.getModId().equals(modId))
                 return true;
 
