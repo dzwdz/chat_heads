@@ -8,8 +8,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 public class MissingClothConfigScreen extends Screen {
-	private static final int WHITE = 16777215;
-
 	private final Screen parent;
 	private final Component message;
 	private final Component clothConfigCfLink;
@@ -52,7 +50,7 @@ public class MissingClothConfigScreen extends Screen {
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
 		super.render(guiGraphics, mouseX, mouseY, delta);
-		guiGraphics.drawCenteredString(font, title, width / 2, 80, WHITE);
-		guiGraphics.drawCenteredString(font, message, width / 2, 100, WHITE);
+		guiGraphics.drawCenteredString(font, title, width / 2, 80, -1);
+		guiGraphics.drawCenteredString(font, message, width / 2, 100, -1);
 	}
 }
