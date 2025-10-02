@@ -27,11 +27,11 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	@ConfigEntry.Gui.Tooltip()
 	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
 
+	@ConfigEntry.Gui.Tooltip()
+	public static boolean detectNameAliases = true;
+
 	@Override
 	public RenderPosition renderPosition() {
-		if (ChatHeads.forceBeforeLine)
-			return RenderPosition.BEFORE_LINE;
-
 		return renderPosition;
 	}
 
@@ -56,13 +56,25 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	}
 
 	@Override
+	public boolean drawShadow() {
+		return drawShadow;
+	}
+
+	@Override
 	public Map<String, String> getNameAliases() {
 		return nameAliases;
 	}
 
 	@Override
-	public boolean drawShadow() {
-		return drawShadow;
+	public boolean detectNameAliases() {
+		return detectNameAliases;
+	}
+
+	@Override
+	public void addNameAlias(String nickname, String profileName) {
+		nameAliases.put(nickname, profileName);
+
+		ClothConfigCommonImpl.saveConfig();
 	}
 
 	@Override
