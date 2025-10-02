@@ -131,7 +131,6 @@ subprojects {
                 changelog = changelogMd
 
                 addGameVersion capitalizedLoader
-                addGameVersion 'Client'
                 projectGameVersions.each{ addGameVersion(it) }
 
                 relations {
