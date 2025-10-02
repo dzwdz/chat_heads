@@ -6,10 +6,7 @@ import dzwdz.chat_heads.Compat;
 import dzwdz.chat_heads.config.ChatHeadsConfigData;
 import dzwdz.chat_heads.config.MissingClothConfigScreen;
 import me.shedaniel.autoconfig.AutoConfig;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
-@Environment(EnvType.CLIENT)
 public class ModMenuImpl implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {

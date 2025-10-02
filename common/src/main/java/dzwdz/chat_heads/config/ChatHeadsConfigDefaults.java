@@ -1,7 +1,6 @@
 package dzwdz.chat_heads.config;
 
-import dzwdz.chat_heads.ChatHeads;
-
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
@@ -12,11 +11,11 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	public static final boolean HANDLE_SYSTEM_MESSAGES = true;
 	public static final boolean DRAW_SHADOW = true;
 
+	public static final boolean DETECT_ALIASES = true;
+	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
+
 	@Override
 	public RenderPosition renderPosition() {
-		if (ChatHeads.forceBeforeLine)
-			return RenderPosition.BEFORE_LINE;
-
 		return RENDER_POSITION;
 	}
 
@@ -42,7 +41,17 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 
 	@Override
 	public Map<String, String> getNameAliases() {
-		return Map.of();
+		return nameAliases;
+	}
+
+	@Override
+	public boolean detectNameAliases() {
+		return DETECT_ALIASES;
+	}
+
+	@Override
+	public void addNameAlias(String nickname, String profileName) {
+		nameAliases.put(nickname, profileName);
 	}
 
 	@Override

@@ -9,10 +9,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
-@Environment(EnvType.CLIENT)
 public class MissingClothConfigScreen extends Screen {
-	private static final int WHITE = 16777215;
-
 	private final Screen parent;
 	private final Component message;
 	private final Component clothConfigCfLink;
@@ -55,8 +52,8 @@ public class MissingClothConfigScreen extends Screen {
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
 		renderDirtBackground(0);
-		drawCenteredString(poseStack, font, title, width / 2, 80, WHITE);
-		drawCenteredString(poseStack, font, message, width / 2, 100, WHITE);
+		drawCenteredString(poseStack, font, title, width / 2, 80, -1);
+		drawCenteredString(poseStack, font, message, width / 2, 100, -1);
 		super.render(poseStack, mouseX, mouseY, delta);
 	}
 }

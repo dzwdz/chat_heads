@@ -20,6 +20,8 @@
   "text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "Ob Köpfe zu \"reinen\" Server-Nachrichten hinzugefügt werden können.\nBedenke dass viele Server (z.B. mit dem FreedomChat-Plugin)\nSpieler-Nachrichten in Server-Nachrichten umwandeln!\nDeaktiviere diese Option nur wenn du verstehst was du tust!",
   "text.autoconfig.chat_heads.option.nameAliases": "Pseudonyme",
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "Manche Server erlauben Spitznamen welche nicht automatisch zugeordnet\nwerden können. Hier können die Spitznamen wie folgt manuell zugeordnet werden:\nSpitzname -> Profilname",
+  "text.autoconfig.chat_heads.option.detectNameAliases": "Pseudonyme automatisch erkennen",
+  "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "Dies sucht nach Antworten auf /realname Befehle auf\nEssentialsX-Servern and fügt diese automatisch als Pseudonym hinzu.",
   "text.autoconfig.chat_heads.option.drawShadow": "Zeichne Schatten",
   "text.chat_heads.config.error.title": "Konnte Konfigurationsmenü nicht öffnen",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config ist nicht installiert!",

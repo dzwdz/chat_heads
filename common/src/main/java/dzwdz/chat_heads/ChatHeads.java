@@ -137,7 +137,30 @@ public class ChatHeads {
         }
     }
 
+    // On EssentialsX, /realname returns "<nickname> is <profile name>", which we can use to auto-add name aliases
+    public static void autoDetectAlias(Component message) {
+        String text = message.getString();
+
+        int i = text.indexOf(" ");
+        if (i == -1) return;
+
+        var nickname = text.substring(0, i);
+
+        if (!text.substring(i).startsWith(" is "))
+            return;
+
+        var profileName = text.substring(i + " is ".length());
+
+        if (profileName.contains(" "))
+            return;
+
+        ChatHeads.CONFIG.addNameAlias(nickname, profileName);
+    }
+
     public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
+        if (ChatHeads.CONFIG.detectNameAliases())
+            autoDetectAlias(message);
+
         if (ChatHeads.serverDisabledChatHeads) {
             ChatHeads.lastSenderData = HeadData.EMPTY;
             return;
