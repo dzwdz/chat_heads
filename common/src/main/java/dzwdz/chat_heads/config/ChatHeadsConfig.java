@@ -8,6 +8,9 @@ public interface ChatHeadsConfig {
 	SenderDetection senderDetection();
 	boolean smartHeuristics();
 	boolean handleSystemMessages();
-	Map<String, String> getNameAliases();
 	boolean drawShadow();
+	Map<String, String> getNameAliases();
+	boolean detectNameAliases();
+
+	void addNameAlias(String nickname, String profileName);
 }
