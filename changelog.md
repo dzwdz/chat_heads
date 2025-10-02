@@ -1,3 +1,8 @@
+## 1.1.0
+
+ - add "Auto-detect Name Aliases" feature, which detects responses to `/realname` commands on EssentialsX servers and automatically adds aliases for it (on by default)
+ - fix "Missing Cloth Config" screen text being invisible
+
 ## 1.0.0
 
 This is a large rewrite of the mod - it finally works how it always should have worked!  
