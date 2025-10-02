@@ -132,7 +132,8 @@ public class ChatHeads {
 
     @SuppressWarnings("UnnecessaryLocalVariable")
     public static Component handleAddedMessage(Component originalMessage, @Nullable PlayerInfo playerInfo) {
-        autoDetectAlias(originalMessage);
+        if (ChatHeads.CONFIG.detectNameAliases())
+            autoDetectAlias(originalMessage);
 
         // note: lastSenderData is used for the BEFORE_LINE rendering, the returned message for the BEFORE_NAME rendering
         ChatHeads.lastSenderData = HeadData.EMPTY;
