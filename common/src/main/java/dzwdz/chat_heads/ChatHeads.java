@@ -166,9 +166,9 @@ public class ChatHeads {
         ChatHeads.CONFIG.addNameAlias(nickname, profileName);
     }
 
-
     public static void handleAddedMessage(Component message, @Nullable ChatType.Bound bound, @Nullable PlayerInfo playerInfo) {
-        autoDetectAlias(message);
+        if (ChatHeads.CONFIG.detectNameAliases())
+            autoDetectAlias(message);
 
         if (ChatHeads.serverDisabledChatHeads) {
             ChatHeads.lastSenderData = HeadData.EMPTY;

@@ -28,7 +28,7 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
 
 	@ConfigEntry.Gui.Tooltip()
-	public static boolean detectNameAliases = true;
+	public static boolean detectNameAliases = ChatHeadsConfigDefaults.DETECT_ALIASES;
 
 	@Override
 	public RenderPosition renderPosition() {
