@@ -1,7 +1,7 @@
 ## 1.1.1
 
 As expected, there were bugs!  
-Chat Heads should now deal with all forms of text styling including ง formatting codes correctly again.  
+Chat Heads should now deal with all forms of text styling including ยง formatting codes correctly again.  
 Keep the issue reports coming!
 
 ## 1.1.0
