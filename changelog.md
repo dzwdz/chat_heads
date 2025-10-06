@@ -1,3 +1,9 @@
+## 1.1.1
+
+As expected, there were bugs!  
+Chat Heads should now deal with all forms of text styling including § formatting codes correctly again.  
+Keep the issue reports coming!
+
 ## 1.1.0
 
  - add "Auto-detect Name Aliases" feature, which detects responses to `/realname` commands on EssentialsX servers and automatically adds aliases for it (on by default)
