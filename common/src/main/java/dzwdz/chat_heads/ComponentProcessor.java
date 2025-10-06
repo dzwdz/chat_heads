@@ -294,7 +294,7 @@ public class ComponentProcessor {
                 var literal = components.get(i);
                 var contents = (PlainTextContents) literal.getContents();
 
-                int codePointCount = (int) contents.text().replaceAll(ChatHeads.FORMAT_REGEX, "").codePoints().count();
+                int codePointCount = (int) contents.text().codePoints().count();
 
                 if (codePointIndex >= codePointCount) {
                     codePointIndex -= codePointCount;

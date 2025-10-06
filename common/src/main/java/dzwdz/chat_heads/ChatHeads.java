@@ -278,8 +278,6 @@ public class ChatHeads {
 
     @NotNull
     public static HeadData scanForPlayerName(@NotNull String message, PlayerInfoCache playerInfoCache) {
-        message = message.replaceAll(FORMAT_REGEX, "");
-
         // large optimization: prepare a names lookup to improve worst case runtime of the following triple nested loop
         var namesByFirstCharacter = playerInfoCache.createNamesByFirstCharacterMap();
 
