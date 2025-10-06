@@ -89,9 +89,32 @@ public class ComponentProcessor {
     public static ArrayList<Component> split(Component component) {
         ArrayList<Component> components = new ArrayList<>();
 
-        walkTree(component, (c, style) -> {
-            var copy = c.plainCopy().setStyle(style);
-            components.add(copy);
+        walkTree(component, (c, cStyle) -> {
+            // preprocess § formatting codes
+            if (c.getContents() instanceof PlainTextContents literal) {
+                Style[] prevStyle = new Style[]{ cStyle };
+                StringBuilder b = new StringBuilder();
+
+                StringDecomposer.iterateFormatted(literal.text(), prevStyle[0], (index, style, cp) -> {
+                    if (!style.equals(prevStyle[0])) {
+                        if (!b.isEmpty())
+                            components.add(Component.literal(b.toString()).setStyle(prevStyle[0]));
+
+                        b.setLength(0);
+                        prevStyle[0] = style;
+                    }
+
+                    b.appendCodePoint(cp);
+
+                    return true;
+                });
+
+                if (!b.isEmpty())
+                    components.add(Component.literal(b.toString()).setStyle(prevStyle[0]));
+            } else {
+                var copy = c.plainCopy().setStyle(cStyle);
+                components.add(copy);
+            }
         });
 
         return components;
