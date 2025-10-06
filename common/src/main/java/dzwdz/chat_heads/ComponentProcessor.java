@@ -1,15 +1,18 @@
 package dzwdz.chat_heads;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.ObjectContents;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.network.chat.contents.objects.ObjectInfo;
 import net.minecraft.network.chat.contents.objects.PlayerSprite;
+import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.item.component.ResolvableProfile;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +31,7 @@ import java.util.function.Predicate;
  * component - sibling1                         sibling2             sibling3
  *                  \ - sibling1.1 - sibling1.2      \ - sibling 2.1
  *
- * They are parsed/rendered from left to right as shown.
+ * They are parsed/rendered from left to right as shown. They also inherit styles from parents to siblings.
  * (Technically speaking, they form a directed tree, parsed in depth first order.)
  * With 1.21.9 ObjectContents are now a thing, which can render AtlasSprites and PlayerSprites (literal chat heads).
  *
@@ -58,15 +61,25 @@ import java.util.function.Predicate;
 
 @SuppressWarnings("CodeBlock2Expr")
 public class ComponentProcessor {
+    public interface StyledComponentConsumer {
+        void accept(Component component, Style style);
+    }
+
     /**
      * Walk the component-sibling tree in depth first order (aka render order).
      */
-    public static void walkTree(Component component, Consumer<Component> consumer) {
-        consumer.accept(component);
+    public static void walkTree(Component component, Style currentStyle, StyledComponentConsumer consumer) {
+        currentStyle = component.getStyle().applyTo(currentStyle);
+
+        consumer.accept(component, currentStyle);
 
         for (Component sibling : component.getSiblings()) {
-            walkTree(sibling, consumer);
+            walkTree(sibling, currentStyle, consumer);
         }
+    }
+
+    public static void walkTree(Component component, StyledComponentConsumer consumer) {
+        walkTree(component, Style.EMPTY, consumer);
     }
 
     /**
@@ -76,8 +89,8 @@ public class ComponentProcessor {
     public static ArrayList<Component> split(Component component) {
         ArrayList<Component> components = new ArrayList<>();
 
-        walkTree(component, c -> {
-            var copy = c.plainCopy().setStyle(c.getStyle());
+        walkTree(component, (c, style) -> {
+            var copy = c.plainCopy().setStyle(style);
             components.add(copy);
         });
 
@@ -88,14 +101,10 @@ public class ComponentProcessor {
      * Joins split components back together, i.e. <code>join(split(component))</code> renders the same as <code>component</code>.
      */
     public static Component join(List<Component> components) {
-        if (components.isEmpty())
-            return Component.empty();
+        Component combined = Component.empty();
 
-        Component combined = components.getFirst();
-
-        components.stream().skip(1).forEach(c -> {
+        for (var c : components)
             combined.getSiblings().add(c);
-        });
 
         return combined;
     }
@@ -271,6 +280,11 @@ public class ComponentProcessor {
 
                 // finally add the head
                 var chatHead = ComponentProcessor.createChatHeadComponent(headData.playerInfo());
+
+                // just for fun
+                if (literal.getStyle().isStrikethrough())
+                    chatHead = chatHead.withStyle(ChatFormatting.STRIKETHROUGH);
+
                 Component decorated;
 
                 var pair = splitLiteral(literal, codePointIndex);
@@ -281,7 +295,7 @@ public class ComponentProcessor {
                     var left = pair.getFirst();
                     var right = pair.getSecond();
 
-                    decorated = left.append(chatHead).append(right);
+                    decorated = Component.empty().append(left).append(chatHead).append(right);
                 }
 
                 components.set(i, decorated);
