@@ -189,7 +189,7 @@ public class ChatHeads {
         var playerInfoCache = new PlayerInfoCache(connection);
 
         if (givenPlayerInfo != null) {
-            playerInfoCache.add(givenPlayerInfo);
+            playerInfoCache.addProfileName(givenPlayerInfo);
         } else {
             playerInfoCache.collectProfileNames();
         }
@@ -205,8 +205,11 @@ public class ChatHeads {
         if (foundPlayerInfo != null)
             return new Pair<>(ComponentProcessor.join(split), HeadData.of(foundPlayerInfo));
 
-        if (givenPlayerInfo == null)
+        if (givenPlayerInfo != null) {
+            playerInfoCache.add(givenPlayerInfo);
+        } else {
             playerInfoCache.collectAllNames();
+        }
 
         foundPlayerInfo = ComponentProcessor.addChatHeadForPlayerName(split, playerInfoCache);
         if (foundPlayerInfo != null)
