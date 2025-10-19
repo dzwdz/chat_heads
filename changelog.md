@@ -1,3 +1,10 @@
+## 1.1.2
+
+Breaking News: Single Source Code Character causes Havoc!
+
+This tiny release fixes an important bug where name aliases and display names weren't always considered for player detection.  
+Fixes e.g. nicknamed players on EssentialsX servers to not show a chat head despite a name alias being defined.
+
 ## 1.1.1
 
 As expected, there were bugs!  
