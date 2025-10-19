@@ -205,7 +205,7 @@ public class ChatHeads {
         if (foundPlayerInfo != null)
             return new Pair<>(ComponentProcessor.join(split), HeadData.of(foundPlayerInfo));
 
-        if (givenPlayerInfo != null)
+        if (givenPlayerInfo == null)
             playerInfoCache.collectAllNames();
 
         foundPlayerInfo = ComponentProcessor.addChatHeadForPlayerName(split, playerInfoCache);
