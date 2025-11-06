@@ -266,8 +266,11 @@ public class ChatHeads {
     }
 
     public static int getTextWidthDifference(@NotNull HeadData headData) {
+        if (ChatHeads.CONFIG.renderPosition() != BEFORE_LINE)
+            return 0;
+
         // whenever a head is rendered or chat is being offset
-        return (headData != HeadData.EMPTY || offsetChat(headData)) ? headWidth() : 0;
+        return headData != HeadData.EMPTY || offsetChat(headData) ? headWidth() : 0;
     }
 
     public static int headWidth() {
