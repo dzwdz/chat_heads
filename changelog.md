@@ -1,3 +1,7 @@
+## 1.1.3
+
+ - fix click position being wrongfully offset in "Before Name" rendering
+
 ## 1.1.2
 
 Breaking News: Single Source Code Character causes Havoc!
