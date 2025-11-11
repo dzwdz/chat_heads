@@ -19,7 +19,7 @@
 	"text.autoconfig.chat_heads.option.handleSystemMessages.@Tooltip": "頭を「純粋な」サーバーメッセージに追加するかどうかです。\n多くのサーバー（例えばFreedomChatプラグインを導入している場合）は\nプレイヤーメッセージをサーバーメッセージに変えてしまうことに注意してください！\nこのオプションを無効化するには何を行っているかを理解した場合のみにしてください！",
 	"text.autoconfig.chat_heads.option.smartHeuristics.@Tooltip": "サーバーがUUIDを伝えることが既知の場合、\nヒューリスティックを無効にします。\n（送信者の識別が「両方」のときに適用されます。）",
 	"text.autoconfig.chat_heads.option.nameAliases": "ニックネーム",
-	"text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "自動的に一致させられないニックネームを設定できるサーバーもあります。\n以下のように、手動でニックネームをプロフィール名に対応させられます:\nニックネーム -> プロフィール名",
+	"text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "自動的に一致させられないニックネームを設定できるサーバーもあります。\n以下のように、手動でニックネームをプロフィール名に対応させられます：\nニックネーム -> プロフィール名",
 	"text.autoconfig.chat_heads.option.detectNameAliases": "エイリアスを自動検出する",
 	"text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "このオプションは、EssentialsXサーバー上で/realnameコマンドへの応答を検索し、自動的にエイリアスを追加します。"
 	"text.chat_heads.config.error.title": "設定画面を開けません！",
