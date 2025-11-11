@@ -21,7 +21,7 @@
   "text.autoconfig.chat_heads.option.nameAliases": "玩家名昵称",
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "一些服务器允许为玩家设置昵称，这些昵称不会自动匹配其对应玩家的头像。\n你可以在此处手动将这些昵称和对应的用户名匹配起来。\n例如：nickname -> profilename",
   "text.autoconfig.chat_heads.option.detectNameAliases": "自动检测别名",
-  "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "此选项将查找EssentialsX服务器上对/realname命令的响应，并自动为其添加别名。"
+  "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "此选项将查找EssentialsX服务器上对/realname命令的响应，并自动为其添加别名。", 
   "text.chat_heads.config.error.title": "无法打开配置菜单",
   "text.chat_heads.config.error.no_cloth_config": "未安装Cloth Config！",
   "text.chat_heads.config.error.cloth_config_curseforge_link": "打开Cloth Config的CurseForge页面",

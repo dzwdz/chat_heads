@@ -21,9 +21,9 @@
   "text.autoconfig.chat_heads.option.nameAliases": "名稱別名",
   "text.autoconfig.chat_heads.option.nameAliases.@Tooltip": "有些伺服器允許設定別名，這將無法自動配對名稱。\n在這裡你可以手動指定配對別名來配對上他們的設定檔名。\n例如：nickname -> profilename",
   "text.autoconfig.chat_heads.option.detectNameAliases": "自動偵測別名",
-  "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "此選項將尋找EssentialsX伺服器上對/realname指令的回應，並自動為其新增別名。"
+  "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "此選項將尋找EssentialsX伺服器上對/realname指令的回應，並自動為其新增別名。", 
   "text.chat_heads.config.error.title": "無法開啟設定選單",
   "text.chat_heads.config.error.no_cloth_config": "尚未安裝「Cloth Config」模組！",
-  "text.chat_heads.config.error.cloth_config_link": "在 CurseForge上開啟Cloth Config頁面",
+  "text.chat_heads.config.error.cloth_config_curseforge_link": "在CurseForge上開啟Cloth Config頁面",
   "text.chat_heads.config.error.cloth_config_modrinth_link": "在Modrinth上開啟Cloth Config頁面"
 }
