@@ -1,3 +1,7 @@
+## 1.1.4
+
+ - update Simplified Chinese (zh_cn), Traditional Chinese (zh_tw) and Japanese (ja_jp) translations, thanks to Internet Yamero!
+
 ## 1.1.3
 
  - fix click position being wrongfully offset in "Before Name" rendering
