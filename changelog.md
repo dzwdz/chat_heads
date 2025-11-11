@@ -1,3 +1,7 @@
+##  0.14.1
+
+ - update Simplified Chinese (zh_cn), Traditional Chinese (zh_tw) and Japanese (ja_jp) translations, thanks to Internet Yamero!
+
 ## 0.14.0
 
  - add "Auto-detect Name Aliases" feature, which detects responses to `/realname` commands on EssentialsX servers and automatically adds aliases for it (on by default)
