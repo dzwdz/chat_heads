@@ -1,3 +1,7 @@
+## 1.14.2
+
+ - fix translations JSON (oops!)
+
 ##  0.14.1
 
  - update Simplified Chinese (zh_cn), Traditional Chinese (zh_tw) and Japanese (ja_jp) translations, thanks to Internet Yamero!
