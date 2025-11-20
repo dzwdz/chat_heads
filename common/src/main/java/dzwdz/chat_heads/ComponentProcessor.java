@@ -230,7 +230,7 @@ public class ComponentProcessor {
             if (c.getContents() instanceof TranslatableContents translatable) {
                 int finalI = i;
 
-                var playerInfo = processTranslatableArguments(translatable, splitArg -> {
+                var playerInfo = processTranslatableArguments(c, translatable, splitArg -> {
                     return addChatHeadForClickTellCommand(splitArg, playerInfoCache);
                 }, decorated -> {
                     components.set(finalI, decorated);
@@ -246,11 +246,11 @@ public class ComponentProcessor {
     }
 
     @Nullable
-    public static <T> T processTranslatableArguments(TranslatableContents translatable, Function<ArrayList<Component>, @Nullable T> processSplitArg, Consumer<Component> processedCallback) {
-        Object[] args = translatable.getArgs();
+    public static <T> T processTranslatableArguments(Component translatable, TranslatableContents contents, Function<ArrayList<Component>, @Nullable T> processSplitArg, Consumer<Component> processedCallback) {
+        Object[] args = contents.getArgs();
 
         // (A3c) for the default "<%s> %s" template, only check the first argument
-        int argsLength = Objects.equals(translatable.getKey(), "chat.type.text") ? 1 : args.length;
+        int argsLength = Objects.equals(contents.getKey(), "chat.type.text") ? 1 : args.length;
 
         for (int i = 0; i < argsLength; i++) {
             if (args[i] instanceof String text) {
@@ -267,7 +267,9 @@ public class ComponentProcessor {
                     Object[] processedArgs = Arrays.copyOf(args, args.length);
                     processedArgs[i] = processedArg;
 
-                    var processed = Component.translatableWithFallback(translatable.getKey(), translatable.getFallback(), processedArgs);
+                    var processed = Component.translatableWithFallback(contents.getKey(), contents.getFallback(), processedArgs);
+                    processed.setStyle(translatable.getStyle());
+                    translatable.getSiblings().forEach(processed::append); // we don't use this but might as well
 
                     processedCallback.accept(processed);
 
@@ -330,9 +332,10 @@ public class ComponentProcessor {
 
             return false;
         }, foundTranslatable -> {
-            var translatable = foundTranslatable.contents;
+            var translatable = components.get(foundTranslatable.index);
+            var contents = foundTranslatable.contents;
 
-            var foundPlayerInfo = processTranslatableArguments(translatable, splitArg -> {
+            var foundPlayerInfo = processTranslatableArguments(translatable, contents, splitArg -> {
                 return addChatHeadForPlayerName(splitArg, playerInfoCache);
             }, decorated -> {
                 components.set(foundTranslatable.index, decorated);
