@@ -1,3 +1,9 @@
+## 1.1.6
+
+Another really small but important bug fix!
+
+ - fix an issue where translatable messages (e.g. join/whisper messages) could lose their style
+
 ## 1.1.5
 
  - fix translations JSON (oops!)
