@@ -1,3 +1,9 @@
+## 1.1.7
+
+Quick followup fix for 1.1.6:
+
+ - chat heads always use the "white" style (fixes e.g. chat heads in leave messages rendering with a yellowish tint)
+
 ## 1.1.6
 
 Another really small but important bug fix!
