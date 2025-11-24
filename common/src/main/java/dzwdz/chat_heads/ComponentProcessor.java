@@ -219,7 +219,8 @@ public class ComponentProcessor {
                 var playerInfo = playerInfoCache.get(profileName);
 
                 if (playerInfo != null) {
-                    var decorated = ComponentProcessor.createChatHeadComponent(playerInfo).append(c);
+                    var chatHead = ComponentProcessor.createChatHeadComponent(playerInfo, c);
+                    var decorated = Component.empty().append(chatHead).append(c);
                     components.set(i, decorated);
 
                     // (A5)
@@ -304,18 +305,13 @@ public class ComponentProcessor {
                 }
 
                 // finally add the head
-                var chatHead = ComponentProcessor.createChatHeadComponent(headData.playerInfo());
-
-                // just for fun
-                if (literal.getStyle().isStrikethrough())
-                    chatHead = chatHead.withStyle(ChatFormatting.STRIKETHROUGH);
+                var chatHead = ComponentProcessor.createChatHeadComponent(headData.playerInfo(), literal);
 
                 Component decorated;
 
                 var pair = splitLiteral(literal, codePointIndex);
-
                 if (pair == null) {
-                    decorated = chatHead.append(literal);
+                    decorated = Component.empty().append(chatHead).append(literal);
                 } else {
                     var left = pair.getFirst();
                     var right = pair.getSecond();
@@ -378,6 +374,18 @@ public class ComponentProcessor {
     }
 
     public static MutableComponent createChatHeadComponent(PlayerInfo playerInfo) {
-        return Component.object(new PlayerSprite(ResolvableProfile.createResolved(playerInfo.getProfile()), playerInfo.showHat()));
+        return Component.object(new PlayerSprite(ResolvableProfile.createResolved(playerInfo.getProfile()), playerInfo.showHat()))
+                .withStyle(ChatFormatting.WHITE);
+    }
+
+    public static MutableComponent createChatHeadComponent(PlayerInfo playerInfo, Component message) {
+        var chatHead = createChatHeadComponent(playerInfo);
+
+        // just for fun
+        if (message.getStyle().isStrikethrough()) {
+            return chatHead.withStyle(ChatFormatting.STRIKETHROUGH);
+        }
+
+        return chatHead;
     }
 }

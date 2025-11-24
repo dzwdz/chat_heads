@@ -7,6 +7,7 @@ import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,6 +17,7 @@ import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
@@ -216,8 +218,12 @@ public class ChatHeads {
             return new Pair<>(ComponentProcessor.join(split), HeadData.of(foundPlayerInfo));
 
         // fallback: put head at the front
-        if (givenPlayerInfo != null)
-            return new Pair<>(ComponentProcessor.createChatHeadComponent(givenPlayerInfo).append(message), HeadData.of(givenPlayerInfo));
+        if (givenPlayerInfo != null) {
+            var chatHead = ComponentProcessor.createChatHeadComponent(givenPlayerInfo, message);
+            var decorated = Component.empty().append(chatHead).append(message);
+
+            return new Pair<>(decorated, HeadData.of(givenPlayerInfo));
+        }
 
         return null;
     }
