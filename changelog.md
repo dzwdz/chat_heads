@@ -1,3 +1,9 @@
+## 1.1.8
+
+ - port to 1.21.11
+ 
+note: "Before Line" rendering had to be rewritten, hopefully bug free
+
 ## 1.1.7
 
 Quick followup fix for 1.1.6:
