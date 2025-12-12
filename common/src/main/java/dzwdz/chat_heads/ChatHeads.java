@@ -7,20 +7,19 @@ import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ChatComponent.ChatGraphicsAccess;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import org.apache.logging.log4j.LogManager;
@@ -73,7 +72,7 @@ public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
     public static final String FORMAT_REGEX = "§.";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
-    public static final ResourceLocation DISABLE_RESOURCE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "disable");
+    public static final Identifier DISABLE_RESOURCE = Identifier.fromNamespaceAndPath(MOD_ID, "disable");
 
     public static ChatHeadsConfig CONFIG = new ChatHeadsConfigDefaults();
 
@@ -88,7 +87,10 @@ public class ChatHeads {
     public static volatile boolean serverSentUuid = false;
     public static volatile boolean serverDisabledChatHeads = false;
 
-    public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
+    // for "before line" / direct rendering
+    public static final Set<Identifier> blendedHeadTextures = new HashSet<>();
+    public static GuiGraphics guiGraphics = null;
+    public static ChatGraphicsAccess chatGraphicsAccess = null;
 
     // for "before name" / vanilla rendering:
     public static boolean insideChat;
@@ -488,8 +490,8 @@ public class ChatHeads {
         );
     }
 
-    public static ResourceLocation getBlendedHeadLocation(ResourceLocation skinLocation) {
-        return ResourceLocation.fromNamespaceAndPath(ChatHeads.MOD_ID, skinLocation.getPath());
+    public static Identifier getBlendedHeadLocation(Identifier skinLocation) {
+        return Identifier.fromNamespaceAndPath(ChatHeads.MOD_ID, skinLocation.getPath());
     }
 
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity) {
@@ -497,7 +499,7 @@ public class ChatHeads {
     }
 
     public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity, boolean drawShadow) {
-        ResourceLocation skinLocation = owner.getSkin().body().texturePath();
+        Identifier skinLocation = owner.getSkin().body().texturePath();
 
         int color = ARGB.white(opacity);
         int shadowColor = ARGB.scaleRGB(color, 0.25F);

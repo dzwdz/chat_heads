@@ -2,6 +2,7 @@ package dzwdz.chat_heads.config;
 
 import dzwdz.chat_heads.ChatHeads;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
@@ -22,7 +23,7 @@ public class ClothConfigCommonImpl {
 			return InteractionResult.SUCCESS;
 		});
 
-		var guiRegistry = AutoConfig.getGuiRegistry(ChatHeadsConfigData.class);
+		var guiRegistry = AutoConfigClient.getGuiRegistry(ChatHeadsConfigData.class);
 		guiRegistry.registerPredicateProvider(
 				new SenderDetectionGuiProvider(),
 				field -> field.getName().equals("senderDetection")

@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ChatComponent.class)
 public abstract class ChatComponentRenderMixin {
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("HEAD"))
     public void chatheads$isInsideChat(CallbackInfo ci) {
         ChatHeads.insideChat = true;
     }
 
-    @Inject(method = "render", at = @At("RETURN"))
+    @Inject(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("RETURN"))
     public void chatheads$isOutsideChat(CallbackInfo ci) {
         ChatHeads.insideChat = false;
     }

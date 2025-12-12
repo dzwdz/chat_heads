@@ -4,6 +4,7 @@
   "package": "dzwdz.chat_heads.mixin",
   "compatibilityLevel": "JAVA_${java_version}",
   "client": [
+    "ChatComponentInnerMixin",
     "ChatComponentMixin",
     "ChatComponentMixin2",
     "ChatComponentRenderMixin",

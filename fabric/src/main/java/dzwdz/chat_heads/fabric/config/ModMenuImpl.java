@@ -5,7 +5,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import dzwdz.chat_heads.Compat;
 import dzwdz.chat_heads.config.ChatHeadsConfigData;
 import dzwdz.chat_heads.config.MissingClothConfigScreen;
-import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 
 public class ModMenuImpl implements ModMenuApi {
     @Override
@@ -14,7 +14,7 @@ public class ModMenuImpl implements ModMenuApi {
         // we put a custom screen instead, to not confuse users
         return parent -> {
             if (Compat.isClothConfigLoaded()) {
-                return AutoConfig.getConfigScreen(ChatHeadsConfigData.class, parent).get();
+                return AutoConfigClient.getConfigScreen(ChatHeadsConfigData.class, parent).get();
             } else {
                 return new MissingClothConfigScreen(parent);
             }

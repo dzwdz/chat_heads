@@ -1,77 +1,50 @@
 package dzwdz.chat_heads.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.HeadData;
 import net.minecraft.client.GuiMessage;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
-import net.minecraft.util.ARGB;
-import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.client.gui.components.ChatComponent.ChatGraphicsAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
-
-@Mixin(value = ChatComponent.class, priority = 990) // apply before Quark's ChatComponentMixin
+@Mixin(value = ChatComponent.class, priority = 990)
 public abstract class ChatComponentMixin {
+    @Inject(method = "render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/Font;IIIZZ)V", at = @At("HEAD"))
+    private static void chatheads$captureGuiGraphics(CallbackInfo ci, @Local(argsOnly = true) GuiGraphics guiGraphics) {
+        ChatHeads.guiGraphics = guiGraphics;
+    }
+
+    @Inject(method = "captureClickableText", at = @At("HEAD"))
+    private static void chatheads$noGraphics(CallbackInfo ci) {
+        ChatHeads.guiGraphics = null;
+    }
+
+    @Inject(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("HEAD"))
+    private static void chatheads$captureChatGraphicsAccess(CallbackInfo ci, @Local(argsOnly = true) ChatGraphicsAccess chatGraphicsAccess) {
+        ChatHeads.chatGraphicsAccess = chatGraphicsAccess;
+    }
+
     @ModifyArg(
-            method = "method_71991", // oh no... let's hope this doesn't break too often
+            method = "method_75802", // render: forEachLine(alphaCalculator, lambda)
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)V",
-                    ordinal = 0
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V"
             ),
             index = 2
     )
-    public int chatheads$moveTextAndRenderChatHead(Font font, FormattedCharSequence formattedCharSequence, int x, int y, int color,
-            @Local(argsOnly = true) GuiGraphics guiGraphics, @Local(argsOnly = true) GuiMessage.Line guiMessage) {
-        HeadData headData = ChatHeads.getHeadData(guiMessage);
-
-        int newX = x + ChatHeads.getChatOffset(headData);
-
-        if (headData == HeadData.EMPTY)
-            return newX;
-
-        if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
-            float opacity = ARGB.alpha(color) / 255f;
-            ChatHeads.renderChatHead(guiGraphics, x, y, headData.playerInfo(), opacity);
-        }
-
-        return newX;
+    private static int chatheads$fixTextOverflow(int original) {
+        return original + ChatHeads.getTextWidthDifference(ChatHeads.getLineData());
     }
 
-    @ModifyExpressionValue(method = "getTagIconLeft", at = @At(value = "CONSTANT", args = "intValue=4"))
-    private int chatheads$moveTagIcon(int four, @Local(argsOnly = true) GuiMessage.Line guiMessage) {
-        return four + ChatHeads.getTextWidthDifference(guiMessage);
-    }
-
-    @ModifyArg(
-            method = "getClickedComponentStyleAt",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/StringSplitter;componentStyleAtWidth(Lnet/minecraft/util/FormattedCharSequence;I)Lnet/minecraft/network/chat/Style;"
-            ),
-            index = 1
-    )
-    public int chatheads$correctClickPosition(int x, @Local GuiMessage.Line guiMessage) {
-        return x - ChatHeads.getTextWidthDifference(guiMessage);
-    }
-
-    @ModifyExpressionValue(
-            method = "addMessageToDisplayQueue",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/ChatComponent;getWidth()I"
-            )
-    )
-    public int chatheads$fixTextOverflow(int original) {
-        return original - ChatHeads.getTextWidthDifference(ChatHeads.getLineData());
+    @Inject(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("RETURN"))
+    private static void chatheads$forgetGraphics(CallbackInfo ci) {
+        ChatHeads.guiGraphics = null;
+        ChatHeads.chatGraphicsAccess = null;
     }
 
     @Inject(
