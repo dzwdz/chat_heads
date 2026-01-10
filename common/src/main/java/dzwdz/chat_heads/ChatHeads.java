@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
@@ -70,7 +71,7 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
-    public static final String FORMAT_REGEX = "§.";
+    public static final Pattern FORMAT_REGEX = Pattern.compile("§.");
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final Identifier DISABLE_RESOURCE = Identifier.fromNamespaceAndPath(MOD_ID, "disable");
 
@@ -352,7 +353,7 @@ public class ChatHeads {
 
         private void addProfileName(PlayerInfo playerInfo) {
             // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
-            String profileName = playerInfo.getProfile().name().replaceAll(FORMAT_REGEX, "");
+            String profileName = FORMAT_REGEX.matcher(playerInfo.getProfile().name()).replaceAll("");
             if (profileName.isEmpty())
                 return;
 
@@ -385,7 +386,7 @@ public class ChatHeads {
 
         private void addDisplayName(PlayerInfo playerInfo) {
             if (playerInfo.getTabListDisplayName() != null) {
-                String displayName = playerInfo.getTabListDisplayName().getString().replaceAll(FORMAT_REGEX, "");
+                String displayName = FORMAT_REGEX.matcher(playerInfo.getTabListDisplayName().getString()).replaceAll("");
                 if (displayName.isEmpty())
                     return;
 
