@@ -6,7 +6,6 @@
 	"text.autoconfig.chat_heads.option.explanation": "「UUID」?「ヒューリスティック」?",
 	"text.autoconfig.chat_heads.option.explanation.@Tooltip": "通常、サーバーはメッセージの送信者が誰なのか、\nつまり送信者のUUIDを伝えてくれます。\nしかし、そうでないサーバーもあり、偽のUUIDを伝えてくることもあります。\nその場合、ヒューリスティックを用いてメッセージ内容から推測する必要があります。\nこのヒューリスティックは完璧ではないため、アイコンが一致しないことがあります。",
 	"text.autoconfig.chat_heads.option.renderPosition": "描画位置",
-	"text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "チャットの頭をどこに描画するか\n\n注意：「名前の前」は特定のmodと競合する可能性があります。\nCaxtonとModern UIでは、自動的に「行の前」が使用されます。",
 	"text.autoconfig.chat_heads.option.renderPosition.BEFORE_LINE": "行の前",
 	"text.autoconfig.chat_heads.option.renderPosition.BEFORE_NAME": "名前の前",
 	"text.autoconfig.chat_heads.option.senderDetection": "送信者の識別",

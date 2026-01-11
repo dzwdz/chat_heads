@@ -6,7 +6,6 @@
   "text.autoconfig.chat_heads.option.explanation": "\"UUIDs\"? \"Heuristics\"?",
   "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Normally, servers tell us who sent a message,\ni.e. the sender's UUID. However, many servers do not.\nThey can even send fake UUIDs. In these cases we need to use\na heuristic, i.e. we guess by the message content.\nThis heuristic is not perfect, so it might mismatch heads.",
   "text.autoconfig.chat_heads.option.renderPosition": "Render Position",
-  "text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "Where to render the chat heads\n\nNote: \"Before Name\" may be incompatible with certain mods.\nFor Caxton and Modern UI, \"Before Line\" will automatically be used.",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_LINE": "Before Line",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_NAME": "Before Name",
   "text.autoconfig.chat_heads.option.senderDetection": "Sender Detection",

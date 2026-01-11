@@ -10,7 +10,6 @@
   "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Normalmente, los servidores nos dicen quién envió un mensaje,\nes decir, el UUID del remitente. Sin embargo, muchos servidores no lo hacen.\nIncluso pueden mandar UUIDs falsos. En esos casos usamos\nuna heurística, es decir, adivinamos basándonos en el contenido del mensaje.\nEsta heurística no es perfecta, así que podría asignar mal algunas cabezas.",
 
   "text.autoconfig.chat_heads.option.renderPosition": "Posición de Renderizado",
-  "text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "Dónde renderizar las cabezas en el chat\n\nNota: \"Antes del Nombre\" puede ser incompatible con algunos mods.\nPara Caxton y Modern UI, se usará automáticamente \"Antes de la Línea\".",
 
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_LINE": "Antes de la Línea",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_NAME": "Antes del Nombre",

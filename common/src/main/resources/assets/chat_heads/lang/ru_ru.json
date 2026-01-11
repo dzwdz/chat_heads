@@ -6,7 +6,6 @@
   "text.autoconfig.chat_heads.option.explanation": "\"UUID\"? \"Эвристика\"?",
   "text.autoconfig.chat_heads.option.explanation.@Tooltip": "Обычно серверы сообщают нам, кто отправил сообщение,\nт.е. UUID отправителя. Однако многие серверы этого не делают.\nИногда они даже отправляют фейковые UUID. В таких случаях\nмы используем эвристику, т.е. угадываем по содержанию сообщения.\nЭта эвристика не всегда точна, поэтому головы могут не совпадать.",
   "text.autoconfig.chat_heads.option.renderPosition": "Позиция отображения",
-  "text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "Где отображать головы чата\n\nПримечание: \"Перед именем\" может быть несовместимо с некоторыми модами.\nДля Caxton и Modern UI \"Перед строкой\" будет использоваться автоматически.",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_LINE": "Перед строкой",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_NAME": "Перед именем",
   "text.autoconfig.chat_heads.option.senderDetection": "Определение отправителя",
