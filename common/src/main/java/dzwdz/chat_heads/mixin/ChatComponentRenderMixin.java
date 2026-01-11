@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ChatComponentRenderMixin {
     @Inject(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("HEAD"))
     public void chatheads$isInsideChat(CallbackInfo ci) {
-        ChatHeads.insideChat = true;
+        ChatHeads.customHeadRendering = true;
     }
 
     @Inject(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("RETURN"))
     public void chatheads$isOutsideChat(CallbackInfo ci) {
-        ChatHeads.insideChat = false;
+        ChatHeads.customHeadRendering = false;
     }
 }

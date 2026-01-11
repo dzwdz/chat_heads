@@ -93,8 +93,10 @@ public class ChatHeads {
     public static GuiGraphics guiGraphics = null;
     public static ChatGraphicsAccess chatGraphicsAccess = null;
 
-    // for "before name" / vanilla rendering:
-    public static boolean insideChat;
+    // for "before name" rendering aka vanilla PlayerSprites rendering:
+    // custom rendering means two things: adjusting the padding (see PaddedChatGlyph) and optional 3Dness (see PlayerGlyphProviderInstanceMixin)
+    // these two things happen at different times, making it hard to precisely limit to just the chat and the preview in the config menu
+    public static boolean customHeadRendering;
 
     public static void init() {
         if (Compat.isClothConfigLoaded()) {
