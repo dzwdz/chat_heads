@@ -8,6 +8,6 @@ public class CompatImpl {
     }
 
     public static boolean isClothConfigLoaded() {
-        return isModLoaded("cloth-config2");
+        return isModLoaded("cloth-config");
     }
 }
