@@ -10,6 +10,10 @@ import java.util.Set;
 public class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (mixinClassName.endsWith("ClothConfigScreenMixin") || mixinClassName.endsWith("AbstractConfigScreenQuitSaveConsumerMixin")) {
+            return Compat.isModLoaded("cloth-config");
+        }
+
         if (mixinClassName.endsWith("EmojifulMixin")) {
             return Compat.isModLoaded("emojiful");
         }
@@ -24,7 +28,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public String getRefMapperConfig() {
-        return "";
+        return null;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
-        return List.of();
+        return null;
     }
 
     @Override

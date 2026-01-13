@@ -7,7 +7,6 @@ import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,7 +16,6 @@ import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
@@ -71,7 +70,7 @@ import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
-    public static final String FORMAT_REGEX = "§.";
+    public static final Pattern FORMAT_REGEX = Pattern.compile("§.");
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ResourceLocation DISABLE_RESOURCE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "disable");
 
@@ -88,10 +87,13 @@ public class ChatHeads {
     public static volatile boolean serverSentUuid = false;
     public static volatile boolean serverDisabledChatHeads = false;
 
+    // for "before line" / direct rendering
     public static final Set<ResourceLocation> blendedHeadTextures = new HashSet<>();
 
-    // for "before name" / vanilla rendering:
-    public static boolean insideChat;
+    // for "before name" rendering aka vanilla PlayerSprites rendering:
+    // custom rendering means two things: adjusting the padding (see PaddedChatGlyph) and optional 3Dness (see PlayerGlyphProviderInstanceMixin)
+    // these two things happen at different times, making it hard to precisely limit to just the chat and the preview in the config menu
+    public static boolean customHeadRendering;
 
     public static void init() {
         if (Compat.isClothConfigLoaded()) {
@@ -350,7 +352,7 @@ public class ChatHeads {
 
         private void addProfileName(PlayerInfo playerInfo) {
             // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
-            String profileName = playerInfo.getProfile().name().replaceAll(FORMAT_REGEX, "");
+            String profileName = FORMAT_REGEX.matcher(playerInfo.getProfile().name()).replaceAll("");
             if (profileName.isEmpty())
                 return;
 
@@ -383,7 +385,7 @@ public class ChatHeads {
 
         private void addDisplayName(PlayerInfo playerInfo) {
             if (playerInfo.getTabListDisplayName() != null) {
-                String displayName = playerInfo.getTabListDisplayName().getString().replaceAll(FORMAT_REGEX, "");
+                String displayName = FORMAT_REGEX.matcher(playerInfo.getTabListDisplayName().getString()).replaceAll("");
                 if (displayName.isEmpty())
                     return;
 

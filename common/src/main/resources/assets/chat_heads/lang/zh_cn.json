@@ -6,7 +6,6 @@
   "text.autoconfig.chat_heads.option.explanation": "“直接使用收到的UUID” 还是 “自动推理正确玩家”？",
   "text.autoconfig.chat_heads.option.explanation.@Tooltip": "通常，服务器会告知你消息发送者的UUID。\n但是，许多服务器并非如此，甚至会发送假的UUID。\n这时我们需要通过消息内容去自动推理正确的发送者。\n不过这种算法并不完美，因此也可能会弄错头像。",
   "text.autoconfig.chat_heads.option.renderPosition": "渲染位置",
-  "text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "在何处渲染聊天头像\n\n注意：“在玩家名前”可能会与部分模组冲突。\n对于模组Caxton和现代化UI，将自动默认使用“在聊天行前”。",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_LINE": "在聊天行前",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_NAME": "在玩家名前",
   "text.autoconfig.chat_heads.option.senderDetection": "发送者检测",

@@ -4,6 +4,7 @@
   "package": "dzwdz.chat_heads.mixin",
   "compatibilityLevel": "JAVA_${java_version}",
   "client": [
+    "AbstractConfigScreenQuitSaveConsumerMixin",
     "ChatComponentMixin",
     "ChatComponentMixin2",
     "ChatComponentRenderMixin",
@@ -15,8 +16,12 @@
     "GuiMessageLineMixin",
     "GuiMessageMixin",
     "PlayerChatMessageMixin",
+    "PlayerGlyphProviderInstanceMixin",
     "PlayerGlyphProviderMixin",
-    "SkinTextureDownloaderMixin"
+    "SkinTextureDownloaderMixin",
+    "render_targets.BookViewScreenMixin",
+    "render_targets.ClothConfigScreenMixin",
+    "render_targets.GuiRendererMixin"
   ],
   "plugin": "dzwdz.chat_heads.MixinPlugin",
   "injectors": {
