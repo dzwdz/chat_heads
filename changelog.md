@@ -1,3 +1,13 @@
+## 1.2.0
+
+Welcome to the 3rd dimension!
+
+ - [1.21.9+] add "3Dness" config option, which can render the hat layer slightly bigger to make heads appear less flat
+
+Example of "3Dness", or Fluffyness if you prefer:
+
+![](https://raw.githubusercontent.com/dzwdz/chat_heads/refs/heads/main/assets/3Dness.png)
+
 ## 1.1.8
 
  - port to 1.21.11
