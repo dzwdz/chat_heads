@@ -12,7 +12,6 @@ import java.util.Map;
 @SuppressWarnings("CanBeFinal")
 @Config(name = ChatHeads.MOD_ID)
 public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
-	@ConfigEntry.Gui.Tooltip()
 	public RenderPosition renderPosition = ChatHeadsConfigDefaults.RENDER_POSITION;
 	public float threeDeeNess = ChatHeadsConfigDefaults.THREE_DEE_NESS;
 	@ConfigEntry.Gui.Tooltip()
