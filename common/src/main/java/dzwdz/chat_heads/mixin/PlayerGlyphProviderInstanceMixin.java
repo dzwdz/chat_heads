@@ -55,7 +55,7 @@ public abstract class PlayerGlyphProviderInstanceMixin {
         if (!ChatHeads.customHeadRendering)
             return original;
 
-        return original + 2 * CONFIG.threeDeeNess();
+        return original + 2 * CONFIG.threeDeeNess(); // 2 times because the head is moved to the right
     }
 
     // move hat up
@@ -87,6 +87,6 @@ public abstract class PlayerGlyphProviderInstanceMixin {
         if (!ChatHeads.customHeadRendering)
             return original;
 
-        return original + 2 * CONFIG.threeDeeNess();
+        return original + CONFIG.threeDeeNess();
     }
 }
