@@ -1,3 +1,8 @@
+## 1.2.1
+
+ - [1.21.9+] implement "3Dness" for "Before Line" rendering
+ - [1.21.9+] fix "3D" heads being taller than intended
+
 ## 1.2.0
 
 Welcome to the 3rd dimension!
