@@ -144,8 +144,8 @@ public abstract class ChatComponentMixin {
     @ModifyArg(
             method = "refreshTrimmedMessages",
             at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V"
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V"
             )
     )
     private GuiMessage chatheads$transferMessageOwner(GuiMessage guiMessage) {
@@ -159,9 +159,9 @@ public abstract class ChatComponentMixin {
     @Inject(
             method = "refreshTrimmedMessages",
             at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V",
-                shift = At.Shift.AFTER
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessageToDisplayQueue(Lnet/minecraft/client/GuiMessage;)V",
+                    shift = At.Shift.AFTER
             )
     )
     private void chatheads$finishedRefreshing(CallbackInfo ci) {
