@@ -9,6 +9,8 @@
   "text.autoconfig.chat_heads.option.renderPosition.@Tooltip": "Wo Spielerköpfe gerendert werden\n\nBemerke dass \"Vor dem Namen\" mit manchen Mods inkompatibel sein kann.\nFür Caxton und Modern UI, wird automatisch \"Vor der Zeile\" benutzt.",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_LINE": "Vor der Zeile",
   "text.autoconfig.chat_heads.option.renderPosition.BEFORE_NAME": "Vor dem Namen",
+  "text.autoconfig.chat_heads.option.threeDeeNess": "3Dhaftigkeit",
+  "text.autoconfig.chat_heads.option.threeDeeNess.@Tooltip": "Rendert die Hut-Ebene etwas größer\ndamit der Kopf weniger flach aussieht.\nDies kann Renderfehler verursachen.",
   "text.autoconfig.chat_heads.option.senderDetection": "Sender-Erkennung",
   "text.autoconfig.chat_heads.option.senderDetection.@Tooltip": "Für die meisten Server funktioniert \"UUID und Heuristik\".\nWenn der Server falsche UUIDs sendet muss \"Nur Heuristik\"\nbenutzt werden.",
   "text.autoconfig.chat_heads.option.senderDetection.UUID_ONLY": "Nur UUID",
