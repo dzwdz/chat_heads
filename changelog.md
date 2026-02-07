@@ -1,4 +1,12 @@
-## 1.14.2
+## 0.15.0
+
+ - backport "3Dness": a config option, which can render the hat layer slightly bigger to make heads appear less flat
+
+Example of "3Dness", or Fluffyness if you prefer:
+
+![](https://raw.githubusercontent.com/dzwdz/chat_heads/refs/heads/main/assets/3Dness.png)
+
+## 0.14.2
 
  - fix translations JSON (oops!)
 
