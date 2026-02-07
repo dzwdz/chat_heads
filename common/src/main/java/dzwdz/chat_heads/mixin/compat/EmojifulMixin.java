@@ -1,6 +1,5 @@
 package dzwdz.chat_heads.mixin.compat;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.HeadData;
 import net.minecraft.network.chat.Style;

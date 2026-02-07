@@ -27,7 +27,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
+import java.util.regex.Pattern;
 
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
@@ -64,7 +66,7 @@ import static net.minecraft.network.chat.ClickEvent.Action.SUGGEST_COMMAND;
 
 public class ChatHeads {
     public static final String MOD_ID = "chat_heads";
-    public static final String FORMAT_REGEX = "§.";
+    public static final Pattern FORMAT_REGEX = Pattern.compile("§.");
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final ResourceLocation DISABLE_RESOURCE = new ResourceLocation(MOD_ID, "disable");
 
@@ -265,7 +267,7 @@ public class ChatHeads {
 
         // try to get player info only from the sender decoration
         if (sender != null) {
-            String cleanSender = sender.getString().replaceAll(FORMAT_REGEX, "");
+            String cleanSender = FORMAT_REGEX.matcher(sender.getString()).replaceAll("");
             return HeadData.of(playerInfoCache.get(cleanSender));
         } else {
             return scanForPlayerName(message.getString(), playerInfoCache);
@@ -305,7 +307,7 @@ public class ChatHeads {
 
     @NotNull
     public static HeadData scanForPlayerName(@NotNull String message, PlayerInfoCache playerInfoCache) {
-        message = message.replaceAll(FORMAT_REGEX, "");
+        message = FORMAT_REGEX.matcher(message).replaceAll("");
 
         // large optimization: prepare a names lookup to improve worst case runtime of the following triple nested loop
         var namesByFirstCharacter = playerInfoCache.createNamesByFirstCharacterMap();
@@ -367,7 +369,7 @@ public class ChatHeads {
 
         private void addProfileName(PlayerInfo playerInfo) {
             // plugins like HaoNick can change profile names to contain illegal characters like formatting codes
-            String profileName = playerInfo.getProfile().getName().replaceAll(FORMAT_REGEX, "");
+            String profileName = FORMAT_REGEX.matcher(playerInfo.getProfile().getName()).replaceAll("");
             if (profileName.isEmpty())
                 return;
 
@@ -400,7 +402,7 @@ public class ChatHeads {
 
         private void addDisplayName(PlayerInfo playerInfo) {
             if (playerInfo.getTabListDisplayName() != null) {
-                String displayName = playerInfo.getTabListDisplayName().getString().replaceAll(FORMAT_REGEX, "");
+                String displayName = FORMAT_REGEX.matcher(playerInfo.getTabListDisplayName().getString()).replaceAll("");
                 if (displayName.isEmpty())
                     return;
 
@@ -500,7 +502,9 @@ public class ChatHeads {
         int yOffset = (upsideDown ? 8 : 0);
         int yDirection = (upsideDown ? -1 : 1);
 
-        if (showHat && blendedHeadTextures.contains(skinLocation)) {
+        boolean threeDee = ChatHeads.CONFIG.threeDeeNess() != 0;
+
+        if (showHat && !threeDee && blendedHeadTextures.contains(skinLocation)) {
             RenderSystem.setShaderTexture(0, getBlendedHeadLocation(skinLocation));
 
             if (drawShadow) {
@@ -514,13 +518,23 @@ public class ChatHeads {
             GuiComponent.blit(matrixStack, x, y + shadowOffset, 8, 8, 0, yOffset, 8, yDirection * 8, 8, 8);
         } else {
             RenderSystem.setShaderTexture(0, skinLocation);
+            BiConsumer<Integer, Integer> pushAndScale = (x0, y0) -> {
+                // scale 8² to max of 10² pixels from the head's center
+                float scale = 1f + (ChatHeads.CONFIG.threeDeeNess() * 0.25f);
+                matrixStack.pushPose();
+                matrixStack.translate( (x0 + 4f),  (y0 + 4f), 0);
+                matrixStack.scale(scale, scale, 1);
+                matrixStack.translate(-(x0 + 4f), -(y0 + 4f), 0);
+            };
 
             if (drawShadow) {
                 RenderSystem.setShaderColor(0.25f, 0.25f, 0.25f, opacity);
 
                 GuiComponent.blit(matrixStack, x + 1, y, 8, 8, 8.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
                 if (showHat) {
+                    if (threeDee) pushAndScale.accept(x + 1, y);
                     GuiComponent.blit(matrixStack, x + 1, y, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
+                    if (threeDee) matrixStack.popPose();
                 }
             }
 
@@ -528,7 +542,9 @@ public class ChatHeads {
 
             GuiComponent.blit(matrixStack, x, y + shadowOffset, 8, 8, 8.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
             if (showHat) {
+                if (threeDee) pushAndScale.accept(x, y + shadowOffset);
                 GuiComponent.blit(matrixStack, x, y + shadowOffset, 8, 8, 40.0f, 8 + yOffset, 8, yDirection * 8, 64, 64);
+                if (threeDee) matrixStack.popPose();
             }
         }
 
