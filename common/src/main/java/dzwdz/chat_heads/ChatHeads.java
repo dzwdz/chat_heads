@@ -558,11 +558,13 @@ public class ChatHeads {
         int shadowColor = ARGB.scaleRGB(color, 0.25F);
         int shadowOffset = drawShadow ? -1 : 0;
 
+        UUID uuid = owner.getProfile().getId();
         ClientLevel level = Minecraft.getInstance().level;
-        Player player = level != null ? level.getPlayerByUUID(owner.getProfile().getId()) : null;
+        Player player = level != null ? level.getPlayerByUUID(uuid) : null;
         boolean upsideDown = player != null && LivingEntityRenderer.isEntityUpsideDown(player);
 
-        boolean showHat = player != null && player.isModelPartShown(PlayerModelPart.HAT);
+        boolean isLocalPlayer = Minecraft.getInstance().getGameProfile().getId().equals(uuid);
+        boolean showHat = player != null && player.isModelPartShown(PlayerModelPart.HAT) || player == null && isLocalPlayer && Minecraft.getInstance().options.isModelPartEnabled(PlayerModelPart.HAT);
 
         int yOffset = (upsideDown ? 8 : 0);
         int yDirection = (upsideDown ? -1 : 1);
