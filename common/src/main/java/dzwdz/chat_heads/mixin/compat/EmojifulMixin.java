@@ -4,13 +4,15 @@ import com.mojang.math.Matrix4f;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.HeadData;
 import net.minecraft.network.chat.Style;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // essentially a copy of FontStringRenderOutputMixin
-@Debug(export = true)
 @Mixin(targets = "com.hrznstudio.emojiful.render.EmojiFontRenderer$EmojiCharacterRenderer", remap = false)
 public abstract class EmojifulMixin {
     @Shadow

@@ -37,6 +37,11 @@ public class ClothConfigCommonImpl {
 				new AliasesGuiProvider(),
 				field -> field.getName().equals("nameAliases")
 		);
+
+		guiRegistry.registerPredicateProvider(
+				new ThreeDeeNessGuiProvider(),
+				field -> field.getName().equals("threeDeeNess")
+		);
 	}
 
 	public static void saveConfig() {
