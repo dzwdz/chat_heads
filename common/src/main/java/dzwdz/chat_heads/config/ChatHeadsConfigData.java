@@ -14,6 +14,7 @@ import java.util.Map;
 public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	@ConfigEntry.Gui.Tooltip()
 	public RenderPosition renderPosition = ChatHeadsConfigDefaults.RENDER_POSITION;
+	public float threeDeeNess = ChatHeadsConfigDefaults.THREE_DEE_NESS;
 	@ConfigEntry.Gui.Tooltip()
 	public boolean offsetNonPlayerText = ChatHeadsConfigDefaults.OFFSET_NON_PLAYER_TEXT;
 	@ConfigEntry.Gui.Tooltip()
@@ -68,6 +69,16 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	@Override
 	public boolean detectNameAliases() {
 		return detectNameAliases;
+	}
+
+	@Override
+	public float threeDeeNess() {
+		return threeDeeNess;
+	}
+
+	@Override
+	public void setThreeDeeNess(float value) {
+		threeDeeNess = value;
 	}
 
 	@Override
