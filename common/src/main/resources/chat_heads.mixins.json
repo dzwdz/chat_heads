@@ -4,6 +4,8 @@
   "package": "dzwdz.chat_heads.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "AbstractConfigScreenQuitSaveConsumerMixin",
+    "AbstractSliderButtonMixin",
     "ChatComponentMixin",
     "ChatComponentMixin2",
     "ChatListenerMixin",

@@ -11,6 +11,8 @@ public interface ChatHeadsConfig {
 	boolean drawShadow();
 	Map<String, String> getNameAliases();
 	boolean detectNameAliases();
+	float threeDeeNess();
 
+	void setThreeDeeNess(float value);
 	void addNameAlias(String nickname, String profileName);
 }

@@ -10,6 +10,7 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	public static final boolean SMART_HEURISTICS = true;
 	public static final boolean HANDLE_SYSTEM_MESSAGES = true;
 	public static final boolean DRAW_SHADOW = true;
+	public static final float THREE_DEE_NESS = 0.0f;
 
 	public static final boolean DETECT_ALIASES = true;
 	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
@@ -57,5 +58,15 @@ public class ChatHeadsConfigDefaults implements ChatHeadsConfig {
 	@Override
 	public boolean drawShadow() {
 		return DRAW_SHADOW;
+	}
+
+	@Override
+	public float threeDeeNess() {
+		return THREE_DEE_NESS;
+	}
+
+	@Override
+	public void setThreeDeeNess(float value) {
+		throw new UnsupportedOperationException();
 	}
 }
