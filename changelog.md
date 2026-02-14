@@ -1,3 +1,7 @@
+## 1.2.2
+
+ - [1.21.9/10] fix "Before Line" not rendering at all (I accidentally the whole code!)
+
 ## 1.2.1
 
  - [1.21.9+] implement "3Dness" for "Before Line" rendering
