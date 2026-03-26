@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.brigadier.suggestion.Suggestion;
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.Rect2i;
@@ -27,8 +27,8 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     @Shadow @Final
     private List<Suggestion> suggestionList;
 
-    @ModifyVariable(method = "render", at = @At("HEAD"), argsOnly = true)
-    public GuiGraphics chatheads$captureGuiGraphics(GuiGraphics guiGraphics, @Share("graphics") LocalRef<GuiGraphics> graphicsRef) {
+    @ModifyVariable(method = "extractRenderState", at = @At("HEAD"), argsOnly = true)
+    public GuiGraphicsExtractor chatheads$captureGuiGraphics(GuiGraphicsExtractor guiGraphics, @Share("graphics") LocalRef<GuiGraphicsExtractor> graphicsRef) {
         graphicsRef.set(guiGraphics);
         return guiGraphics;
     }
@@ -52,7 +52,7 @@ public abstract class CommandSuggestionSuggestionsListMixin {
         }
     }
 
-    @ModifyVariable(method = "render", at = @At("STORE"), ordinal = 0)
+    @ModifyVariable(method = "extractRenderState", at = @At("STORE"), ordinal = 0)
     public Suggestion chatheads$captureSuggestion(Suggestion suggestion,
             @Share("player") LocalRef<PlayerInfo> playerRef) {
         var connection = Minecraft.getInstance().getConnection();
@@ -66,10 +66,10 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     }
 
     @ModifyArg(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V",
                     ordinal = 4
             ),
             index = 0
@@ -81,16 +81,16 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     }
 
     @ModifyArg(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V",
                     ordinal = 0
             ),
             index = 3
     )
     public int chatheads$renderChatHead(int y,
-            @Share("player") LocalRef<PlayerInfo> playerRef, @Share("graphics") LocalRef<GuiGraphics> graphicsRef) {
+            @Share("player") LocalRef<PlayerInfo> playerRef, @Share("graphics") LocalRef<GuiGraphicsExtractor> graphicsRef) {
         int x = rect.getX() - ChatHeads.headWidth(false);
 
         if (playerRef.get() != null) {

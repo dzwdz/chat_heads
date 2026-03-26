@@ -1,6 +1,6 @@
 package dzwdz.chat_heads.config;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -48,9 +48,9 @@ public class MissingClothConfigScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-		super.render(guiGraphics, mouseX, mouseY, delta);
-		guiGraphics.drawCenteredString(font, title, width / 2, 80, -1);
-		guiGraphics.drawCenteredString(font, message, width / 2, 100, -1);
+	public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float a) {
+		super.extractRenderState(guiGraphics, mouseX, mouseY, a);
+		guiGraphics.centeredText(font, title, width / 2, 80, -1);
+		guiGraphics.centeredText(font, message, width / 2, 100, -1);
 	}
 }

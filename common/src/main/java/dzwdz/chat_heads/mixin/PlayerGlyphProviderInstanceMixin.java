@@ -14,7 +14,7 @@ public abstract class PlayerGlyphProviderInstanceMixin {
     @ModifyArg(method = "renderSprite",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
+                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
                     ordinal = 0
             ),
             index = 3
@@ -30,7 +30,7 @@ public abstract class PlayerGlyphProviderInstanceMixin {
     @ModifyArg(method = "renderSprite",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
+                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
                     ordinal = 0
             ),
             index = 4
@@ -46,7 +46,7 @@ public abstract class PlayerGlyphProviderInstanceMixin {
     @ModifyArg(method = "renderSprite",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
+                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
                     ordinal = 1
             ),
             index = 4
@@ -62,7 +62,7 @@ public abstract class PlayerGlyphProviderInstanceMixin {
     @ModifyArg(method = "renderSprite",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
+                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
                     ordinal = 1
             ),
             index = 5
@@ -78,7 +78,7 @@ public abstract class PlayerGlyphProviderInstanceMixin {
     @ModifyArg(method = "renderSprite",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
+                    target = "Lnet/minecraft/client/gui/font/PlayerGlyphProvider$Instance;renderQuad(Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFFFIFFIIII)V",
                     ordinal = 1
             ),
             index = 6

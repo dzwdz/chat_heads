@@ -16,10 +16,7 @@ import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.item.component.ResolvableProfile;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -351,7 +348,7 @@ public class ComponentProcessor {
 
     public static boolean containsPlayerSprite(ArrayList<Component> components) {
         for (var c : components) {
-            if (c.getContents() instanceof ObjectContents(ObjectInfo objectInfo) && objectInfo instanceof PlayerSprite) {
+            if (c.getContents() instanceof ObjectContents(ObjectInfo objectInfo, Optional<Component> _) && objectInfo instanceof PlayerSprite) {
                 return true;
             }
         }

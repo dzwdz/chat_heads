@@ -16,7 +16,7 @@ public abstract class ChatListenerMixin {
             method = "showMessageToPlayer",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addPlayerMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/multiplayer/chat/GuiMessageTag;)V",
                     ordinal = 0
             )
     )
@@ -25,14 +25,25 @@ public abstract class ChatListenerMixin {
         return ChatHeads.handleAddedMessage(message, ChatHeads.getOwner(playerChatMessage));
     }
 
-    // handleDisguisedChatMessage: see project specific ChatListenerMixin
+    // either called from handleDisguisedChatMessage directly, or after some potential chat delay
+    @ModifyArg(
+            method = "lambda$handleDisguisedChatMessage$0",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addPlayerMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/multiplayer/chat/GuiMessageTag;)V",
+                    ordinal = 0
+            )
+    )
+    public Component chatheads$handleAddedDisguisedMessage(Component message) {
+        return ChatHeads.handleAddedMessage(message, null);
+    }
 
     // called for system messages
     @ModifyArg(
             method = "handleSystemMessage",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;)V",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent;addServerSystemMessage(Lnet/minecraft/network/chat/Component;)V",
                     ordinal = 0
             )
     )

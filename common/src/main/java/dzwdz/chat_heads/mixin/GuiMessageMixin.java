@@ -2,7 +2,7 @@ package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.HeadData;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

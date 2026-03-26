@@ -7,13 +7,13 @@ import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
-import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ChatComponent.ChatGraphicsAccess;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.network.chat.Component;
@@ -26,7 +26,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3x2fStack;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -92,7 +91,7 @@ public class ChatHeads {
 
     // for "before line" / direct rendering
     public static final Set<Identifier> blendedHeadTextures = new HashSet<>();
-    public static GuiGraphics guiGraphics = null;
+    public static GuiGraphicsExtractor guiGraphics = null;
     public static ChatGraphicsAccess chatGraphicsAccess = null;
 
     // for "before name" rendering aka vanilla PlayerSprites rendering:
@@ -499,11 +498,11 @@ public class ChatHeads {
         return Identifier.fromNamespaceAndPath(ChatHeads.MOD_ID, skinLocation.getPath());
     }
 
-    public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity) {
+    public static void renderChatHead(GuiGraphicsExtractor guiGraphics, int x, int y, PlayerInfo owner, float opacity) {
         renderChatHead(guiGraphics, x, y, owner, opacity, ChatHeads.CONFIG.drawShadow());
     }
 
-    public static void renderChatHead(GuiGraphics guiGraphics, int x, int y, PlayerInfo owner, float opacity, boolean drawShadow) {
+    public static void renderChatHead(GuiGraphicsExtractor guiGraphics, int x, int y, PlayerInfo owner, float opacity, boolean drawShadow) {
         Identifier skinLocation = owner.getSkin().body().texturePath();
 
         int color = ARGB.white(opacity);

@@ -1,7 +1,7 @@
 plugins {
-    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
-    id 'architectury-plugin' version '3.4-SNAPSHOT'
-    id 'com.gradleup.shadow' version '8.3.+' apply false
+    id 'dev.architectury.loom-no-remap' version '1.14-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.5-SNAPSHOT'
+    id 'com.gradleup.shadow' version '9.4.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
 }
@@ -16,9 +16,8 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'dev.architectury.loom-no-remap'
     apply plugin: 'architectury-plugin'
-    apply plugin: 'maven-publish'
 
     base {
         archivesName = project.archives_base_name
@@ -56,16 +55,9 @@ subprojects {
 
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
-        mappings loom.layered {
-            officialMojangMappings()
-            if (project.parchment_version) {
-                parchment("org.parchmentmc.data:parchment-$rootProject.minecraft_version:${project.parchment_version}@zip")
-            }
-        }
     }
 
     java {
-        withSourcesJar()
         targetCompatibility = sourceCompatibility = project.java_version as Integer
     }
 
@@ -98,6 +90,42 @@ subprojects {
     def lastGameVersion = projectGameVersions.last()
     def capitalizedLoader = loader == 'neoforge' ? 'NeoForge' : loader.capitalize()
 
+    apply plugin: 'com.gradleup.shadow'
+
+    loom {
+        accessWidenerPath = project(":common").loom.accessWidenerPath
+    }
+
+    configurations {
+        common {
+            canBeResolved = true
+            canBeConsumed = false
+        }
+        compileClasspath.extendsFrom common
+        runtimeClasspath.extendsFrom common
+
+        // Files in this configuration will be bundled into your mod using the Shadow plugin.
+        // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+        shadowBundle {
+            canBeResolved = true
+            canBeConsumed = false
+        }
+    }
+
+    jar {
+        archiveClassifier = "raw"
+    }
+
+    // see https://gist.github.com/shedaniel/18d4eebf940e9c3296e87d994ebb2838
+    shadowJar {
+        dependsOn(jar)
+        mainSpec.sourcePaths.clear()       // Remove default source set inclusion
+        from(zipTree(jar.archiveFile))     // Unpack jar output (preserves Loom modifications)
+
+        configurations = [project.configurations.shadowBundle]
+        archiveClassifier = null           // shadowJar becomes the main artifact
+    }
+
     apply plugin: "com.modrinth.minotaur"
 
     modrinth {
@@ -108,7 +136,7 @@ subprojects {
             versionName = project.mod_version
             versionNumber = project.mod_version
             versionType = "release"
-            uploadFile = remapJar
+            uploadFile = shadowJar
             changelog = changelogMd
             gameVersions = projectGameVersions
             loaders = [loader]
@@ -136,7 +164,7 @@ subprojects {
                 relations {
                     toList(project.optional_curseforge_dependencies).each{ optionalDependency(it) }
                 }
-                mainArtifact(remapJar.archiveFile.get().asFile) {
+                mainArtifact(shadowJar.archiveFile.get().asFile) { // needs to be configured after shadowJar
                     displayName = "[${capitalizedLoader} ${lastGameVersion}] ${project.mod_version}"
                 }
                 afterEvaluate {
@@ -146,6 +174,7 @@ subprojects {
             options {
                 forgeGradleIntegration = false
                 javaVersionAutoDetect = false
+                debug = true
             }
         }
     }
