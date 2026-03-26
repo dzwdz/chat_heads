@@ -1,3 +1,12 @@
+## 1.2.2
+
+ - port to 26.1
+
+While 26.1 means massive changes for the entire modding community, this port ended up being relatively straightforward.  
+Thanks to shedaniel for pulling an allnighter to get Architectury Loom (and Cloth Config) ready!
+
+Also, as always, report any issues you find!
+
 ## 1.2.1
 
  - [1.21.9+] implement "3Dness" for "Before Line" rendering
