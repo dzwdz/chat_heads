@@ -174,7 +174,7 @@ subprojects {
             options {
                 forgeGradleIntegration = false
                 javaVersionAutoDetect = false
-                debug = true
+                debug = false
             }
         }
     }
