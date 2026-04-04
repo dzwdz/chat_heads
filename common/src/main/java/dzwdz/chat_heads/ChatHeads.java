@@ -7,7 +7,6 @@ import com.mojang.math.Matrix4f;
 import dzwdz.chat_heads.config.ChatHeadsConfig;
 import dzwdz.chat_heads.config.ChatHeadsConfigDefaults;
 import dzwdz.chat_heads.config.ClothConfigCommonImpl;
-import dzwdz.chat_heads.config.RenderPosition;
 import dzwdz.chat_heads.mixininterface.HeadRenderable;
 import dzwdz.chat_heads.mixininterface.Ownable;
 import net.minecraft.client.GuiMessage;
@@ -31,6 +30,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Pattern;
 
+import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
 import static dzwdz.chat_heads.config.SenderDetection.UUID_ONLY;
 import static net.minecraft.network.chat.ClickEvent.Action.SUGGEST_COMMAND;
@@ -214,19 +214,28 @@ public class ChatHeads {
         ((Ownable) (Object) message).chatheads$setOwner(owner);
     }
 
+    public static boolean offsetChat(@NotNull HeadData headData) {
+        if (ChatHeads.CONFIG.renderPosition() != BEFORE_LINE)
+            return false;
+
+        return headData != HeadData.EMPTY || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads);
+    }
+
     public static int getChatOffset(@NotNull GuiMessage.Line guiMessage) {
         return getChatOffset(getHeadData(guiMessage));
     }
 
     public static int getChatOffset(@NotNull HeadData headData) {
-        if (ChatHeads.CONFIG.renderPosition() != RenderPosition.BEFORE_LINE)
-            return 0;
+        return offsetChat(headData) ? headWidth() : 0;
+    }
 
-        if (headData != HeadData.EMPTY || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads)) {
-            return ChatHeads.headWidth();
-        } else {
-            return 0;
-        }
+    public static int getTextWidthDifference(@NotNull GuiMessage.Line guiMessage) {
+        return getTextWidthDifference(getHeadData(guiMessage));
+    }
+
+    public static int getTextWidthDifference(@NotNull HeadData headData) {
+        // whenever a head is rendered or chat is being offset
+        return (headData != HeadData.EMPTY || offsetChat(headData)) ? headWidth() : 0;
     }
 
     public static int headWidth() {
