@@ -1,3 +1,7 @@
+## 0.15.1
+
+- [1.21.5-] fix click positions yet again
+
 ## 0.15.0
 
  - backport "3Dness": a config option, which can render the hat layer slightly bigger to make heads appear less flat
