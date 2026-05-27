@@ -1,7 +1,7 @@
 plugins {
     id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
-    id 'com.gradleup.shadow' version '8.3.+' apply false
+    id 'com.gradleup.shadow' version '9.4.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
 }
@@ -18,7 +18,6 @@ allprojects {
 subprojects {
     apply plugin: 'dev.architectury.loom'
     apply plugin: 'architectury-plugin'
-    apply plugin: 'maven-publish'
 
     base {
         archivesName = project.archives_base_name
@@ -65,7 +64,6 @@ subprojects {
     }
 
     java {
-        withSourcesJar()
         targetCompatibility = sourceCompatibility = project.java_version as Integer
     }
 
