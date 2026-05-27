@@ -16,6 +16,7 @@
     "DownloadedPackSourceMixin",
     "GuiMessageLineMixin",
     "GuiMessageMixin",
+    "PlainTextRenderableMixin",
     "PlayerChatMessageMixin",
     "PlayerGlyphProviderInstanceMixin",
     "PlayerGlyphProviderMixin",
