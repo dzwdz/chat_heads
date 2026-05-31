@@ -124,6 +124,9 @@ public class ComponentProcessor {
      * Joins split components back together, i.e. <code>join(split(component))</code> renders the same as <code>component</code>.
      */
     public static Component join(List<Component> components) {
+        if (components.size() == 1)
+            return components.getFirst();
+
         Component combined = Component.empty();
 
         for (var c : components)
