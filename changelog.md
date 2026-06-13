@@ -1,3 +1,7 @@
+## 0.15.2
+
+- [1.19.2 - 1.21.6] fix automatic "Before Line" fallback for Caxton and ModernUI not working anymore (regression of 0.14.0)
+
 ## 0.15.1
 
 - [1.21.5-] fix click positions yet again
