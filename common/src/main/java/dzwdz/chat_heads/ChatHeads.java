@@ -94,10 +94,6 @@ public class ChatHeads {
             "caxton", () -> true,
             "modernui", () -> {
                 try {
-                    // Emojiful makes Modern UI sort of compatible
-                    if (Compat.isModLoaded("emojiful"))
-                        return false;
-
                     Class<?> modernUi;
                     try {
                         modernUi = Class.forName("icyllis.modernui.mc.ModernUIMod");
