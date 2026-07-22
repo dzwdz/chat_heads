@@ -1,3 +1,7 @@
+## 1.2.5
+
+ - update Argentina Spanish (es_ar) translations, thanks to Texaliuz!
+
 ## 1.2.4
 
  - [1.21.9+] slightly improve compatibility with Chat Patches
