@@ -1,8 +1,8 @@
 plugins {
-    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
-    id 'architectury-plugin' version '3.4-SNAPSHOT'
-    id 'com.gradleup.shadow' version '8.3.+' apply false
-    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
+    id 'dev.architectury.loom' version '1.17-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.5-SNAPSHOT'
+    id 'com.gradleup.shadow' version '9.4.+' apply false
+    id 'de.maxhenkel.cursegradle' version '1.5.+' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
 }
 
@@ -18,7 +18,6 @@ allprojects {
 subprojects {
     apply plugin: 'dev.architectury.loom'
     apply plugin: 'architectury-plugin'
-    apply plugin: 'maven-publish'
 
     base {
         archivesName = project.archives_base_name
@@ -27,15 +26,20 @@ subprojects {
     loom {
         silentMojangMappingsLicense()
 
+        runConfigs.configureEach {
+            preferGradleTask = true
+        }
+
         runs {
             client {
-                vmArgs "-Dmixin.debug.export=true"
-                programArgs "--username", "Player"
+                jvmArguments = "-Dmixin.debug.export=true"
+                programArguments = ["--username", "Player"]
             }
         }
     }
 
     repositories {
+        maven { url = "https://maven.gnomecraft.net/releases/" }
         maven { url = "https://maven.terraformersmc.com/" }
         maven {
             name = 'ParchmentMC'
@@ -65,7 +69,6 @@ subprojects {
     }
 
     java {
-        withSourcesJar()
         targetCompatibility = sourceCompatibility = project.java_version as Integer
     }
 
@@ -98,7 +101,7 @@ subprojects {
     def lastGameVersion = projectGameVersions.last()
     def capitalizedLoader = loader == 'neoforge' ? 'NeoForge' : loader.capitalize()
 
-    apply plugin: "com.modrinth.minotaur"
+    apply plugin: 'com.modrinth.minotaur'
 
     modrinth {
         def MODRINTH_TOKEN = System.getenv("MODRINTH_TOKEN")
@@ -118,35 +121,37 @@ subprojects {
         }
     }
 
-    apply plugin: "com.matthewprenger.cursegradle"
+    apply plugin: 'de.maxhenkel.cursegradle'
 
     curseforge {
         def CURSEFORGE_TOKEN = System.getenv("CURSEFORGE_TOKEN")
         if (CURSEFORGE_TOKEN != null) {
             apiKey = CURSEFORGE_TOKEN
-            project {
-                id = project.curseforge_id
-                releaseType = "release"
-                changelogType = "markdown"
-                changelog = changelogMd
+        }
 
-                addGameVersion capitalizedLoader
-                projectGameVersions.each{ addGameVersion(it) }
+        project {
+            id = project.curseforge_id
+            releaseType = "release"
+            changelogType = "markdown"
+            changelog = changelogMd
 
-                relations {
-                    toList(project.optional_curseforge_dependencies).each{ optionalDependency(it) }
-                }
-                mainArtifact(remapJar.archiveFile.get().asFile) {
-                    displayName = "[${capitalizedLoader} ${lastGameVersion}] ${project.mod_version}"
-                }
-                afterEvaluate {
-                    uploadTask.dependsOn("build")
-                }
+            addGameVersion capitalizedLoader
+            projectGameVersions.each{ addGameVersion(it) }
+            addGameVersion 'Client'
+
+            relations {
+                toList(project.optional_curseforge_dependencies).each{ optionalDependency(it) }
             }
-            options {
-                forgeGradleIntegration = false
-                javaVersionAutoDetect = false
+            mainArtifact(remapJar.archiveFile.get().asFile) {
+                displayName = "[${capitalizedLoader} ${lastGameVersion}] ${project.mod_version}"
             }
+            afterEvaluate {
+                uploadTask.dependsOn("build")
+            }
+        }
+        options {
+            forgeGradleIntegration = false
+            javaVersionAutoDetect = false
         }
     }
 }
