@@ -39,6 +39,7 @@ subprojects {
     }
 
     repositories {
+        maven { url = "https://maven.gnomecraft.net/releases/" }
         maven { url = "https://maven.terraformersmc.com/" }
         maven {
             name = 'ParchmentMC'
