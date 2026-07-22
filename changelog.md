@@ -1,3 +1,7 @@
+## 0.15.3
+
+ - update Argentina Spanish (es_ar) translations, thanks to Texaliuz!
+
 ## 0.15.2
 
 - [1.19.2 - 1.21.6] fix automatic "Before Line" fallback for Caxton and ModernUI not working anymore (regression of 0.14.0)

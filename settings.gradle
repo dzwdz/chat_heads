@@ -4,6 +4,16 @@ pluginManagement {
         maven { url = "https://maven.architectury.dev/" }
         maven { url = "https://maven.minecraftforge.net/" }
         gradlePluginPortal()
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = 'https://maven.maxhenkel.de/repository/public'
+                }
+            }
+            filter {
+                includeGroupAndSubgroups 'de.maxhenkel'
+            }
+        }
     }
 }
 
