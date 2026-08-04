@@ -1,3 +1,7 @@
+## 0.15.4
+
+ - fix compatibility issue with TAB plugin's layout feature (ignore fake "slot" player info)
+
 ## 0.15.3
 
  - update Argentina Spanish (es_ar) translations, thanks to Texaliuz!
