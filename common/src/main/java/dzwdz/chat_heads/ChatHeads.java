@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
 import static dzwdz.chat_heads.config.SenderDetection.HEURISTIC_ONLY;
@@ -363,13 +364,16 @@ public class ChatHeads {
             this.connection = connection;
         }
 
+        // TAB plugin's layout feature adds a bunch of fake PlayerInfos with names |slot_11 - |slot_90 and UUIDs 1-80
+        private Stream<PlayerInfo> getRealOnlinePlayers() {
+            return connection.getOnlinePlayers().stream().filter(playerInfo -> !playerInfo.getProfile().getName().startsWith("|slot_"));
+        }
+
         public void collectProfileNames() {
             if (collectedProfileNames) return;
             collectedProfileNames = true;
 
-            for (var playerInfo : connection.getOnlinePlayers()) {
-                addProfileName(playerInfo);
-            }
+            getRealOnlinePlayers().forEach(this::addProfileName);
         }
 
         private void addProfileName(PlayerInfo playerInfo) {
@@ -388,9 +392,7 @@ public class ChatHeads {
             collectProfileNames();
 
             // collect display names
-            for (var playerInfo : connection.getOnlinePlayers()) {
-                addDisplayName(playerInfo);
-            }
+            getRealOnlinePlayers().forEach(this::addDisplayName);
 
             // add name aliases, copying player info from profile/display names
             addNameAliases();
@@ -408,7 +410,7 @@ public class ChatHeads {
         private void addDisplayName(PlayerInfo playerInfo) {
             if (playerInfo.getTabListDisplayName() != null) {
                 String displayName = FORMAT_REGEX.matcher(playerInfo.getTabListDisplayName().getString()).replaceAll("");
-                if (displayName.isEmpty())
+                if (displayName.isEmpty() || displayName.equals(" "))
                     return;
 
                 playerInfos.putIfAbsent(displayName, playerInfo);
