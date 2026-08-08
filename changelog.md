@@ -1,3 +1,7 @@
+## 1.2.7
+
+ - update Turkish (tr_tr) translations, thanks to iFair1!
+
 ## 1.2.6
 
  - fix compatibility issue with TAB plugin's layout feature (ignore fake "slot" player info)
