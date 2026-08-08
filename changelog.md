@@ -1,3 +1,7 @@
+## 0.15.5
+
+ - update Turkish (tr_tr) translations, thanks to iFair1!
+
 ## 0.15.4
 
  - fix compatibility issue with TAB plugin's layout feature (ignore fake "slot" player info)
