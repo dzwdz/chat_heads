@@ -1,3 +1,7 @@
+## 0.15.6
+
+ - update Ukranian (uk_ua) translations, thanks to Ch1sho!
+
 ## 0.15.5
 
  - update Turkish (tr_tr) translations, thanks to iFair1!
