@@ -1,3 +1,7 @@
+## 0.15.7
+
+ - compatibility with TalkArea (fix offset head position)
+ 
 ## 0.15.6
 
  - update Ukranian (uk_ua) translations, thanks to Ch1sho!
