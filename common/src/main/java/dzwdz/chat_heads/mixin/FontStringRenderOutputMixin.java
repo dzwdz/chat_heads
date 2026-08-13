@@ -21,9 +21,6 @@ public abstract class FontStringRenderOutputMixin {
     @Shadow @Final private Matrix4f pose;
     @Shadow @Final private boolean dropShadow;
 
-    @Unique
-    private int chatheads$charsRendered = 0;
-
     @Inject(method = "accept", at = @At("HEAD"))
     public void chatheads$renderChatHead(int i, Style style, int j, CallbackInfoReturnable<Boolean> cir) {
         if (ChatHeads.renderHeadData == HeadData.EMPTY)
@@ -31,7 +28,7 @@ public abstract class FontStringRenderOutputMixin {
 
         int renderIndex = Math.max(ChatHeads.renderHeadData.codePointIndex(), 0); // fallback to rendering at beginning
 
-        if (chatheads$charsRendered == renderIndex) {
+        if (!dropShadow && ChatHeads.renderedChars == renderIndex || dropShadow && ChatHeads.renderedShadowChars == renderIndex) {
             if (!dropShadow) {
                 PoseStack poseStack = ChatHeads.guiGraphics.pose();
 
@@ -47,6 +44,10 @@ public abstract class FontStringRenderOutputMixin {
             x += ChatHeads.headWidth();
         }
 
-        chatheads$charsRendered++;
+        if (!dropShadow) {
+            ChatHeads.renderedChars++;
+        } else {
+            ChatHeads.renderedShadowChars++;
+        }
     }
 }

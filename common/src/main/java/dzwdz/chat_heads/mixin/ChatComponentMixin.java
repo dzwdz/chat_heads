@@ -63,6 +63,8 @@ public abstract class ChatComponentMixin {
             ChatHeads.guiGraphics = guiGraphics;
             ChatHeads.renderHeadData = headData;
             ChatHeads.renderHeadOpacity = opacityRef.get();
+            ChatHeads.renderedChars = 0;
+            ChatHeads.renderedShadowChars = 0;
         }
     }
 

@@ -97,6 +97,9 @@ public class ChatHeads {
     public static GuiGraphics guiGraphics;
     @NotNull public static HeadData renderHeadData = HeadData.EMPTY;
     public static float renderHeadOpacity;
+    // with TalkArea, a single drawString call is replaced with multiple, we thus count all rendered (shadow) characters from before the original call to just after
+    public static int renderedChars = 0;
+    public static int renderedShadowChars = 0;
 
     public static boolean forceBeforeLine;
     private static final Map<String, BooleanSupplier> beforeNameIncompatibility = Map.of(
