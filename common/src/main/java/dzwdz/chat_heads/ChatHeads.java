@@ -172,9 +172,8 @@ public class ChatHeads {
             return originalMessage;
 
         var decoratedMessage = messageAndData.getFirst();
-        var headData = messageAndData.getSecond();
 
-        ChatHeads.lastSenderData = headData;
+        ChatHeads.lastSenderData = messageAndData.getSecond();
 
         if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
             return originalMessage;
@@ -524,10 +523,10 @@ public class ChatHeads {
 
         if (showHat && !threeDee && blendedHeadTextures.contains(skinLocation)) {
             if (drawShadow)
-                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x + 1, y, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, shadowColor);
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA, getBlendedHeadLocation(skinLocation), x + 1, y, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, shadowColor);
 
             // draw head in one draw call, fixing transparency issues of the "vanilla" path below
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getBlendedHeadLocation(skinLocation), x, y + shadowOffset, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA, getBlendedHeadLocation(skinLocation), x, y + shadowOffset, 0, yOffset, 8, 8, 8, yDirection * 8, 8, 8, color);
         } else {
             var pose = guiGraphics.pose();
             BiConsumer<Integer, Integer> pushAndScale = (x0, y0) -> {
@@ -536,18 +535,18 @@ public class ChatHeads {
             };
 
             if (drawShadow) {
-                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x + 1, y,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA, skinLocation, x + 1, y,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
                 if (showHat) {
                     if (threeDee) pushAndScale.accept(x + 1, y);
-                    guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x + 1, y, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
+                    guiGraphics.blit(RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA, skinLocation, x + 1, y, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, shadowColor);
                     if (threeDee) pose.popMatrix();
                 }
             }
 
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y + shadowOffset,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA, skinLocation, x, y + shadowOffset,  8.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
             if (showHat) {
                 if (threeDee) pushAndScale.accept(x, y + shadowOffset);
-                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, skinLocation, x, y + shadowOffset, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA, skinLocation, x, y + shadowOffset, 40.0f, 8 + yOffset, 8, 8, 8, yDirection * 8, 64, 64, color);
                 if (threeDee) pose.popMatrix();
             }
         }
