@@ -1,3 +1,7 @@
+## 1.2.9
+
+ - port to 26.3
+
 ## 1.2.8
 
  - update Ukranian (uk_ua) translations, thanks to Ch1sho!
