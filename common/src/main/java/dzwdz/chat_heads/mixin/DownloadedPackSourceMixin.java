@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Mixin(DownloadedPackSource.class)
 public abstract class DownloadedPackSourceMixin {
@@ -20,13 +21,11 @@ public abstract class DownloadedPackSourceMixin {
         List<Pack> packs = cir.getReturnValue();
         if (packs == null) return; // in the rare case the server pack is invalid
 
-        for (Pack serverPack : packs) {
-            try (PackResources resources = serverPack.open()) {
-                if (resources.getResource(PackType.CLIENT_RESOURCES, ChatHeads.DISABLE_RESOURCE) != null) {
-                    ChatHeads.serverDisabledChatHeads = true;
-                    ChatHeads.LOGGER.info("Chat Heads disabled by server request");
-                }
+        packs.stream().flatMap(Pack::open).forEach(resources -> {
+            if (resources.getResource(PackType.CLIENT_RESOURCES, ChatHeads.DISABLE_RESOURCE) != null) {
+                ChatHeads.serverDisabledChatHeads = true;
+                ChatHeads.LOGGER.info("Chat Heads disabled by server request");
             }
-        }
+        });
     }
 }

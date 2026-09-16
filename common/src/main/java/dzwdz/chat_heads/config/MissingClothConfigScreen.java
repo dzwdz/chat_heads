@@ -1,11 +1,14 @@
 package dzwdz.chat_heads.config;
 
+import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
+
+import java.net.URI;
 
 public class MissingClothConfigScreen extends Screen {
 	private final Screen parent;
@@ -31,19 +34,19 @@ public class MissingClothConfigScreen extends Screen {
 		int y = 120;
 
 		addRenderableWidget(Button.builder(clothConfigCfLink, (button) -> {
-			Util.getPlatform().openUri("https://www.curseforge.com/minecraft/mc-mods/cloth-config");
+			Blaze3D.openUri(URI.create("https://www.curseforge.com/minecraft/mc-mods/cloth-config"));
 		}).bounds(x, y, w, h).build());
 
 		y += h + 10;
 
 		addRenderableWidget(Button.builder(clothConfigMrLink, (button) -> {
-			Util.getPlatform().openUri("https://modrinth.com/mod/cloth-config");
+			Blaze3D.openUri(URI.create("https://modrinth.com/mod/cloth-config"));
 		}).bounds(x, y, w, h).build());
 
 		y += h + 10;
 
 		addRenderableWidget(Button.builder(CommonComponents.GUI_BACK, (button) -> {
-			minecraft.setScreen(parent);
+			minecraft.gui.setScreen(parent);
 		}).bounds(x, y, w, h).build());
 	}
 
