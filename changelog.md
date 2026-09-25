@@ -1,3 +1,9 @@
+## 1.3.0
+
+ - rework "Before Line": instead of manually rendering a Chat Head, add a player sprite component to the message just like "Before Name" does
+ - compatibility: Chat Patches' history will now store the Chat Head in "Before Line" mode too
+ - add "Chat Heads Right Padding" setting, which allows configuring the amount of padding pixels after a chat head
+
 ## 1.2.9
 
  - port to 26.3
