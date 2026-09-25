@@ -15,4 +15,5 @@ public interface ChatHeadsConfig {
 
 	void setThreeDeeNess(float value);
 	void addNameAlias(String nickname, String profileName);
+	int rightPadding();
 }

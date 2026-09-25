@@ -24,6 +24,8 @@
   "text.autoconfig.chat_heads.option.detectNameAliases": "Pseudonyme automatisch erkennen",
   "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "Dies sucht nach Antworten auf /realname Befehle auf\nEssentialsX-Servern and fügt diese automatisch als Pseudonym hinzu.",
   "text.autoconfig.chat_heads.option.drawShadow": "Zeichne Schatten",
+  "text.autoconfig.chat_heads.option.rightPadding": "Rechtsseitiges Spielerkopf-Padding",
+  "text.autoconfig.chat_heads.option.rightPadding.@Tooltip": "Wie viele Pixel Leerraum nach einem Spielerkopf gesetzt werden.\n0 ist vanilla (Kopf berührt Text)\n1 ist konsistent mit allem Text (Schatten berührt Text)\nBemerke dass 3Dhaftigkeit etwas Padding hinzufügt.\nDiese Einstellung trifft nur auf Köpfe im Chat und in Büchern zu.",
   "text.chat_heads.config.error.title": "Konnte Konfigurationsmenü nicht öffnen",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config ist nicht installiert!",
   "text.chat_heads.config.error.cloth_config_curseforge_link": "Cloth Config Seite auf CurseForge öffnen",

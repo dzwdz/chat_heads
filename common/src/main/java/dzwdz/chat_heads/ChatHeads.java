@@ -288,7 +288,7 @@ public class ChatHeads {
 
     // pixels the head takes up (including padding)
     public static int headWidth() {
-        return 8 + 1;
+        return 8 + ChatHeads.CONFIG.rightPadding() + Math.round(2*CONFIG.threeDeeNess());
     }
 
     @NotNull

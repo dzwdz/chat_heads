@@ -23,6 +23,9 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 	@ConfigEntry.Gui.Tooltip()
 	public boolean handleSystemMessages = ChatHeadsConfigDefaults.HANDLE_SYSTEM_MESSAGES;
 	public boolean drawShadow = ChatHeadsConfigDefaults.DRAW_SHADOW;
+	@ConfigEntry.Gui.Tooltip()
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 16)
+	public int rightPadding = ChatHeadsConfigDefaults.RIGHT_PADDING;
 
 	@ConfigEntry.Gui.Tooltip()
 	public Map<String, String> nameAliases = new LinkedHashMap<>(); // nickname -> profile name
@@ -87,7 +90,12 @@ public class ChatHeadsConfigData implements ConfigData, ChatHeadsConfig {
 		ClothConfigCommonImpl.saveConfig();
 	}
 
-	@Override
+    @Override
+    public int rightPadding() {
+        return rightPadding;
+    }
+
+    @Override
 	public void validatePostLoad() throws ConfigData.ValidationException {
 		nameAliases.entrySet().removeIf(entry -> entry.getKey().isEmpty() || entry.getValue().isEmpty());
 	}
