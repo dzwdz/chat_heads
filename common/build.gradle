@@ -13,4 +13,5 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
     api "me.shedaniel.cloth:cloth-config:${project.cloth_config_version}"
+    compileOnly "maven.modrinth:chatpatches:${project.chatpatches_version}"
 }

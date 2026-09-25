@@ -24,6 +24,8 @@
   "text.autoconfig.chat_heads.option.detectNameAliases": "Auto-detect Name Aliases",
   "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "This will look for responses to /realname commands on\nEssentialsX servers and automatically add an alias for it.",
   "text.autoconfig.chat_heads.option.drawShadow": "Render Shadow",
+  "text.autoconfig.chat_heads.option.rightPadding": "Chat Heads Right Padding",
+  "text.autoconfig.chat_heads.option.rightPadding.@Tooltip": "How many pixels of empty space are put after a chat head.\n0 is vanilla (head touches text)\n1 is consistent with any text (shadow touches text)\nNote that 3Dness adds some amount of padding.\nThis setting only applies to heads in the chat and inside books.",
   "text.chat_heads.config.error.title": "Couldn't open config menu",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config is not installed!",
   "text.chat_heads.config.error.cloth_config_curseforge_link": "Open Cloth Config page on CurseForge",
