@@ -20,6 +20,7 @@
     "PlayerGlyphProviderInstanceMixin",
     "PlayerGlyphProviderMixin",
     "SkinTextureDownloaderMixin",
+    "compat.chatpatches.ChatUtilMixin",
     "render_targets.BookViewScreenMixin",
     "render_targets.ClothConfigScreenMixin",
     "render_targets.GuiRendererMixin"

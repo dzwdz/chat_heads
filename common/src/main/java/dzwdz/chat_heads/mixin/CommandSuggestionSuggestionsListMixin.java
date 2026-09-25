@@ -38,14 +38,14 @@ public abstract class CommandSuggestionSuggestionsListMixin {
         var connection = Minecraft.getInstance().getConnection();
         if (connection == null) return;
 
-        // when chat head would render out of bounds
-        if (rect.getX() - (ChatHeads.headWidth(false) + 2) < 3) {
+        // when the (padded) chat head would render out of bounds
+        if (rect.getX() - (2 + 8 + 1) < 3) {
             // and when a chat head could render at all
             for (Suggestion suggestion : suggestionList) {
                 PlayerInfo playerInfo = connection.getPlayerInfo(suggestion.getText());
                 if (playerInfo != null) {
                     // move suggestions to accommodate for chat heads
-                    rect.setPosition(3 + (ChatHeads.headWidth(false) + 2), rect.getY());
+                    rect.setPosition(3 + (2 + 8 + 1), rect.getY());
                     break;
                 }
             }
@@ -76,7 +76,7 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     )
     public int chatheads$enlargeBackground(int x,
             @Share("player") LocalRef<PlayerInfo> playerRef) {
-        if (playerRef.get() != null) return x - (ChatHeads.headWidth(false) + 2);
+        if (playerRef.get() != null) return x - (2 + 8 + 1);
         return x;
     }
 
@@ -91,7 +91,7 @@ public abstract class CommandSuggestionSuggestionsListMixin {
     )
     public int chatheads$renderChatHead(int y,
             @Share("player") LocalRef<PlayerInfo> playerRef, @Share("graphics") LocalRef<GuiGraphics> graphicsRef) {
-        int x = rect.getX() - ChatHeads.headWidth(false);
+        int x = rect.getX() - (8 + 1);
 
         if (playerRef.get() != null) {
             ChatHeads.renderChatHead(graphicsRef.get(), x, y, playerRef.get(), 1.0f, false);

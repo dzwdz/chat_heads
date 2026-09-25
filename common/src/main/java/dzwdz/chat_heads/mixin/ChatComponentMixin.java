@@ -3,20 +3,16 @@ package dzwdz.chat_heads.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.HeadData;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static dzwdz.chat_heads.config.RenderPosition.BEFORE_LINE;
 
 @Mixin(value = ChatComponent.class, priority = 990)
 public abstract class ChatComponentMixin {
@@ -29,26 +25,14 @@ public abstract class ChatComponentMixin {
             ),
             index = 2
     )
-    public int chatheads$moveTextAndRenderChatHead(Font font, FormattedCharSequence formattedCharSequence, int x, int y, int color,
-        	@Local(argsOnly = true) GuiGraphics guiGraphics, @Local(argsOnly = true) GuiMessage.Line guiMessage) {
-        HeadData headData = ChatHeads.getHeadData(guiMessage);
-
-        int newX = x + ChatHeads.getChatOffset(headData);
-
-        if (headData == HeadData.EMPTY)
-            return newX;
-
-        if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
-            float opacity = ARGB.alpha(color) / 255f;
-            ChatHeads.renderChatHead(guiGraphics, x, y, headData.playerInfo(), opacity);
-        }
-
-        return newX;
+    public int chatheads$moveText(Font font, FormattedCharSequence formattedCharSequence, int x, int y, int color,
+            @Local(argsOnly = true) GuiGraphics guiGraphics, @Local(argsOnly = true) GuiMessage.Line guiMessage) {
+        return x + ChatHeads.getChatOffset(guiMessage);
     }
 
     @ModifyExpressionValue(method = "getTagIconLeft", at = @At(value = "CONSTANT", args = "intValue=4"))
     private int chatheads$moveTagIcon(int four, @Local(argsOnly = true) GuiMessage.Line guiMessage) {
-        return four + ChatHeads.getTextWidthDifference(guiMessage);
+        return four + ChatHeads.getTextWidthDifference();
     }
 
     @ModifyArg(
@@ -60,7 +44,7 @@ public abstract class ChatComponentMixin {
             index = 1
     )
     public int chatheads$correctClickPosition(int x, @Local GuiMessage.Line guiMessage) {
-        return x - ChatHeads.getTextWidthDifference(guiMessage);
+        return x - ChatHeads.getTextWidthDifference();
     }
 
     @ModifyExpressionValue(
@@ -71,7 +55,7 @@ public abstract class ChatComponentMixin {
             )
     )
     public int chatheads$fixTextOverflow(int original) {
-        return original - ChatHeads.getTextWidthDifference(ChatHeads.getLineData());
+        return original - ChatHeads.getTextWidthDifference();
     }
 
     @Inject(

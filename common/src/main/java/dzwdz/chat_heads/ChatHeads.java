@@ -16,6 +16,7 @@ import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +26,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3x2fStack;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -175,7 +175,7 @@ public class ChatHeads {
         ChatHeads.lastSenderData = headData;
 
         if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
-            return originalMessage;
+            return originalMessage;  // add head at a later time, see ChatComponentMixin2
         } else {
             return decoratedMessage;
         }
@@ -224,10 +224,7 @@ public class ChatHeads {
 
         // fallback: put head at the front
         if (givenPlayerInfo != null) {
-            var chatHead = ComponentProcessor.createChatHeadComponent(givenPlayerInfo, message);
-            var decorated = Component.empty().append(chatHead).append(message);
-
-            return new Pair<>(decorated, HeadData.of(givenPlayerInfo));
+            return new Pair<>(ComponentProcessor.prependChatHead(message, givenPlayerInfo), HeadData.of(givenPlayerInfo));
         }
 
         return null;
@@ -261,36 +258,34 @@ public class ChatHeads {
         ((Ownable) (Object) message).chatheads$setOwner(owner);
     }
 
-    public static boolean offsetChat(@NotNull HeadData headData) {
-        if (ChatHeads.CONFIG.renderPosition() != BEFORE_LINE)
+    private static boolean offsetEnabled() {
+        return ChatHeads.CONFIG.renderPosition() == BEFORE_LINE && ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads;
+    }
+
+    private static boolean startsWithHead(@NotNull GuiMessage.Line line) {
+        boolean[] r = new boolean[1];
+
+        line.content().accept((position, style, codepoint) -> {
+            if (style.getFont() instanceof FontDescription.PlayerSprite)
+                r[0] = true;
+
             return false;
+        });
 
-        return headData != HeadData.EMPTY || (ChatHeads.CONFIG.offsetNonPlayerText() && !ChatHeads.serverDisabledChatHeads);
+        return r[0];
     }
 
-    public static int getChatOffset(@NotNull HeadData headData) {
-        return offsetChat(headData) ? headWidth() : 0;
+    public static int getChatOffset(@NotNull GuiMessage.Line line) {
+        return offsetEnabled() && !startsWithHead(line) ? headWidth() : 0;
     }
 
-    public static int getTextWidthDifference(@NotNull GuiMessage.Line guiMessage) {
-        return getTextWidthDifference(getHeadData(guiMessage));
-    }
-
-    public static int getTextWidthDifference(@NotNull HeadData headData) {
-        if (ChatHeads.CONFIG.renderPosition() != BEFORE_LINE)
-            return 0;
-
-        // whenever a head is rendered or chat is being offset
-        return headData != HeadData.EMPTY || offsetChat(headData) ? headWidth() : 0;
-    }
-
-    public static int headWidth() {
-        return headWidth(ChatHeads.CONFIG.drawShadow());
+    public static int getTextWidthDifference() {
+        return offsetEnabled() ? headWidth() : 0;
     }
 
     // pixels the head takes up (including padding)
-    public static int headWidth(boolean drawShadow) {
-        return 8 + 2 + (drawShadow ? 1 : 0);
+    public static int headWidth() {
+        return 8 + ChatHeads.CONFIG.rightPadding() + Math.round(2*CONFIG.threeDeeNess());
     }
 
     @NotNull
