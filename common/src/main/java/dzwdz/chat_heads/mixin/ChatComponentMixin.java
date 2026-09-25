@@ -38,7 +38,7 @@ public abstract class ChatComponentMixin {
             index = 2
     )
     private static int chatheads$fixTextOverflow(int original) {
-        return original + ChatHeads.getTextWidthDifference(ChatHeads.getLineData());
+        return original + ChatHeads.getTextWidthDifference();
     }
 
     @Inject(method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V", at = @At("RETURN"))

@@ -388,4 +388,9 @@ public class ComponentProcessor {
 
         return chatHead;
     }
+
+    public static Component prependChatHead(Component message, PlayerInfo playerInfo) {
+        var chatHead = ComponentProcessor.createChatHeadComponent(playerInfo, message);
+        return Component.empty().append(chatHead).append(message);
+    }
 }
