@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import dzwdz.chat_heads.ChatHeads;
-import dzwdz.chat_heads.HeadData;
 import net.minecraft.client.GuiMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,18 +23,10 @@ public abstract class ChatComponentInnerMixin {
                     target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;handleMessage(IFLnet/minecraft/util/FormattedCharSequence;)Z"
             )
     )
-    private void chatheads$renderChatHeadAndOffsetChatMessage(Args args, @Local(argsOnly = true) GuiMessage.Line line,
+    private void chatheads$offsetChatMessage(Args args, @Local(argsOnly = true) GuiMessage.Line line,
             @Share("chatOffset") LocalIntRef chatOffset) {
         if (ChatHeads.CONFIG.renderPosition() == BEFORE_LINE) {
-            int y = args.get(0);
-            float opacity = args.get(1);
-            var headData = ChatHeads.getHeadData(line);
-
-            chatOffset.set(ChatHeads.getChatOffset(headData));
-
-            if (ChatHeads.guiGraphics != null && headData != HeadData.EMPTY) {
-                ChatHeads.renderChatHead(ChatHeads.guiGraphics, 0, y, headData.playerInfo(), opacity);
-            }
+            chatOffset.set(ChatHeads.getChatOffset(line));
 
             ChatHeads.chatGraphicsAccess.updatePose((matrix3x2f) -> {
                 matrix3x2f.translate(chatOffset.get(), 0);

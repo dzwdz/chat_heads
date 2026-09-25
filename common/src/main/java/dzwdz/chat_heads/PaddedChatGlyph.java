@@ -14,6 +14,6 @@ public class PaddedChatGlyph implements GlyphInfo {
 
     @Override
     public float getAdvance() {
-        return glyphInfo.getAdvance() + (ChatHeads.customHeadRendering ? 1 + 2*CONFIG.threeDeeNess() : 0);
+        return glyphInfo.getAdvance() + (ChatHeads.customHeadRendering ? CONFIG.rightPadding() + Math.round(2*CONFIG.threeDeeNess()) : 0);
     }
 }

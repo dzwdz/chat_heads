@@ -18,6 +18,10 @@ public class MixinPlugin implements IMixinConfigPlugin {
             return Compat.isModLoaded("emojiful");
         }
 
+        if (mixinClassName.endsWith("ChatUtilMixin")) {
+            return Compat.isModLoaded("chatpatches");
+        }
+
         return true;
     }
 

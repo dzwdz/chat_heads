@@ -1,9 +1,12 @@
 package dzwdz.chat_heads.mixin;
 
 import dzwdz.chat_heads.ChatHeads;
+import dzwdz.chat_heads.ComponentProcessor;
 import dzwdz.chat_heads.HeadData;
+import dzwdz.chat_heads.config.RenderPosition;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,6 +17,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // also after Chat Timestamps so the head position is correct
 @Mixin(value = ChatComponent.class, priority = 10100)
 public abstract class ChatComponentMixin2 {
+    @ModifyArg(
+            method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/GuiMessage;<init>(ILnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V"
+            ),
+            index = 1
+    )
+    private Component chatheads$prependChatHead(Component contents) {
+        if (ChatHeads.CONFIG.renderPosition() == RenderPosition.BEFORE_LINE && ChatHeads.lastSenderData != HeadData.EMPTY) {
+            return ComponentProcessor.prependChatHead(contents, ChatHeads.lastSenderData.playerInfo());
+        }
+
+        return contents;
+    }
+
     @Inject(
             method = "addMessageToDisplayQueue",
             at = @At("HEAD")
