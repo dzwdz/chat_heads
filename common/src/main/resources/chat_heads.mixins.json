@@ -19,6 +19,7 @@
     "PlayerChatMessageMixin",
     "PlayerGlyphProviderInstanceMixin",
     "PlayerGlyphProviderMixin",
+    "PlayerSpriteMixin",
     "SkinTextureDownloaderMixin",
     "compat.chatpatches.ChatUtilMixin",
     "render_targets.BookViewScreenMixin",

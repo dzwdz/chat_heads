@@ -1,3 +1,7 @@
+## 1.3.1
+
+ - don't log heads from Chat Heads (they'd appear as "[name head]" in the logs)
+
 ## 1.3.0
 
  - rework "Before Line": instead of manually rendering a Chat Head, add a player sprite component to the message just like "Before Name" does
