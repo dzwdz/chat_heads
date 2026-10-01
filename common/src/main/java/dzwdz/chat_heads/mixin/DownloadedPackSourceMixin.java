@@ -3,7 +3,6 @@ package dzwdz.chat_heads.mixin;
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.resources.server.DownloadedPackSource;
 import net.minecraft.client.resources.server.PackReloadConfig;
-import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Mixin(DownloadedPackSource.class)
 public abstract class DownloadedPackSourceMixin {

@@ -1,5 +1,7 @@
 package dzwdz.chat_heads.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import dzwdz.chat_heads.ChatHeads;
 import dzwdz.chat_heads.ComponentProcessor;
 import dzwdz.chat_heads.HeadData;
@@ -72,5 +74,12 @@ public abstract class ChatComponentMixin2 {
     )
     private void chatheads$forgetSender(CallbackInfo ci) {
         ChatHeads.lastSenderData = HeadData.EMPTY;
+    }
+
+    @WrapMethod(method = "logChatMessage")
+    private void chatheads$insideLog(GuiMessage message, Operation<Void> original) {
+        ChatHeads.insideLog = true;
+        original.call(message);
+        ChatHeads.insideLog = false;
     }
 }
