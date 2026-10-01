@@ -1,6 +1,7 @@
 package dzwdz.chat_heads;
 
 import com.mojang.datafixers.util.Pair;
+import dzwdz.chat_heads.mixininterface.VisibleInLog;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.ClickEvent;
@@ -377,8 +378,10 @@ public class ComponentProcessor {
     }
 
     public static MutableComponent createChatHeadComponent(PlayerInfo playerInfo) {
-        return Component.object(new PlayerSprite(ResolvableProfile.createResolved(playerInfo.getProfile()), playerInfo.showHat()))
-                .withStyle(ChatFormatting.WHITE);
+        var playerSprite = new PlayerSprite(ResolvableProfile.createResolved(playerInfo.getProfile()), playerInfo.showHat());
+        ((VisibleInLog) (Object) playerSprite).chatheads$setVisibleInLog(false);
+
+        return Component.object(playerSprite).withStyle(ChatFormatting.WHITE);
     }
 
     public static MutableComponent createChatHeadComponent(PlayerInfo playerInfo, Component message) {
