@@ -101,6 +101,9 @@ public class ChatHeads {
     // these two things happen at different times, making it hard to precisely limit to just the chat and the preview in the config menu
     public static boolean customHeadRendering;
 
+    // inside ChatComponent.logChatMessage or not?
+    public static boolean insideLog;
+
     public static void init() {
         if (Compat.isClothConfigLoaded()) {
             ClothConfigCommonImpl.loadConfig();
