@@ -24,6 +24,8 @@
   "text.autoconfig.chat_heads.option.detectNameAliases": "Takma Adları Otomatik Algıla",
   "text.autoconfig.chat_heads.option.detectNameAliases.@Tooltip": "Bu seçenek, EssentialsX sunucularında /realname komutlarına\nverilen yanıtları arar ve otomatik olarak bir takma ad ekler.",
   "text.autoconfig.chat_heads.option.drawShadow": "Gölge Çiz",
+  "text.autoconfig.chat_heads.option.rightPadding": "Sohbet Kafalarının Sağ Boşluğu",
+  "text.autoconfig.chat_heads.option.rightPadding.@Tooltip": "Sohbet kafasının sağında bırakılacak boşluğu piksel cinsinden belirler.\n0: Vanilla ile aynıdır (kafa metne bitişiktir).\n1: Normal metindeki aralıkla uyumludur (kafanın gölgesi metne bitişiktir).\n3B görünüm de bir miktar ek boşluk bırakır.\nBu ayar yalnızca sohbetteki ve kitapların içindeki kafalar için geçerlidir.",
   "text.chat_heads.config.error.title": "Ayar menüsü açılamadı",
   "text.chat_heads.config.error.no_cloth_config": "Cloth Config yüklü değil!",
   "text.chat_heads.config.error.cloth_config_curseforge_link": "CurseForge'da Cloth Config sayfasını aç",
