@@ -1,3 +1,7 @@
+## 1.3.2
+
+ - update Turkish (tr_tr) translations, thanks to iFair1!
+
 ## 1.3.1
 
  - don't log heads from Chat Heads (they'd appear as "[name head]" in the logs)
