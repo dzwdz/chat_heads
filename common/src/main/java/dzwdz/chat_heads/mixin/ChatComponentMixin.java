@@ -1,5 +1,6 @@
 package dzwdz.chat_heads.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import dzwdz.chat_heads.ChatHeads;
 import net.minecraft.client.GuiMessage;
@@ -29,15 +30,15 @@ public abstract class ChatComponentMixin {
         ChatHeads.chatGraphicsAccess = chatGraphicsAccess;
     }
 
-    @ModifyArg(
-            method = "method_75802", // render: forEachLine(alphaCalculator, lambda)
+    @ModifyExpressionValue(
+            method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V"
-            ),
-            index = 2
+                    target = "Lnet/minecraft/util/Mth;ceil(F)I",
+                    ordinal = 0
+            )
     )
-    private static int chatheads$fixTextOverflow(int original) {
+    private static int chatheads$increaseMaxWidth(int original) {
         return original + ChatHeads.getTextWidthDifference();
     }
 
