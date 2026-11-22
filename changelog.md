@@ -1,3 +1,7 @@
+## 1.3.3
+
+ - [1.21.9+] fix scrollbar position in "Before Line" mode
+
 ## 1.3.2
 
  - update Turkish (tr_tr) translations, thanks to iFair1!

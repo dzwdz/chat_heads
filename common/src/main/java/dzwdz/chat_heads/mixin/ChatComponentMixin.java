@@ -48,14 +48,15 @@ public abstract class ChatComponentMixin {
     }
 
     @ModifyExpressionValue(
-            method = "addMessageToDisplayQueue",
+            method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/ChatComponent;getWidth()I"
+                    target = "Lnet/minecraft/util/Mth;ceil(F)I",
+                    ordinal = 0
             )
     )
-    public int chatheads$fixTextOverflow(int original) {
-        return original - ChatHeads.getTextWidthDifference();
+    private static int chatheads$increaseMaxWidth(int original) {
+        return original + ChatHeads.getTextWidthDifference();
     }
 
     @Inject(
