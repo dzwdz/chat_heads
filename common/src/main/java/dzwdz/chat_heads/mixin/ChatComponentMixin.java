@@ -1,7 +1,10 @@
 package dzwdz.chat_heads.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dzwdz.chat_heads.ChatHeads;
+import dzwdz.chat_heads.config.RenderPosition;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.components.ChatComponent.ChatGraphicsAccess;
@@ -10,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ChatComponent.class, priority = 990)
@@ -84,5 +88,33 @@ public abstract class ChatComponentMixin {
     )
     private void chatheads$finishedRefreshing(CallbackInfo ci) {
         ChatHeads.refreshing = false;
+    }
+
+    @WrapOperation(
+            method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V"
+            ),
+            slice = @Slice(
+                    from = @At(
+                            value = "INVOKE",
+                            target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V",
+                            ordinal = 2
+                    ),
+                    to = @At(
+                            value = "INVOKE",
+                            target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V",
+                            ordinal = 3,
+                            shift = At.Shift.AFTER
+                    )
+            )
+    )
+    private void chatheads$transformScrollbarPosition(ChatGraphicsAccess instance, int x0, int y0, int x1, int y1, int color, Operation<Void> original) {
+        if (ChatHeads.CONFIG.renderPosition().equals(RenderPosition.BEFORE_LINE)) {
+            original.call(instance, x0 + ChatHeads.CONFIG.rightPadding() + 8, y0, x1 + ChatHeads.CONFIG.rightPadding() + 8, y1, color);
+        } else {
+            original.call(instance, x0, y0, x1, y1, color);
+        }
     }
 }
